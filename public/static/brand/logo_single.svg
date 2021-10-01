@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="751px" height="751px" viewBox="0 0 751 751" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="A" transform="translate(-782.000000, -2072.000000)">
+            <rect id="Rectangle" fill="#FFFFFF" fill-rule="nonzero" x="0" y="0" width="8840" height="6338" rx="200.016"></rect>
+            <g id="Group" transform="translate(782.000000, 2072.000000)">
+                <rect id="Rectangle" fill="#FFFFFF" fill-rule="nonzero" x="0.562" y="0.66" width="750.059" height="750.059" rx="50.0039"></rect>
+                <circle id="Oval" fill="#F02972" fill-rule="nonzero" cx="167.575" cy="235.18" r="59.0047"></circle>
+                <circle id="Oval" fill="#F02972" fill-rule="nonzero" cx="583.61" cy="235.18" r="59.0047"></circle>
+                <path d="M167.576,212.68 C180.003,212.68 190.077,222.75 190.077,235.18 L190.077,344.69 C190.077,447.15 273.14,530.2 375.59,530.2 C478.05,530.2 561.11,447.15 561.11,344.69 L561.11,235.18 C561.11,222.75 571.18,212.68 583.61,212.68 C596.04,212.68 606.11,222.75 606.11,235.18 L606.11,344.69 C606.11,472 502.9,575.21 375.59,575.21 C248.28,575.21 145.074,472 145.074,344.69 L145.074,235.18 C145.074,222.75 155.148,212.68 167.576,212.68 Z" id="Path" fill="#2E095C"></path>
+            </g>
+        </g>
+    </g>
+</svg>
