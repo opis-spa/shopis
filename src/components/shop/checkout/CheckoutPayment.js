@@ -1,4 +1,4 @@
-import React from 'react';
+import { useMemo } from 'react';
 import * as Yup from 'yup';
 import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -6,62 +6,29 @@ import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
 import { Grid, Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+// hooks
+import usePartnership from '../../../hooks/usePartnership';
 // redux
 import { useDispatch, useSelector } from '../../../redux/store';
-import { onGotoStep, onBackStep, onNextStep, applyShipping } from '../../../redux/slices/product';
+import { onGotoStep, onBackStep, onNextStep } from '../../../redux/slices/product';
 //
 import CheckoutSummary from './CheckoutSummary';
-import CheckoutDelivery from './CheckoutDelivery';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 
 // ----------------------------------------------------------------------
 
-const DELIVERY_OPTIONS = [
-  {
-    value: 0,
-    title: 'Standard delivery (Free)',
-    description: 'Delivered on Monday, August 12'
-  },
-  {
-    value: 2,
-    title: 'Fast delivery ($2,00)',
-    description: 'Delivered on Monday, August 5'
-  }
-];
-
-const PAYMENT_OPTIONS = [
-  {
-    value: 'paypal',
-    title: 'Pay with Paypal',
-    description: 'You will be redirected to PayPal website to complete your purchase securely.',
-    icons: ['/static/icons/ic_paypal.svg']
-  },
-  {
-    value: 'credit_card',
-    title: 'Credit / Debit Card',
-    description: 'We support Mastercard, Visa, Discover and Stripe.',
-    icons: ['/static/icons/ic_mastercard.svg', '/static/icons/ic_visa.svg']
-  },
-  {
-    value: 'cash',
-    title: 'Cash on CheckoutDelivery',
-    description: 'Pay with cash when your order is delivered.',
-    icons: []
-  }
-];
-
-const CARDS_OPTIONS = [
-  { value: 'ViSa1', label: '**** **** **** 1212 - Jimmy Holland' },
-  { value: 'ViSa2', label: '**** **** **** 2424 - Shawn Stokes' },
-  { value: 'MasterCard', label: '**** **** **** 4545 - Cole Armstrong' }
-];
-
-// ----------------------------------------------------------------------
-
 export default function CheckoutPayment() {
   const dispatch = useDispatch();
-  const { total, discount, subtotal, shipping } = useSelector((state) => state.cart);
+  const { partnership } = usePartnership();
+  const { data: payments } = useSelector((state) => state.payment);
+  const { checkout } = useSelector((state) => state.product);
+  const { total, discount, subtotal, shipping } = checkout;
+
+  const PAYMENT_OPTIONS = useMemo(() => {
+    const { paymentMethods } = partnership;
+    return payments.filter((item) => paymentMethods.indexOf(item.id) >= 0);
+  }, [partnership, payments]);
 
   const handleNextStep = () => {
     dispatch(onNextStep());
@@ -75,12 +42,8 @@ export default function CheckoutPayment() {
     dispatch(onGotoStep(step));
   };
 
-  const handleApplyShipping = (value) => {
-    dispatch(applyShipping(value));
-  };
-
   const PaymentSchema = Yup.object().shape({
-    payment: Yup.mixed().required('Payment is required')
+    payment: Yup.mixed().required('La forma de pago es requerida')
   });
 
   const formik = useFormik({
@@ -107,12 +70,7 @@ export default function CheckoutPayment() {
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
-            <CheckoutDelivery
-              formik={formik}
-              onApplyShipping={handleApplyShipping}
-              deliveryOptions={DELIVERY_OPTIONS}
-            />
-            <CheckoutPaymentMethods formik={formik} cardOptions={CARDS_OPTIONS} paymentOptions={PAYMENT_OPTIONS} />
+            <CheckoutPaymentMethods formik={formik} paymentOptions={PAYMENT_OPTIONS} />
             <Button
               type="button"
               size="small"
@@ -120,7 +78,7 @@ export default function CheckoutPayment() {
               onClick={handleBackStep}
               startIcon={<Icon icon={arrowIosBackFill} />}
             >
-              Back
+              Volver
             </Button>
           </Grid>
 
@@ -135,7 +93,7 @@ export default function CheckoutPayment() {
               onEdit={() => handleGotoStep(0)}
             />
             <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-              Complete Order
+              Completar orden
             </LoadingButton>
           </Grid>
         </Grid>

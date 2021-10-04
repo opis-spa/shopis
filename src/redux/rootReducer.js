@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 // slices
-import shopisReducer from './slices/shopis';
 import dashboardReducer from './slices/dashboard';
 import categoryReducer from './slices/category';
 import paymentReducer from './slices/payment';
@@ -32,7 +31,6 @@ const productPersistConfig = {
 };
 
 const rootReducer = combineReducers({
-  shopis: shopisReducer,
   dashboard: dashboardReducer,
   wallet: walletReducer,
   user: userReducer,

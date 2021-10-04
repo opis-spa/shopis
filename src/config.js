@@ -10,4 +10,5 @@ export const firebaseConfig = {
 };
 
 export const googleAnalyticsConfig = process.env.REACT_APP_GA_MEASUREMENT_ID;
-export const hotjarConfig = process.env.REACT;
+export const hotjarConfig = process.env.REACT_APP_HOTJAR;
+export const paypalConfig = process.env.REACT_PAYPAL_CLIENT_ID;

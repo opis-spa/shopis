@@ -37,7 +37,11 @@ const Home = () => {
   return (
     <Page title={partnership.name}>
       <Grid>
-        {!isLoading ? (
+        {isLoading ? (
+          <Grid item xs={12} style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>
+            <CircularProgress />
+          </Grid>
+        ) : (
           <>
             <Grid item xs={12}>
               <CarouselAnimation />
@@ -57,10 +61,6 @@ const Home = () => {
               </Container>
             </Grid>
           </>
-        ) : (
-          <Grid item xs={12} style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>
-            <CircularProgress />
-          </Grid>
         )}
       </Grid>
     </Page>

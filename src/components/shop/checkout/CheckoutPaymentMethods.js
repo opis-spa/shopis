@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
-import plusFill from '@iconify/icons-eva/plus-fill';
 import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 // material
 import { styled } from '@mui/material/styles';
@@ -10,9 +9,7 @@ import {
   Card,
   Grid,
   Radio,
-  Button,
   Collapse,
-  TextField,
   Typography,
   RadioGroup,
   CardHeader,
@@ -21,6 +18,7 @@ import {
   FormControlLabel
 } from '@mui/material';
 //
+import PayPal from './payment/methods/PayPal';
 import { MHidden } from '../../@material-extend';
 
 // ----------------------------------------------------------------------
@@ -39,39 +37,39 @@ const OptionStyle = styled('div')(({ theme }) => ({
 
 CheckoutPaymentMethods.propTypes = {
   formik: PropTypes.object,
-  paymentOptions: PropTypes.array,
-  cardOptions: PropTypes.array
+  paymentOptions: PropTypes.array
 };
 
-export default function CheckoutPaymentMethods({ paymentOptions, cardOptions, formik }) {
+export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
   const { errors, touched, values, getFieldProps } = formik;
-
+  console.log('paymentOptions');
+  console.log(paymentOptions);
   return (
     <Card sx={{ my: 3 }}>
-      <CardHeader title="Payment options" />
+      <CardHeader title="Forma de pago" />
       <CardContent>
         <RadioGroup row {...getFieldProps('payment')}>
           <Grid container spacing={2}>
             {paymentOptions.map((method) => {
-              const { value, title, icons, description } = method;
-              const hasChildren = value === 'credit_card';
+              const { type, name, icons, description } = method;
+              const hasChildren = type === 'paypal';
 
               return (
-                <Grid key={title} item xs={12}>
+                <Grid key={name} item xs={12}>
                   <OptionStyle
                     sx={{
-                      ...(values.payment === value && {
+                      ...(values.payment === type && {
                         boxShadow: (theme) => theme.customShadows.z8
                       }),
                       ...(hasChildren && { flexWrap: 'wrap' })
                     }}
                   >
                     <FormControlLabel
-                      value={value}
+                      value={type}
                       control={<Radio checkedIcon={<Icon icon={checkmarkCircle2Fill} />} />}
                       label={
                         <Box sx={{ ml: 1 }}>
-                          <Typography variant="subtitle2">{title}</Typography>
+                          <Typography variant="subtitle2">{name}</Typography>
                           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                             {description}
                           </Typography>
@@ -88,7 +86,8 @@ export default function CheckoutPaymentMethods({ paymentOptions, cardOptions, fo
                             alt="logo card"
                             src={icon}
                             sx={{
-                              ...(index === 0 && { mr: 1 })
+                              ...(index === 0 && { mr: 1 }),
+                              maxWidth: { xs: 30, md: 50 }
                             }}
                           />
                         ))}
@@ -96,30 +95,8 @@ export default function CheckoutPaymentMethods({ paymentOptions, cardOptions, fo
                     </MHidden>
 
                     {hasChildren && (
-                      <Collapse in={values.payment === 'credit_card'} sx={{ width: '100%' }}>
-                        <TextField
-                          select
-                          fullWidth
-                          label="Card"
-                          {...getFieldProps('card')}
-                          SelectProps={{ native: true }}
-                        >
-                          {cardOptions.map((option) => (
-                            <option key={option.value} value={option.value}>
-                              {option.label}
-                            </option>
-                          ))}
-                        </TextField>
-
-                        <Button
-                          id="add-card"
-                          type="button"
-                          size="small"
-                          startIcon={<Icon icon={plusFill} width={20} height={20} />}
-                          sx={{ my: 3 }}
-                        >
-                          Add new card
-                        </Button>
+                      <Collapse in={values.payment === 'paypal'} sx={{ width: '100%' }}>
+                        <PayPal amount={(5).toFixed(2)} />
                       </Collapse>
                     )}
                   </OptionStyle>

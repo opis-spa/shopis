@@ -10,7 +10,8 @@ CheckoutBillingInfo.propTypes = {};
 
 export default function CheckoutBillingInfo() {
   // const { receiver, phone, addressType, fullAddress } = billing;
-  const { delivery: billing } = useSelector((state) => state.cart);
+  const { checkout } = useSelector((state) => state.product);
+  const { delivery: billing } = checkout;
 
   return (
     <Box>

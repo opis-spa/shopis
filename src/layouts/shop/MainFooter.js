@@ -31,7 +31,7 @@ export default function MainFooter() {
           <SocialNetwork network={partnership.socialNetwork} />
         </Box>
 
-        <Typography variant="caption" component="p">
+        <Typography variant="caption" component="div">
           © Todos los derechos reservados
           <PowerBy />
         </Typography>

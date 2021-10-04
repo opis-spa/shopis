@@ -64,7 +64,6 @@ export default function Router() {
         { path: 'verify', element: <VerifyCode /> }
       ]
     },
-
     // Dashboard Routes
     {
       path: 'app',
@@ -86,7 +85,6 @@ export default function Router() {
         { path: 'coupons', element: <Coupons /> }
       ]
     },
-
     // Landing (comingSoon active)
     {
       path: '/',
@@ -102,20 +100,19 @@ export default function Router() {
         }
       ]
     },
-
     // Shop
     {
-      path: 'shop',
+      path: 'shop/:id',
       element: (
         <PartnershipGuard>
           <ShopLayout />
         </PartnershipGuard>
       ),
       children: [
-        { path: ':id', element: <ShopHome /> },
-        { path: ':id/cart', element: <ShopCart /> },
-        { path: ':id/store', element: <ShopStore /> },
-        { path: ':id/product/:name', element: <ShopProduct /> }
+        { element: <ShopHome /> },
+        { path: 'cart', element: <ShopCart /> },
+        { path: 'store', element: <ShopStore /> },
+        { path: 'product/:name', element: <ShopProduct /> }
       ]
     },
     {

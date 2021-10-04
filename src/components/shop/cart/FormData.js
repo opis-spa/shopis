@@ -44,7 +44,9 @@ function FormData(props) {
 
   return (
     <RootStyle>
-      <Typography variant="h5">Información de contacto</Typography>
+      <Typography variant="h5" sx={{ mb: 4 }}>
+        Información de contacto
+      </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField
@@ -78,6 +80,11 @@ function FormData(props) {
             helperText={touched.phone && errors.phone}
           />
         </Grid>
+      </Grid>
+      <Typography variant="h5" sx={{ mt: 4, mb: 4 }}>
+        Despacho
+      </Typography>
+      <Grid container>
         <Grid item xs={12}>
           <TextField
             disabled={loading}

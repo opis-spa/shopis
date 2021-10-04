@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
+import { useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
 import { Box, Grid, Card, Button, Typography } from '@mui/material';
 // redux
-import { useDispatch, useSelector } from '../../../redux/store';
+import { useDispatch } from '../../../redux/store';
 import { onBackStep, onNextStep, createBilling } from '../../../redux/slices/product';
+// utils
 //
 import Label from '../../Label';
-import CheckoutSummary from './CheckoutSummary';
 import CheckoutNewAddressForm from './CheckoutNewAddressForm';
 
 // ----------------------------------------------------------------------
 
 const MOCK_ADDRESS_BOOKS = [...Array(5)].map((_, index) => ({
-  id: index,
-  receiver: 'Diego Diaz',
-  fullAddress: 'La casa',
-  phone: '+56986771296',
+  id: '1',
+  receiver: 'hola',
+  fullAddress: 'se peude',
+  phone: 'number',
   addressType: index === 0 ? 'Home' : 'Office',
   isDefault: index === 0
 }));
@@ -86,7 +86,6 @@ function AddressItem({ address, onNextStep, onCreateBilling }) {
 export default function CheckoutBillingAddress() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  const { total, discount, subtotal } = useSelector((state) => state.cart);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -128,10 +127,6 @@ export default function CheckoutBillingAddress() {
               Add new address
             </Button>
           </Box>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <CheckoutSummary subtotal={subtotal} total={total} discount={discount} />
         </Grid>
       </Grid>
 

@@ -13,7 +13,8 @@ import {
   RadioGroup,
   CardHeader,
   CardContent,
-  FormControlLabel
+  FormControlLabel,
+  FormHelperText
 } from '@mui/material';
 
 // ----------------------------------------------------------------------
@@ -37,39 +38,39 @@ CheckoutDelivery.propTypes = {
 };
 
 export default function CheckoutDelivery({ formik, deliveryOptions, onApplyShipping, ...other }) {
-  const { values, setFieldValue } = formik;
+  const { values, setFieldValue, errors, touched } = formik;
 
   return (
     <Card {...other}>
-      <CardHeader title="Delivery options" />
+      <CardHeader title="Tipo de entrega" />
       <CardContent>
         <RadioGroup
           name="delivery"
-          value={Number(values.delivery)}
+          value={values.delivery}
           onChange={(event) => {
             const { value } = event.target;
-            setFieldValue('delivery', Number(value));
-            onApplyShipping(Number(value));
+            setFieldValue('delivery', value);
+            onApplyShipping(value);
           }}
         >
           <Grid container spacing={2}>
             {deliveryOptions.map((delivery) => {
-              const { value, title, description } = delivery;
+              const { type, name, description } = delivery;
               return (
-                <Grid key={value} item xs={12} md={6}>
+                <Grid key={type} item xs={12} md={6}>
                   <OptionStyle
                     sx={{
-                      ...(values.delivery === value && {
+                      ...(values.delivery === type && {
                         boxShadow: (theme) => theme.customShadows.z8
                       })
                     }}
                   >
                     <FormControlLabel
-                      value={value}
+                      value={type}
                       control={<Radio checkedIcon={<Icon icon={checkmarkCircle2Fill} />} />}
                       label={
                         <Box sx={{ ml: 1 }}>
-                          <Typography variant="subtitle2">{title}</Typography>
+                          <Typography variant="subtitle2">{name}</Typography>
                           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                             {description}
                           </Typography>
@@ -83,6 +84,14 @@ export default function CheckoutDelivery({ formik, deliveryOptions, onApplyShipp
             })}
           </Grid>
         </RadioGroup>
+
+        {errors.delivery && (
+          <FormHelperText error>
+            <Box component="span" sx={{ px: 2 }}>
+              {touched.delivery && errors.delivery}
+            </Box>
+          </FormHelperText>
+        )}
       </CardContent>
     </Card>
   );

@@ -20,6 +20,7 @@ const initialState = {
     rating: ''
   },
   checkout: {
+    data: {},
     activeStep: 1,
     cart: [],
     subtotal: 0,
@@ -136,6 +137,9 @@ const slice = createSlice({
     createBilling(state, action) {
       state.checkout.billing = action.payload;
     },
+    createInformation(state, action) {
+      state.checkout.data = action.payload;
+    },
     increaseQuantity(state, action) {
       const productId = action.payload;
       const updateCart = map(state.checkout.cart, (product) => {
@@ -202,6 +206,7 @@ export const {
   onNextStep,
   onBackStep,
   createBilling,
+  createInformation,
   applyShipping
 } = slice.actions;
 

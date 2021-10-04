@@ -7,22 +7,19 @@ import { styled } from '@mui/material/styles';
 import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getCart, createBilling } from '../../redux/slices/product';
+import { getCart, createBilling, onGotoStep } from '../../redux/slices/product';
+import { getDeliveries } from '../../redux/slices/delivery';
+import { getPayments } from '../../redux/slices/payment';
 // hooks
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
-import {
-  CheckoutInformation,
-  CheckoutPayment,
-  CheckoutOrderComplete,
-  CheckoutBillingAddress
-} from '../../components/shop/checkout';
+import { CheckoutInformation, CheckoutPayment, CheckoutOrderComplete } from '../../components/shop/checkout';
 
 // ----------------------------------------------------------------------
 
-const STEPS = ['Carrito', 'Contacto', 'Despacho', 'Pago'];
+const STEPS = ['Carrito', 'Despacho', 'Pago'];
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   top: 10,
@@ -100,12 +97,15 @@ export default function EcommerceCheckout() {
   const dispatch = useDispatch();
   const isMountedRef = useIsMountedRef();
   const { checkout } = useSelector((state) => state.product);
-  const { cart, delivery, activeStep } = checkout;
+  const { cart, activeStep } = checkout;
   const isComplete = activeStep === STEPS.length;
 
   useEffect(() => {
     if (isMountedRef.current) {
       dispatch(getCart(cart));
+      dispatch(getDeliveries());
+      dispatch(getPayments());
+      dispatch(onGotoStep(1));
     }
   }, [dispatch, isMountedRef, cart]);
 
@@ -143,8 +143,7 @@ export default function EcommerceCheckout() {
         {!isComplete ? (
           <>
             {activeStep === 1 && <CheckoutInformation />}
-            {activeStep === 2 && <CheckoutBillingAddress />}
-            {activeStep === 3 && delivery && <CheckoutPayment />}
+            {activeStep === 2 && <CheckoutPayment />}
           </>
         ) : (
           <CheckoutOrderComplete open={isComplete} />

@@ -1,12 +1,17 @@
 import React, { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { paramCase } from 'change-case';
+import { Link as RouteLink } from 'react-router-dom';
 import Slider from 'react-slick';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 // material
 import { alpha, useTheme, styled } from '@mui/material/styles';
 import { Box, Card, Paper, Button, Typography, CardContent } from '@mui/material';
-// utils
+// hooks
+import usePartnership from '../../hooks/usePartnership';
+// routes
+import { PATH_SHOP } from '../../routes/paths';
 //
 import { varFadeInRight, MotionContainer } from '../animate';
 import { CarouselControlsArrowsIndex } from './controls';
@@ -40,6 +45,8 @@ CarouselItem.propTypes = {
 };
 
 function CarouselItem({ item, isActive }) {
+  const { partnership } = usePartnership();
+  const { nickname } = partnership;
   const theme = useTheme();
   const { photo, title } = item;
 
@@ -100,7 +107,12 @@ function CarouselItem({ item, isActive }) {
               </Typography>
             </motion.div>
             <motion.div variants={varFadeInRight}>
-              <Button variant="contained" sx={{ mt: 3 }}>
+              <Button
+                component={RouteLink}
+                to={`${PATH_SHOP.root}/${nickname}/product/${paramCase(item.name)}`}
+                variant="contained"
+                sx={{ mt: 3 }}
+              >
                 Lo quiero
                 <span role="img" aria-label="fire">
                   🔥

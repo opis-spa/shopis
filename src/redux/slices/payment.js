@@ -43,7 +43,7 @@ export function getPayments() {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get(`/api/v1/payment-method`);
-      dispatch(slice.actions.getCategoriesSuccess(response.data.paymentMethods));
+      dispatch(slice.actions.getPaymentsSuccess(response.data.paymentMethods));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

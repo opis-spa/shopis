@@ -15,25 +15,20 @@ const propTypes = {
 };
 
 function PartnershipGuard({ children }) {
-  const { isExists, isInitialized, getPartnership, partnership } = usePartnership();
+  const { isExists, isInitialized, initialize } = usePartnership();
   const params = useParams();
   const { id } = params;
 
-  const validation = useMemo(() => {
-    try {
-      const { nickname } = partnership || { nickname: '' };
-      return nickname !== id;
-    } catch (error) {
-      return false;
-    }
-  }, [partnership, id]);
+  useMemo(async () => {
+    const handleInit = async (uri) => {
+      if (!isInitialized && uri) {
+        await initialize(id);
+      }
+    };
 
-  useMemo(() => {
-    console.log('memo validation', validation, id);
-    if (validation) {
-      getPartnership(id);
-    }
-  }, [id, validation]);
+    await handleInit(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isInitialized, id]);
 
   if (isInitialized && !isExists) {
     return <Navigate to={PATH_PAGE.notexists} />;

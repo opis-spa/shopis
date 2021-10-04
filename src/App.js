@@ -9,6 +9,7 @@ import useAuth from './hooks/useAuth';
 import RtlLayout from './components/RtlLayout';
 import ScrollToTop from './components/ScrollToTop';
 import GoogleAnalytics from './components/GoogleAnalytics';
+import PayPal from './components/PayPal';
 import Hotjar from './components/Hotjar';
 import NotistackProvider from './components/NotistackProvider';
 import { BaseOptionChartStyle } from './components/charts/BaseOptionChart';
@@ -24,6 +25,7 @@ export default function App() {
       <RtlLayout>
         <NotistackProvider>
           <GlobalStyles />
+          <PayPal />
           <ProgressBarStyle />
           <BaseOptionChartStyle />
           <ScrollToTop />

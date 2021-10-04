@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { Icon } from '@iconify/react';
 import editFill from '@iconify/icons-eva/edit-fill';
 // material
@@ -24,12 +23,14 @@ import { fCurrency } from '../../../utils/formatNumber';
 CheckoutSummary.propTypes = {
   total: PropTypes.number,
   discount: PropTypes.number,
+  delivery: PropTypes.bool,
   subtotal: PropTypes.number,
   shipping: PropTypes.number,
   onEdit: PropTypes.func,
   enableEdit: PropTypes.bool,
   onApplyDiscount: PropTypes.func,
-  enableDiscount: PropTypes.bool
+  enableDiscount: PropTypes.bool,
+  preview: PropTypes.bool
 };
 
 export default function CheckoutSummary({
@@ -44,9 +45,6 @@ export default function CheckoutSummary({
   enableDiscount = false,
   preview = false
 }) {
-  const { totals, coupon } = useSelector((state) => state.cart);
-  const displayShipping = shipping !== null ? 'Free' : '-';
-
   const fnDelivery = (totals) => {
     if (delivery === -1) {
       return 'Envío por pagar';
@@ -76,15 +74,15 @@ export default function CheckoutSummary({
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               Subtotal
             </Typography>
-            <Typography variant="subtitle2">{fCurrency(totals.subtotal)}</Typography>
+            <Typography variant="subtitle2">{fCurrency(subtotal)}</Typography>
           </Stack>
 
-          {totals.coupon > 0 && (
+          {discount > 0 && (
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body2" color="textSecondary">
-                Cupón ({coupon.code})
+                Cupón
               </Typography>
-              <Typography variant="subtitle2">{fCurrency(-totals.coupon)}</Typography>
+              <Typography variant="subtitle2">{fCurrency(-discount)}</Typography>
             </Stack>
           )}
 
@@ -93,7 +91,7 @@ export default function CheckoutSummary({
               <Typography variant="body2" color="textSecondary">
                 Despacho
               </Typography>
-              <Typography variant="subtitle2">{fnDelivery(totals.delivery)}</Typography>
+              <Typography variant="subtitle2">{fnDelivery(shipping)}</Typography>
             </Stack>
           )}
 
@@ -105,7 +103,7 @@ export default function CheckoutSummary({
             <Typography variant="subtitle1">Total</Typography>
             <Box sx={{ textAlign: 'right' }}>
               <Typography variant="subtitle1" sx={{ color: 'error.main' }}>
-                {fCurrency(totals.total)}
+                {fCurrency(total)}
               </Typography>
               <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
                 (Todos los impuestos incluidos)

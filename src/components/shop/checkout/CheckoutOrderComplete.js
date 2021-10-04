@@ -12,6 +12,7 @@ import { deleteCart } from '../../../redux/slices/product';
 //
 import { DialogAnimate } from '../../animate';
 import { OrderCompleteIllustration } from '../../../assets';
+import LinkParnership from '../../LinkParnership';
 
 // ----------------------------------------------------------------------
 
@@ -60,8 +61,8 @@ export default function CheckoutOrderComplete({ ...other }) {
         <Divider sx={{ my: 3 }} />
 
         <Stack direction={{ xs: 'column-reverse', sm: 'row' }} justifyContent="space-between" spacing={2}>
-          <Button color="inherit" onClick={handleResetStep} startIcon={<Icon icon={arrowIosBackFill} />}>
-            Continuar Comprando
+          <Button color="inherit" startIcon={<Icon icon={arrowIosBackFill} />}>
+            <LinkParnership to="">Continuar Comprando</LinkParnership>
           </Button>
           <Button variant="contained" startIcon={<Icon icon={filePdfFilled} />} onClick={handleResetStep}>
             Download as PDF

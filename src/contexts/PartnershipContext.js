@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useReducer } from 'react';
+import React, { createContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
 // utils
 import axios from '../utils/axios';
@@ -19,6 +19,7 @@ const handlers = {
       ...state,
       isExists,
       isInitialized: true,
+      isLoading: false,
       partnership
     };
   },
@@ -55,7 +56,8 @@ const reducer = (state, action) => (handlers[action.type] ? handlers[action.type
 
 const PartnershipContext = createContext({
   ...initialState,
-  getPartnership: () => Promise.resolve()
+  getPartnership: () => Promise.resolve(),
+  initialize: () => Promise.resolve()
 });
 
 const propTypes = {
@@ -65,53 +67,46 @@ const propTypes = {
 function PartnershipProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    const initialize = async () => {
-      dispatch({
-        type: 'LOADING',
-        value: true
-      });
+  const initialize = async (nickname) => {
+    dispatch({
+      type: 'LOADING',
+      value: true
+    });
 
-      const nickname = window.localStorage.getItem('nickname');
-      if (nickname) {
-        // if exists is initialize
-        try {
-          const response = await axios.get(`/api/v1/partnerships/nickname/${nickname}`);
-          const { success, partnership } = response.data;
+    try {
+      const response = await axios.get(`/api/v1/partnerships/nickname/${nickname}`);
+      const { success, partnership } = response.data;
 
-          if (success) {
-            dispatch({
-              type: 'INITIALIZE',
-              payload: {
-                isExists: true,
-                partnership
-              }
-            });
-            return true;
+      if (success) {
+        dispatch({
+          type: 'INITIALIZE',
+          payload: {
+            isExists: true,
+            partnership
           }
-        } catch (error) {
-          dispatch({
-            type: 'INITIALIZENOTLOAD'
-          });
-        }
+        });
+        return true;
       }
+    } catch (error) {
       dispatch({
-        type: 'INITIALIZE',
-        payload: {
-          isExists: false,
-          partneship: null
-        }
+        type: 'INITIALIZENOTLOAD'
       });
+    }
 
-      dispatch({
-        type: 'LOADING',
-        value: false
-      });
-      return false;
-    };
+    dispatch({
+      type: 'INITIALIZE',
+      payload: {
+        isExists: false,
+        partneship: null
+      }
+    });
 
-    initialize();
-  }, []);
+    dispatch({
+      type: 'LOADING',
+      value: false
+    });
+    return false;
+  };
 
   const getPartnership = async (uri) => {
     dispatch({
@@ -147,6 +142,7 @@ function PartnershipProvider({ children }) {
     <PartnershipContext.Provider
       value={{
         ...state,
+        initialize,
         getPartnership
       }}
     >
