@@ -78,7 +78,6 @@ function NotificationItem({ notification }) {
     <ListItemButton
       onClick={handleMarkAsRead}
       disableGutters
-      component={RouterLink}
       sx={{
         py: 1.5,
         px: 2.5,
