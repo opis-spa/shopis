@@ -48,12 +48,10 @@ function IconBullet({ type = 'item' }) {
 }
 
 MenuDesktopItem.propTypes = {
-  item: PropTypes.object,
-  isHome: PropTypes.bool,
-  isOffset: PropTypes.bool
+  item: PropTypes.object
 };
 
-function MenuDesktopItem({ item, isHome, isOffset }) {
+function MenuDesktopItem({ item }) {
   const { title, path } = item;
 
   const handleScroller = () => {
@@ -72,8 +70,7 @@ function MenuDesktopItem({ item, isHome, isOffset }) {
       onClick={handleScroller}
       sx={{
         fontWeight: 200,
-        ...(isHome && { color: 'common.white' }),
-        ...(isOffset && { color: 'primary.main' })
+        color: 'text.primary'
       }}
     >
       {title}

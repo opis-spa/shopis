@@ -8,7 +8,7 @@ import { PATH_AUTH } from '../../routes/paths';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 // components
-import LogoShopis from '../../components/LogoShopis';
+import LogoRifopis from '../../components/LogoRifopis';
 import { MHidden } from '../../components/@material-extend';
 //
 import MenuDesktop from './MenuDesktop';
@@ -52,7 +52,7 @@ export default function MainNavbar() {
   const isHome = pathname === '/';
 
   return (
-    <AppBar sx={{ boxShadow: 0, bgcolor: 'transparent' }}>
+    <AppBar sx={{ boxShadow: 0, bgcolor: 'common.white' }}>
       <ToolbarStyle
         disableGutters
         sx={{
@@ -70,8 +70,8 @@ export default function MainNavbar() {
             justifyContent: 'space-between'
           }}
         >
-          <RouterLink to="/">
-            <LogoShopis diapo={!isOffset} />
+          <RouterLink to="">
+            <LogoRifopis diapo={!isOffset} />
           </RouterLink>
           <Box sx={{ flexGrow: 1 }} />
 
@@ -88,11 +88,10 @@ export default function MainNavbar() {
               sx={{
                 fontWeight: 900,
                 textTransform: 'uppercase',
-                ...(!isOffset && { color: 'common.white' }),
-                ...(isOffset && { color: 'secondary.main' })
+                color: 'primary.main'
               }}
             >
-              Registrame
+              Ingresar
             </Button>
           </MHidden>
 

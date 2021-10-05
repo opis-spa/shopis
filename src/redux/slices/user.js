@@ -18,7 +18,8 @@ const initialState = {
   cards: null,
   addressBook: [],
   invoices: [],
-  notifications: null
+  notifications: null,
+  newsletter: []
 };
 
 const slice = createSlice({
@@ -107,6 +108,11 @@ const slice = createSlice({
       state.cards = action.payload;
     },
 
+    getNewsletter(state, action) {
+      state.isLoading = false;
+      state.newsletter = action.payload;
+    },
+
     // GET ADDRESS BOOK
     getAddressBookSuccess(state, action) {
       state.isLoading = false;
@@ -141,6 +147,20 @@ export function getProfile() {
     try {
       const response = await axios.get('/api/user/profile');
       dispatch(slice.actions.getProfileSuccess(response.data.profile));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function subscriptionNewsletter(body) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.post('/api/v1/user/newsletter/subscription', body);
+      dispatch(slice.actions.getNewsletter(response.data.subscription.channel));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

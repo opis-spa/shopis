@@ -35,7 +35,7 @@ export default function Business() {
   }, [dispatch, isMountedRef]);
 
   return (
-    <Page title="Dashboard | Shopis">
+    <Page title="Dashboard | shopis">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>

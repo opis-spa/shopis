@@ -48,7 +48,7 @@ function CarouselItem({ item, isActive }) {
   const { partnership } = usePartnership();
   const { nickname } = partnership;
   const theme = useTheme();
-  const { photo, title } = item;
+  const { photo, photos, name } = item;
 
   return (
     <Paper
@@ -60,7 +60,7 @@ function CarouselItem({ item, isActive }) {
         }
       }}
     >
-      <CarouselImgStyle alt={title} src={photo} />
+      <CarouselImgStyle alt={name} src={photo || photos[0]} />
       <Box
         sx={{
           top: 0,

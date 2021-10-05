@@ -6,7 +6,7 @@ import cartOutline from '@iconify/icons-eva/shopping-cart-outline';
 import { Badge } from '@mui/material';
 // components
 import { MIconButton } from '../../components/@material-extend';
-import LinkParnership from '../../components/LinkParnership';
+import LinkPartnership from '../../components/LinkPartnership';
 
 // ----------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ export default function Searchbar() {
   const totalItems = cart.length;
 
   return (
-    <LinkParnership to="/cart">
+    <LinkPartnership to="/cart">
       <MIconButton
         sx={{
           padding: 0,
@@ -28,6 +28,6 @@ export default function Searchbar() {
           <Icon icon={cartOutline} width={20} height={20} />
         </Badge>
       </MIconButton>
-    </LinkParnership>
+    </LinkPartnership>
   );
 }

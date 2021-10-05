@@ -89,7 +89,8 @@ function ThumbnailItem({ item }) {
 
 const propTypes = {
   product: PropTypes.shape({
-    photo: PropTypes.string
+    photo: PropTypes.string,
+    photos: PropTypes.string
   })
 };
 
@@ -103,8 +104,8 @@ function ProductDetailsCarousel(props) {
   const slider1 = useRef(null);
   const slider2 = useRef(null);
 
-  const { photo } = product;
-  const imagesLightbox = Array.isArray(photo) ? photo.map((img) => img.large) : [photo];
+  const { photo, photos } = product;
+  const imagesLightbox = Array.isArray(photos) ? photos : [photo];
 
   const handleOpenLightbox = (url) => {
     const selectedImage = findIndex(imagesLightbox, (index) => index === url);

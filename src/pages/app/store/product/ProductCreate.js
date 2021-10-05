@@ -31,7 +31,7 @@ export default function ProductCreate() {
   }, [dispatch]);
 
   return (
-    <Page title="Nuevo producto | Shopis">
+    <Page title="Nuevo producto | shopis">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading={!isEdit ? 'Nuevo producto' : 'Producto'}

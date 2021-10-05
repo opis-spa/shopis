@@ -4,7 +4,9 @@ import { Navigate, useRoutes, useLocation } from 'react-router-dom';
 import MainLayout from '../layouts/main'; // this layout to management panel
 import LandingLayout from '../layouts/landing';
 import ShopLayout from '../layouts/shop';
+import RifopisLayout from '../layouts/rifopis';
 import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
+import LogoOnlyLayoutRifopis from '../layouts/rifopis/LogoOnlyLayout';
 // guards
 import PartnershipGuard from '../guards/PartnershipGuard';
 import GuestGuard from '../guards/GuestGuard';
@@ -40,7 +42,9 @@ const Loadable = (Component) => (props) => {
 };
 
 export default function Router() {
-  return useRoutes([
+  const DOMAIN_HOST = window.location.host;
+
+  const routes = [
     {
       path: 'auth',
       children: [
@@ -63,81 +67,119 @@ export default function Router() {
         { path: 'reset-password', element: <ResetPassword /> },
         { path: 'verify', element: <VerifyCode /> }
       ]
-    },
-    // Dashboard Routes
-    {
-      path: 'app',
-      element: (
-        <AuthGuard>
-          <MainLayout />
-        </AuthGuard>
-      ),
-      children: [
-        { element: <Navigate to="/app/dashboard" replace /> },
-        { path: 'dashboard', element: <DashboardBusiness /> },
-        { path: 'store', element: <Store /> },
-        { path: 'products', element: <Products /> },
-        { path: 'product/new', element: <ProductCreate /> },
-        { path: 'product/:name/edit', element: <ProductCreate /> },
-        { path: 'products', element: <Products /> },
-        { path: 'orders', element: <Orders /> },
-        { path: 'order/:id', element: <Order /> },
-        { path: 'coupons', element: <Coupons /> }
-      ]
-    },
-    // Landing (comingSoon active)
-    {
-      path: '/',
-      children: [
-        {
-          element: <LogoOnlyLayout />,
-          children: [{ element: <ComingSoon /> }, { path: 'not-exists', element: <NotFound /> }]
-        },
-        {
-          path: '/website',
-          element: <LandingLayout />,
-          children: [{ element: <LandingPage /> }]
-        }
-      ]
-    },
-    // Shop
-    {
-      path: 'shop/:id',
-      element: (
-        <PartnershipGuard>
-          <ShopLayout />
-        </PartnershipGuard>
-      ),
-      children: [
-        { element: <ShopHome /> },
-        { path: 'cart', element: <ShopCart /> },
-        { path: 'store', element: <ShopStore /> },
-        { path: 'product/:name', element: <ShopProduct /> }
-      ]
-    },
-    {
-      path: 'shop',
-      element: (
-        <PartnershipGuard>
-          <LogoOnlyLayout />
-        </PartnershipGuard>
-      ),
-      children: [{ path: ':id/checkout', element: <Checkout /> }]
-    },
-
-    // Main Routes
-    {
-      path: '*',
-      element: <LogoOnlyLayout />,
-      children: [
-        { path: 'coming-soon', element: <ComingSoon /> },
-        { path: 'maintenance', element: <Maintenance /> },
-        { path: '500', element: <Page500 /> },
-        { path: '404', element: <Page404 /> },
-        { path: '*', element: <Navigate to="/404" replace /> }
-      ]
     }
-  ]);
+  ];
+
+  if (DOMAIN_HOST.indexOf('rifopis.cl') >= 0) {
+    routes.push(
+      {
+        path: '',
+        element: <LogoOnlyLayoutRifopis />,
+        children: [{ element: <RifopisComingSoon /> }]
+      },
+      {
+        path: 'website',
+        element: (
+          <PartnershipGuard init="rifopis">
+            <RifopisLayout />
+          </PartnershipGuard>
+        ),
+        children: [
+          { element: <RifopisHome /> },
+          { path: 'cart', element: <RifopisCart /> },
+          { path: 'store', element: <RifopisStore /> },
+          { path: 'product/:name', element: <RifopisProduct /> }
+        ]
+      },
+      {
+        path: '',
+        element: (
+          <PartnershipGuard>
+            <LogoOnlyLayout />
+          </PartnershipGuard>
+        ),
+        children: [{ path: ':id/checkout', element: <RifopisCheckout /> }]
+      }
+    );
+  } else {
+    routes.push(
+      // Dashboard Routes
+      {
+        path: 'app',
+        element: (
+          <AuthGuard>
+            <MainLayout />
+          </AuthGuard>
+        ),
+        children: [
+          { element: <Navigate to="/app/dashboard" replace /> },
+          { path: 'dashboard', element: <DashboardBusiness /> },
+          { path: 'store', element: <Store /> },
+          { path: 'products', element: <Products /> },
+          { path: 'product/new', element: <ProductCreate /> },
+          { path: 'product/:name/edit', element: <ProductCreate /> },
+          { path: 'products', element: <Products /> },
+          { path: 'orders', element: <Orders /> },
+          { path: 'order/:id', element: <Order /> },
+          { path: 'coupons', element: <Coupons /> }
+        ]
+      },
+      // Landing (comingSoon active)
+      {
+        path: '/',
+        children: [
+          {
+            element: <LogoOnlyLayout />,
+            children: [{ element: <ComingSoon /> }, { path: 'not-exists', element: <NotFound /> }]
+          },
+          {
+            path: '/website',
+            element: <LandingLayout />,
+            children: [{ element: <LandingPage /> }]
+          }
+        ]
+      },
+      // Shop
+      {
+        path: 'shop/:id',
+        element: (
+          <PartnershipGuard>
+            <ShopLayout />
+          </PartnershipGuard>
+        ),
+        children: [
+          { element: <ShopHome /> },
+          { path: 'cart', element: <ShopCart /> },
+          { path: 'store', element: <ShopStore /> },
+          { path: 'product/:name', element: <ShopProduct /> }
+        ]
+      },
+      {
+        path: 'shop',
+        element: (
+          <PartnershipGuard>
+            <LogoOnlyLayout />
+          </PartnershipGuard>
+        ),
+        children: [{ path: ':id/checkout', element: <Checkout /> }]
+      },
+
+      // Main Routes
+      {
+        path: '*',
+        element: <LogoOnlyLayout />,
+        children: [
+          { path: 'coming-soon', element: <ComingSoon /> },
+          { path: 'maintenance', element: <Maintenance /> },
+          { path: '500', element: <Page500 /> },
+          { path: '404', element: <Page404 /> },
+          { path: '*', element: <Navigate to="/404" replace /> }
+        ]
+      }
+    );
+  }
+
+  return useRoutes(routes);
 }
 
 // IMPORT COMPONENTS
@@ -161,9 +203,16 @@ const ShopCart = Loadable(lazy(() => import('../pages/shop/Cart')));
 const ShopProduct = Loadable(lazy(() => import('../pages/shop/Product')));
 const ShopStore = Loadable(lazy(() => import('../pages/shop/Store')));
 const Checkout = Loadable(lazy(() => import('../pages/shop/Checkout')));
+// Rifopis
+const RifopisHome = Loadable(lazy(() => import('../pages/rifopis/Home')));
+const RifopisCart = Loadable(lazy(() => import('../pages/rifopis/Cart')));
+const RifopisProduct = Loadable(lazy(() => import('../pages/rifopis/Product')));
+const RifopisStore = Loadable(lazy(() => import('../pages/rifopis/Store')));
+const RifopisCheckout = Loadable(lazy(() => import('../pages/rifopis/Checkout')));
 // Main
 const LandingPage = Loadable(lazy(() => import('../pages/landing/Home')));
 const ComingSoon = Loadable(lazy(() => import('../pages/ComingSoon')));
+const RifopisComingSoon = Loadable(lazy(() => import('../pages/rifopis/ComingSoon')));
 const Maintenance = Loadable(lazy(() => import('../pages/Maintenance')));
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));

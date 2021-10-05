@@ -12,6 +12,7 @@ axiosInstance.interceptors.request.use(async (response) => {
   try {
     const token = await auth.currentUser.getIdToken();
     response.headers.Authorization = `Bearer ${token}`;
+    response.headers['Access-Control-Allow-Origin'] = '*';
   } catch (error) {
     response.headers.Authorization = '';
   }

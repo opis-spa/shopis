@@ -66,7 +66,7 @@ export default function Store() {
   };
 
   return (
-    <Page title="Tienda | Shopis">
+    <Page title="Tienda | shopis">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs heading="Tienda" links={[{ name: 'Shopis', href: PATH_APP.root }, { name: 'Tienda' }]} />
 

@@ -85,7 +85,7 @@ function SetColor(themeColor) {
     case 'cyan':
       color = CYAN;
       break;
-    case 'blue':
+    case 'rifopis':
       color = BLUE;
       break;
     case 'orange':

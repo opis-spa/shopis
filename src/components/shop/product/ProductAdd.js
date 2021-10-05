@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 import { useFormik, FormikProvider } from 'formik';
+// material
 import { Button } from '@mui/material';
-import Increment from '../../Increment';
+// hooks
+import useIsMountedRef from '../../../hooks/useIsMountedRef';
+// redux
+import { useDispatch } from '../../../redux/store';
 import { addCart, decreaseQuantity, increaseQuantity } from '../../../redux/slices/product';
+// components
+import Increment from '../../Increment';
 
 const propTypes = {
   product: PropTypes.shape({
-    _id: PropTypes.string,
+    id: PropTypes.string,
     quantity: PropTypes.number,
     amount: PropTypes.number,
     stock: PropTypes.number
@@ -17,7 +22,8 @@ const propTypes = {
 
 function ProductAdd(props) {
   const { product } = props;
-  const { quantity, stock } = product;
+  const { id, quantity, stock } = product;
+  const isMountedRef = useIsMountedRef();
   const [cartQuantity, setCartQuantity] = useState(quantity);
   const dispatch = useDispatch();
   const formik = useFormik({
@@ -28,10 +34,16 @@ function ProductAdd(props) {
     }
   });
 
-  const handleIncrease = (id) => {
+  useEffect(() => {
+    if (isMountedRef.current) {
+      setCartQuantity(product.quantity);
+    }
+  }, [dispatch, isMountedRef, product]);
+
+  const handleIncrease = () => {
     dispatch(increaseQuantity(id));
   };
-  const handleDecrease = (id) => {
+  const handleDecrease = () => {
     dispatch(decreaseQuantity(id));
   };
   const handleAddToCart = async () => {

@@ -11,7 +11,7 @@ import Logo from '../../components/Logo';
 import CartPopover from './CartPopover';
 import AccountPopover from './AccountPopover';
 import Searchbar from './Searchbar';
-import LinkPartnership from '../../components/LinkParnership';
+import LinkPartnership from '../../components/LinkPartnership';
 
 // ----------------------------------------------------------------------
 

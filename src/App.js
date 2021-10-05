@@ -11,6 +11,7 @@ import ScrollToTop from './components/ScrollToTop';
 import GoogleAnalytics from './components/GoogleAnalytics';
 import PayPal from './components/PayPal';
 import Hotjar from './components/Hotjar';
+import ThemePrimaryColor from './components/ThemePrimaryColor';
 import NotistackProvider from './components/NotistackProvider';
 import { BaseOptionChartStyle } from './components/charts/BaseOptionChart';
 import LoadingScreen, { ProgressBarStyle } from './components/LoadingScreen';
@@ -22,18 +23,20 @@ export default function App() {
 
   return (
     <ThemeConfig>
-      <RtlLayout>
-        <NotistackProvider>
-          <GlobalStyles />
-          <PayPal />
-          <ProgressBarStyle />
-          <BaseOptionChartStyle />
-          <ScrollToTop />
-          <GoogleAnalytics />
-          <Hotjar />
-          {isInitialized ? <Router /> : <LoadingScreen />}
-        </NotistackProvider>
-      </RtlLayout>
+      <ThemePrimaryColor>
+        <RtlLayout>
+          <NotistackProvider>
+            <GlobalStyles />
+            <PayPal />
+            <ProgressBarStyle />
+            <BaseOptionChartStyle />
+            <ScrollToTop />
+            <GoogleAnalytics />
+            <Hotjar />
+            {isInitialized ? <Router /> : <LoadingScreen />}
+          </NotistackProvider>
+        </RtlLayout>
+      </ThemePrimaryColor>
     </ThemeConfig>
   );
 }

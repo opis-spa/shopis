@@ -26,7 +26,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function VerifyCode() {
   return (
-    <RootStyle title="Verify | Minimal UI">
+    <RootStyle title="Verificar | shopis">
       <LogoOnlyLayout />
 
       <Container>

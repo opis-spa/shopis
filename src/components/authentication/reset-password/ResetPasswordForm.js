@@ -20,12 +20,12 @@ export default function ResetPasswordForm({ onSent, onGetEmail }) {
   const isMountedRef = useIsMountedRef();
 
   const ResetPasswordSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required')
+    email: Yup.string().email('El formato del correo electrónico').required('El correo electrónico es requerido')
   });
 
   const formik = useFormik({
     initialValues: {
-      email: 'demo@minimals.cc'
+      email: ''
     },
     validationSchema: ResetPasswordSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
@@ -58,13 +58,13 @@ export default function ResetPasswordForm({ onSent, onGetEmail }) {
             fullWidth
             {...getFieldProps('email')}
             type="email"
-            label="Email address"
+            label="Correo electrónico"
             error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
           />
 
           <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-            Reset Password
+            Reiniciar contraseña
           </LoadingButton>
         </Stack>
       </Form>

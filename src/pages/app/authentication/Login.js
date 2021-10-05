@@ -49,7 +49,7 @@ export default function Login() {
   const { method } = useAuth();
 
   return (
-    <RootStyle title="Login | Minimal-UI">
+    <RootStyle title="Inicio de sesión | shopis">
       <AuthLayout>
         Aún no tienes cuenta&nbsp;
         <LogoOpis />? &nbsp;

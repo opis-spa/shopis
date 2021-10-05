@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { paramCase } from 'change-case';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Card, Stack, Typography } from '@mui/material';
+// redux
+import { useSelector } from '../../../redux/store';
 // components
 import Label from '../../Label';
 import ProductAdd from './ProductAdd';
-import LinkPartnership from '../../LinkParnership';
+import LinkPartnership from '../../LinkPartnership';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
 
@@ -30,6 +32,15 @@ ProductItem.propTypes = {
 
 function ProductItem({ product, ...other }) {
   const { name, photo, amount, discountPartnership: discount, unitMeasurement } = product;
+  const { cart } = useSelector((state) => state.product.checkout);
+
+  const productCart = useMemo(() => {
+    const cartNew = cart.find((item) => item.id === product.id);
+    if (cartNew) {
+      return cartNew;
+    }
+    return product;
+  }, [cart, product]);
 
   const parseUnity = (value) => {
     try {
@@ -87,7 +98,7 @@ function ProductItem({ product, ...other }) {
               )}
             </Box>
 
-            <ProductAdd product={product} />
+            <ProductAdd product={productCart} />
           </Stack>
         </Stack>
       </Stack>

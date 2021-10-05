@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Icon } from '@iconify/react';
 import personOutline from '@iconify/icons-eva/person-outline';
 // components
-import LinkParnership from '../../components/LinkParnership';
+import LinkPartnership from '../../components/LinkPartnership';
 import { MIconButton } from '../../components/@material-extend';
 
 // ----------------------------------------------------------------------
@@ -11,7 +11,7 @@ const AccountPopover = () => {
   const anchorRef = useRef(null);
 
   return (
-    <LinkParnership to="/auth/login">
+    <LinkPartnership to="/auth/login">
       <MIconButton
         ref={anchorRef}
         sx={{
@@ -22,7 +22,7 @@ const AccountPopover = () => {
       >
         <Icon icon={personOutline} width={20} height={20} />
       </MIconButton>
-    </LinkParnership>
+    </LinkPartnership>
   );
 };
 

@@ -30,7 +30,7 @@ export default function ResetPassword() {
   const [sent, setSent] = useState(false);
 
   return (
-    <RootStyle title="Reiniciar contraseña | Shopis">
+    <RootStyle title="Reiniciar contraseña | shopis">
       <LogoOnlyLayout />
 
       <Container>

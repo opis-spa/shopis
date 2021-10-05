@@ -10,7 +10,7 @@ import { useSelector } from '../../../redux/store';
 // components
 import ProductItem from './ProductItem';
 import ProductItemSimple from './ProductItemSimple';
-import LinkParnership from '../../LinkParnership';
+import LinkPartnership from '../../LinkPartnership';
 // ----------------------------------------------------------------------
 
 function applyFilter(products, sortBy, filters) {
@@ -91,9 +91,9 @@ function ProductList({ max = 0, view }) {
             mb: 4
           }}
         >
-          <LinkParnership variant="button" to="/store" component={RouteLink}>
+          <LinkPartnership variant="button" to="/store" component={RouteLink}>
             VER TODO
-          </LinkParnership>
+          </LinkPartnership>
         </Box>
       )}
     </GridStyle>

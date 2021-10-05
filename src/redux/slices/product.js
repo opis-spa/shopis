@@ -142,6 +142,8 @@ const slice = createSlice({
     },
     increaseQuantity(state, action) {
       const productId = action.payload;
+      console.log('product actions payload');
+      console.log(action.payload);
       const updateCart = map(state.checkout.cart, (product) => {
         if (product.id === productId) {
           return {
@@ -179,6 +181,11 @@ const slice = createSlice({
       state.checkout.total = state.checkout.subtotal;
     },
     applyShipping(state, action) {
+      const shipping = action.payload;
+      state.checkout.shipping = shipping;
+      state.checkout.total = state.checkout.subtotal - state.checkout.discount + shipping;
+    },
+    addProduct(state, action) {
       const shipping = action.payload;
       state.checkout.shipping = shipping;
       state.checkout.total = state.checkout.subtotal - state.checkout.discount + shipping;
@@ -229,8 +236,7 @@ export function getProductStore(nickname) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get(`/api/v1/partnerships/${nickname}/product`);
-      const { partnership } = response.data;
-      dispatch(slice.actions.getProductsSuccess(partnership.products));
+      dispatch(slice.actions.getProductsSuccess(response.data.products));
     } catch (error) {
       console.log('errror');
       console.log(error);
@@ -245,6 +251,17 @@ export const aplicateCoupon = (body) => async (dispatch) => {
   try {
     const response = await axios.post('/api/v1/coupons/validate', body);
     dispatch(slice.actions.applyDiscount(response.data.coupons));
+  } catch (error) {
+    console.error(error);
+    dispatch(slice.actions.hasError(error));
+  }
+};
+
+export const createProduct = (body) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.post('/api/v1/products/create', body);
+    dispatch(slice.actions.addProduct(response.data.product));
   } catch (error) {
     console.error(error);
     dispatch(slice.actions.hasError(error));

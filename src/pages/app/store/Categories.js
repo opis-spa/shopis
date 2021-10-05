@@ -165,7 +165,7 @@ export default function EcommerceProductList() {
   const isProductNotFound = filteredProducts.length === 0;
 
   return (
-    <Page title="Products | Shopis">
+    <Page title="Productos | shopis">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Lista de productos"

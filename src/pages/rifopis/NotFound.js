@@ -22,7 +22,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function Page404() {
   return (
-    <RootStyle title="No encontramos la tienda | shopis">
+    <RootStyle title="Shopis - No encontramos la tienda">
       <Container>
         <MotionContainer initial="initial" open>
           <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>

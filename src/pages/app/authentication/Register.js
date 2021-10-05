@@ -49,7 +49,7 @@ export default function Register() {
   const { method } = useAuth();
 
   return (
-    <RootStyle title="Registro | Shopis">
+    <RootStyle title="Registro | shopis">
       <AuthLayout>
         Ya tienes una cuenta&nbsp;
         <LogoOpis />? &nbsp;

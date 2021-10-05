@@ -168,6 +168,30 @@ export default function AccountGeneral() {
 
                 <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                   <TextField
+                    value={values.location?.address || ''}
+                    onChange={(e) => setFieldValue('location.address', e.target.value)}
+                    fullWidth
+                    label="Dirección"
+                    variant="outlined"
+                    error={Boolean(touched.location?.address && errors.location?.address)}
+                    helperText={(touched.location?.address && errors.location?.address) || ''}
+                  />
+                </Stack>
+
+                <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+                  <TextField
+                    value={values.location?.addressMore || ''}
+                    onChange={(e) => setFieldValue('location.addressMore', e.target.value)}
+                    fullWidth
+                    label="Dirección adicional"
+                    variant="outlined"
+                    error={Boolean(touched.location?.addressMore && errors.location?.addressMore)}
+                    helperText={(touched.location?.addressMore && errors.location?.addressMore) || ''}
+                  />
+                </Stack>
+
+                <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+                  <TextField
                     select
                     fullWidth
                     label="País"
@@ -187,18 +211,6 @@ export default function AccountGeneral() {
                         </option>
                       ))}
                   </TextField>
-                </Stack>
-
-                <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                  <TextField
-                    value={values.location?.address || ''}
-                    onChange={(e) => setFieldValue('location.address', e.target.value)}
-                    fullWidth
-                    label="Dirección"
-                    variant="outlined"
-                    error={Boolean(touched.location?.address && errors.location?.address)}
-                    helperText={(touched.location?.address && errors.location?.address) || ''}
-                  />
                 </Stack>
 
                 <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>

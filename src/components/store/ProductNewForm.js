@@ -22,7 +22,10 @@ import {
 } from '@mui/material';
 // routes
 import { PATH_APP } from '../../routes/paths';
-//
+// redux
+import { useDispatch } from '../../redux/store';
+import { createProduct } from '../../redux/slices/product';
+// components
 import { QuillEditor } from '../editor';
 import { UploadMultiFile } from '../upload';
 
@@ -59,6 +62,7 @@ ProductNewForm.propTypes = {
 
 export default function ProductNewForm({ isEdit, currentProduct }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
   const NewProductSchema = Yup.object().shape({
@@ -76,8 +80,8 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       name: currentProduct?.name || '',
       description: currentProduct?.description || '',
       photos: currentProduct?.photos || [],
-      amount: currentProduct?.amount || '',
-      discountPartnership: currentProduct?.discountPartnership || '',
+      amount: currentProduct?.amount || 0,
+      discountPartnership: currentProduct?.discountPartnership || 0,
       tags: currentProduct?.tags || '',
       stockInfinity: (currentProduct?.stock || -1) === -1,
       stock: currentProduct?.stock || -1
@@ -86,6 +90,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
         resetForm();
+        await dispatch(createProduct(values));
         setSubmitting(false);
         enqueueSnackbar(!isEdit ? 'Producto creado satisfactoriamente' : 'Producto editado satisfactoriamente', {
           variant: 'success'

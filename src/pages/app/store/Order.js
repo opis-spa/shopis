@@ -157,7 +157,7 @@ export default function Order() {
   const isProductNotFound = filteredProducts.length === 0;
 
   return (
-    <Page title="Products | Shopis">
+    <Page title="Ordenes | shopis">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Ordenes"
