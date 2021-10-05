@@ -38,7 +38,7 @@ export default function LogoOnlyLayout() {
         </LinkStyle>
       </HeaderStyle>
       <Outlet />
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: -80 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: -5 }}>
         <PowerBy />
       </Box>
     </>
