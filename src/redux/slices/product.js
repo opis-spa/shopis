@@ -28,7 +28,8 @@ const initialState = {
     discount: 0,
     shipping: 0,
     delivery: null,
-    billing: null
+    billing: null,
+    isDelivery: false
   }
 };
 
@@ -78,18 +79,23 @@ const slice = createSlice({
         return quantity - isPrimo;
       };
 
+      let isDelivery = false;
+
       const subtotal = sum(
-        cart.map(
-          (product) =>
+        cart.map((product) => {
+          isDelivery = isDelivery || product.delivery;
+          return (
             (product.amount - product.discountPartnership) *
             (product.promo === '3x2' ? promoAdd(product.quantity) : product.quantity)
-        )
+          );
+        })
       );
       const discount = cart.length === 0 ? 0 : state.checkout.discount;
       const shipping = cart.length === 0 ? 0 : state.checkout.shipping;
       const billing = cart.length === 0 ? null : state.checkout.billing;
 
       state.checkout.cart = cart;
+      state.checkout.isDelivery = isDelivery;
       state.checkout.discount = discount;
       state.checkout.shipping = shipping;
       state.checkout.billing = billing;

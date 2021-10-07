@@ -15,11 +15,14 @@ import useIsMountedRef from '../../hooks/useIsMountedRef';
 import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
-import { CheckoutInformation, CheckoutPayment, CheckoutOrderComplete } from '../../components/shop/checkout';
+import {
+  CheckoutInformation,
+  CheckoutDelivery,
+  CheckoutPayment,
+  CheckoutOrderComplete
+} from '../../components/shop/checkout';
 
 // ----------------------------------------------------------------------
-
-const STEPS = ['Carrito', 'Despacho', 'Pago'];
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   top: 10,
@@ -97,7 +100,12 @@ export default function EcommerceCheckout() {
   const dispatch = useDispatch();
   const isMountedRef = useIsMountedRef();
   const { checkout } = useSelector((state) => state.product);
-  const { cart, activeStep } = checkout;
+  const { cart, activeStep, isDelivery } = checkout;
+  const STEPS = ['Carrito', 'Ingresar datos'];
+  if (isDelivery) {
+    STEPS.push('Despacho');
+  }
+  STEPS.push('Completar pago');
   const isComplete = activeStep === STEPS.length;
 
   useEffect(() => {
@@ -143,7 +151,8 @@ export default function EcommerceCheckout() {
         {!isComplete ? (
           <>
             {activeStep === 1 && <CheckoutInformation />}
-            {activeStep === 2 && <CheckoutPayment />}
+            {isDelivery && activeStep === 2 && <CheckoutDelivery />}
+            {activeStep === 3 - (isDelivery ? 1 : 0) && <CheckoutPayment />}
           </>
         ) : (
           <CheckoutOrderComplete open={isComplete} />
