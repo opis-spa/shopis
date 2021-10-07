@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { Box } from '@mui/material';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
@@ -17,7 +17,7 @@ const defaultProps = {
   onDecrease: () => {}
 };
 
-function Increment(props) {
+const Increment = forwardRef((props, ref) => {
   const { available, quantity, onIncrease, onDecrease } = props;
 
   const incrementQuantity = () => {
@@ -29,6 +29,7 @@ function Increment(props) {
 
   return (
     <Box
+      ref={ref}
       sx={{
         py: 0.5,
         px: 0.75,
@@ -65,7 +66,7 @@ function Increment(props) {
       </MIconButton>
     </Box>
   );
-}
+});
 
 Increment.propTypes = propType;
 Increment.defaultProps = defaultProps;

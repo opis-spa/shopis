@@ -71,7 +71,20 @@ const slice = createSlice({
     getCart(state, action) {
       const cart = action.payload;
 
-      const subtotal = sum(cart.map((product) => (product.amount - product.discountPartnership) * product.quantity));
+      const promoAdd = (quantity) => {
+        const isPrimo = quantity % 3 === 0 ? 1 : 0;
+        console.log(' promo cal ');
+        console.log(quantity - isPrimo);
+        return quantity - isPrimo;
+      };
+
+      const subtotal = sum(
+        cart.map(
+          (product) =>
+            (product.amount - product.discountPartnership) *
+            (product.promo === '3x2' ? promoAdd(product.quantity) : product.quantity)
+        )
+      );
       const discount = cart.length === 0 ? 0 : state.checkout.discount;
       const shipping = cart.length === 0 ? 0 : state.checkout.shipping;
       const billing = cart.length === 0 ? null : state.checkout.billing;
@@ -159,8 +172,10 @@ const slice = createSlice({
 
     decreaseQuantity(state, action) {
       const productId = action.payload;
-      const updateCart = map(state.checkout.cart, (product) => {
+      let isDelete = false;
+      let updateCart = map(state.checkout.cart, (product) => {
         if (product.id === productId) {
+          isDelete = product.quantity - 1 === 0;
           return {
             ...product,
             quantity: product.quantity - 1
@@ -168,6 +183,10 @@ const slice = createSlice({
         }
         return product;
       });
+
+      if (isDelete) {
+        updateCart = filter(state.checkout.cart, (item) => item.id !== productId);
+      }
 
       state.checkout.cart = updateCart;
     },

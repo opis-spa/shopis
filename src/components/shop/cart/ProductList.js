@@ -109,12 +109,15 @@ export default function ProductList({ formik, onDelete, onIncreaseQuantity, onDe
 
         <TableBody>
           {products.map((product) => {
-            const { id, name, amount, photo, quantity, stock, discountPartnership } = product;
+            const { id, name, amount, photo, photos, promo, quantity, stock, discountPartnership } = product;
+            const image = photos || [photo];
+            const isPromo = promo === '3x2';
+            const isDiscountXPromo = isPromo && quantity % 3 === 0;
             return (
               <TableRow key={id}>
                 <TableCell>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <ThumbImgStyle alt="product image" src={photo} />
+                    <ThumbImgStyle alt="product image" src={image[0]} />
                     <Box>
                       <Typography noWrap variant="subtitle2" sx={{ maxWidth: 240, mb: 0.5 }}>
                         {name}
@@ -147,7 +150,18 @@ export default function ProductList({ formik, onDelete, onIncreaseQuantity, onDe
                   />
                 </TableCell>
 
-                <TableCell align="right">{fCurrency((amount - discountPartnership) * quantity)}</TableCell>
+                <TableCell align="right" sx={{ textAlign: 'right' }}>
+                  <Stack>
+                    {isDiscountXPromo && (
+                      <Typography sx={{ textDecoration: 'line-through', color: 'text.disabled', fontSize: 12 }}>
+                        {fCurrency((amount - discountPartnership) * quantity)}
+                      </Typography>
+                    )}
+                    <Typography>
+                      {fCurrency((amount - discountPartnership) * (quantity - (isDiscountXPromo ? 1 : 0)))}
+                    </Typography>
+                  </Stack>
+                </TableCell>
               </TableRow>
             );
           })}

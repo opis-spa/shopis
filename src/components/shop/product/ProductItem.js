@@ -31,8 +31,15 @@ ProductItem.propTypes = {
 };
 
 function ProductItem({ product, ...other }) {
-  const { name, photo, amount, discountPartnership: discount, unitMeasurement } = product;
+  const { name, photo, photos, amount, discountPartnership: discount, unitMeasurement } = product;
   const { cart } = useSelector((state) => state.product.checkout);
+
+  const image = useMemo(() => {
+    if (photos) {
+      return photos;
+    }
+    return [photo];
+  }, [photos, photo]);
 
   const productCart = useMemo(() => {
     const cartNew = cart.find((item) => item.id === product.id);
@@ -74,7 +81,7 @@ function ProductItem({ product, ...other }) {
           </Label>
         )}
 
-        <ProductImgStyle alt={name} src={photo} />
+        <ProductImgStyle alt={name} src={image[0]} />
       </Box>
 
       <Stack sx={{ p: 3 }}>
@@ -98,7 +105,7 @@ function ProductItem({ product, ...other }) {
               )}
             </Box>
 
-            <ProductAdd product={productCart} />
+            <ProductAdd title={productCart?.type === 'raffle' || '' ? 'participar' : 'agregar'} product={productCart} />
           </Stack>
         </Stack>
       </Stack>

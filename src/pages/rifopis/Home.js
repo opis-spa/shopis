@@ -36,7 +36,7 @@ const Home = () => {
 
   return (
     <Page title={partnership.name}>
-      <Grid>
+      <Grid container spacing={2} sx={{ mb: 10 }}>
         {isLoading ? (
           <Grid item xs={12} style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>
             <CircularProgress />

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useFormik, FormikProvider } from 'formik';
 // material
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 // hooks
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // redux
@@ -12,17 +12,25 @@ import { addCart, decreaseQuantity, increaseQuantity } from '../../../redux/slic
 import Increment from '../../Increment';
 
 const propTypes = {
+  title: PropTypes.string,
   product: PropTypes.shape({
     id: PropTypes.string,
     quantity: PropTypes.number,
     amount: PropTypes.number,
-    stock: PropTypes.number
+    stock: PropTypes.number,
+    promo: PropTypes.string,
+    type: PropTypes.string
   })
 };
 
+const defaultProps = {
+  title: 'Agregar'
+};
+
 function ProductAdd(props) {
-  const { product } = props;
-  const { id, quantity, stock } = product;
+  const { product, title } = props;
+  const { id, quantity, stock, promo } = product;
+  const isTreeXTwo = promo === '3x2';
   const isMountedRef = useIsMountedRef();
   const [cartQuantity, setCartQuantity] = useState(quantity);
   const dispatch = useDispatch();
@@ -40,6 +48,11 @@ function ProductAdd(props) {
     }
   }, [dispatch, isMountedRef, product]);
 
+  const open = useMemo(() => {
+    const isPrimo = (cartQuantity + 1) % 3 === 0;
+    return isTreeXTwo && isPrimo;
+  }, [isTreeXTwo, cartQuantity]);
+
   const handleIncrease = () => {
     dispatch(increaseQuantity(id));
   };
@@ -47,14 +60,23 @@ function ProductAdd(props) {
     dispatch(decreaseQuantity(id));
   };
   const handleAddToCart = async () => {
-    setCartQuantity(1);
-    dispatch(addCart({ ...product, quantity: 1 }));
+    const addQuantity = isTreeXTwo ? 3 : 1;
+    setCartQuantity(addQuantity);
+    dispatch(addCart({ ...product, quantity: addQuantity }));
   };
 
   return (
     <FormikProvider value={formik}>
       {(cartQuantity || 0) > 0 ? (
-        <div>
+        <Tooltip
+          open={open}
+          disableFocusListener
+          disableHoverListener
+          disableTouchListener
+          title="¡1 más para la promo!"
+          placement="bottom"
+          arrow
+        >
           <Increment
             name="quantity"
             quantity={cartQuantity}
@@ -62,11 +84,11 @@ function ProductAdd(props) {
             onDecrease={handleDecrease}
             onIncrease={handleIncrease}
           />
-        </div>
+        </Tooltip>
       ) : (
         <div>
           <Button fullWidth variant="contained" color="primary" size="small" onClick={handleAddToCart}>
-            agregar
+            {title}
           </Button>
         </div>
       )}
@@ -75,5 +97,6 @@ function ProductAdd(props) {
 }
 
 ProductAdd.propTypes = propTypes;
+ProductAdd.defaultProps = defaultProps;
 
 export default ProductAdd;
