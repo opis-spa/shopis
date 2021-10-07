@@ -2,7 +2,6 @@ import { Helmet } from 'react-helmet-async';
 import { paypalConfig } from '../config';
 
 // ----------------------------------------------------------------------
-
 const PAYPAL_CLIENT_ID = paypalConfig;
 
 export default function PayPal() {
