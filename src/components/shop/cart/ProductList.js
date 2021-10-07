@@ -77,7 +77,12 @@ function Incrementer({ available, quantity, onIncrease, onDecrease }) {
           <Icon icon={minusFill} width={16} height={16} />
         </MIconButton>
         {quantity}
-        <MIconButton size="small" color="inherit" onClick={onIncrease} disabled={quantity >= available}>
+        <MIconButton
+          size="small"
+          color="inherit"
+          onClick={onIncrease}
+          disabled={available >= 0 && quantity >= available}
+        >
           <Icon icon={plusFill} width={16} height={16} />
         </MIconButton>
       </IncrementerStyle>
