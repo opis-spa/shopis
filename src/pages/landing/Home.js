@@ -26,8 +26,8 @@ const Landing = () => (
   <RootStyle title="shopis">
     <LandingHero />
     <ContentStyle>
-      <LandingShared />
       <LandingCategories />
+      <LandingShared />
       <LandingOrdersAllTime />
       <LandingMethodPayment />
       <LandingRegister />

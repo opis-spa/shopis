@@ -52,6 +52,7 @@ export default function LandingCategories() {
 
   return (
     <RootStyle>
+      <Box component="img" src="/static/img/shape.svg" sx={{ position: 'absolute' }} />
       <Container maxWidth="lg">
         <Grid container direction="row">
           <Grid item xs={12} md={7} lg={6}>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Element } from 'react-scroll';
 // material
 import { useTheme, styled } from '@mui/material/styles';
-import { Grid, Container, Typography, Box } from '@mui/material';
+import { Grid, Container, Typography } from '@mui/material';
 //
 import { varFadeInUp, MotionInView } from '../animate';
 
@@ -30,7 +30,6 @@ export default function LandingOrdersAllTime() {
 
   return (
     <RootStyle name="que-ofrecemos">
-      <Box component="img" src="/static/img/shape.svg" sx={{ position: 'absolute' }} />
       <Container maxWidth="lg">
         <Grid container spacing={5} justifyContent="center">
           <Grid item xs={12} md={6} dir="ltr">
