@@ -17,7 +17,6 @@ const RootStyle = styled(Page)({
 });
 
 const ContentStyle = styled('div')(({ theme }) => ({
-  overflow: 'hidden',
   position: 'relative',
   backgroundColor: theme.palette.background.default
 }));
@@ -29,7 +28,7 @@ const Landing = () => (
       <LandingCategories />
       <LandingShared />
       <LandingOrdersAllTime />
-      <LandingMethodPayment />
+      {/* <LandingMethodPayment /> */}
       <LandingRegister />
       <LandingPricingPlans />
       <LandingFaqs />
