@@ -28,7 +28,7 @@ const Landing = () => (
       <LandingCategories />
       <LandingShared />
       <LandingOrdersAllTime />
-      {/* <LandingMethodPayment /> */}
+      <LandingMethodPayment />
       <LandingRegister />
       <LandingPricingPlans />
       <LandingFaqs />

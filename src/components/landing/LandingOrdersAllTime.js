@@ -185,7 +185,8 @@ export default function LandingOrdersAllTime() {
                 mb: 3
               },
               [theme.breakpoints.up('md')]: {
-                fontSize: 48
+                fontSize: 48,
+                mb: 2
               }
             }}
           >
@@ -209,7 +210,8 @@ export default function LandingOrdersAllTime() {
                 fontSize: 20
               },
               [theme.breakpoints.up('md')]: {
-                fontSize: 24
+                fontSize: 24,
+                mb: 2
               }
             }}
           >

@@ -33,8 +33,9 @@ const PLANS = [
 
 const RootStyle = styled(Element)(({ theme }) => ({
   paddingTop: theme.spacing(15),
+  paddingBottom: theme.spacing(5),
   [theme.breakpoints.up('md')]: {
-    paddingBottom: theme.spacing(15)
+    paddingBottom: theme.spacing(10)
   }
 }));
 
@@ -68,11 +69,9 @@ function PlanCard({ plan, cardIndex }) {
     <Card
       sx={{
         p: 5,
-        boxShadow: (theme) =>
-          `0px 48px 80px ${alpha(isLight ? theme.palette.grey[500] : theme.palette.common.black, 0.12)}`,
+        boxShadow: (theme) => `0px 0 16px ${alpha(isLight ? 'rgb(41,63,161)' : theme.palette.common.black, 0.15)}`,
         ...(cardIndex === 1 && {
-          boxShadow: (theme) =>
-            `0px 48px 80px ${alpha(isLight ? theme.palette.grey[500] : theme.palette.common.black, 0.48)}`
+          boxShadow: (theme) => `0px 0 16px ${alpha(isLight ? 'rgb(41,63,161)' : theme.palette.common.black, 0.15)}`
         })
       }}
     >
@@ -88,17 +87,42 @@ function PlanCard({ plan, cardIndex }) {
         />
 
         <StackPriceStyle direction="row">
-          <Typography variant="h1" sx={{ fontWeight: 900 }}>
+          <Typography
+            variant="h2"
+            sx={{
+              fontWeight: 900,
+              color: '#3C568E',
+              fontSize: 36,
+              [theme.breakpoints.up('sm')]: { fontSize: 40 },
+              [theme.breakpoints.up('md')]: { fontSize: 48 }
+            }}
+          >
             {fCurrency(price)}
           </Typography>
-          <Typography variant="body2"> al mes </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              fontSize: 16,
+              position: 'relative',
+              bottom: 6,
+              left: 8,
+              [theme.breakpoints.up('sm')]: { fontSize: 18 }
+            }}
+          >
+            al mes
+          </Typography>
         </StackPriceStyle>
 
         <Stack spacing={2.5}>
           {commons.map((option) => (
             <Stack key={option} spacing={1.5} direction="row" alignItems="center">
-              <Box component={Icon} icon={checkmarkFill} sx={{ color: 'text.main', width: 7, height: 7 }} />
-              <Typography variant="body2">{option}</Typography>
+              <Box component={Icon} icon={checkmarkFill} sx={{ color: '#3C568E', width: 7, height: 7 }} />
+              <Typography
+                variant="body2"
+                sx={{ color: '#3C568E', fontSize: 16, [theme.breakpoints.up('sm')]: { fontSize: 18 } }}
+              >
+                {option}
+              </Typography>
             </Stack>
           ))}
 
@@ -156,19 +180,33 @@ function PlanCard({ plan, cardIndex }) {
 PlanCard.propTypes = propTypes;
 
 export default function LandingPricingPlans() {
+  const theme = useTheme();
+
   return (
     <RootStyle name="precios">
       <Container maxWidth="lg">
-        <Box sx={{ mb: 10, textAlign: 'center' }}>
+        <Box sx={{ mb: 5, textAlign: 'center' }}>
           <MotionInView variants={varFadeInDown}>
-            <Typography variant="h2" sx={{ color: 'secondary.main', fontWeight: 900, mb: 3 }}>
+            <Typography
+              variant="h2"
+              sx={{
+                color: 'secondary.main',
+                fontWeight: 900,
+                mb: 2,
+                [theme.breakpoints.up('sm')]: { fontSize: 40 },
+                [theme.breakpoints.up('md')]: { fontSize: 48 }
+              }}
+            >
               Pruébalo gratis
             </Typography>
           </MotionInView>
           <MotionInView variants={varFadeInDown}>
             <Typography
               sx={{
-                color: (theme) => (theme.palette.mode === 'light' ? 'text.secondary' : 'text.primary')
+                color: (theme) => (theme.palette.mode === 'light' ? 'primary.main' : 'text.primary'),
+                fontSize: 16,
+                [theme.breakpoints.up('sm')]: { fontSize: 20 },
+                [theme.breakpoints.up('md')]: { fontSize: 24 }
               }}
             >
               Si te gusta, paga solo mientras lo uses.
@@ -178,7 +216,7 @@ export default function LandingPricingPlans() {
 
         <Grid container spacing={5} justifyContent="center">
           {PLANS.map((plan, index) => (
-            <Grid key={plan.id} item xs={12} md={4}>
+            <Grid key={plan.id} item xs={12} sx={{ maxWidth: 490 }}>
               <MotionInView variants={index === 1 ? varFadeInDown : varFadeInUp}>
                 <PlanCard plan={plan} cardIndex={index} />
               </MotionInView>
