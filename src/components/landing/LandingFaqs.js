@@ -67,7 +67,8 @@ function FaqsList() {
 
 const RootStyle = styled(Element)(({ theme }) => ({
   paddingTop: theme.spacing(15),
-  paddingBottom: theme.spacing(15)
+  paddingBottom: theme.spacing(15),
+  overflow: 'hidden'
 }));
 
 const TypographyTitle = styled(Typography)(({ theme }) => ({

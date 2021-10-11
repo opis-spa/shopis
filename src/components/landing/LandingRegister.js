@@ -20,6 +20,7 @@ const storeValidationSchema = Yup.object().shape({
 const RootStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(15, 0),
   backgroundColor: theme.palette.primary.main,
+  overflow: 'hidden',
   [theme.breakpoints.up('md')]: {
     padding: theme.spacing(20, 0)
   }

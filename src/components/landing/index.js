@@ -6,3 +6,4 @@ export { default as LandingCategories } from './LandingCategories';
 export { default as LandingOrdersAllTime } from './LandingOrdersAllTime';
 export { default as LandingShared } from './LandingShared';
 export { default as LandingFaqs } from './LandingFaqs';
+export { default as LandingContact } from './LandingContact';

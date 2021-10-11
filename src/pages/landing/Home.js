@@ -9,7 +9,8 @@ import {
   LandingRegister,
   LandingOrdersAllTime,
   LandingMethodPayment,
-  LandingCategories
+  LandingCategories,
+  LandingContact
 } from '../../components/landing';
 
 const RootStyle = styled(Page)({
@@ -32,6 +33,7 @@ const Landing = () => (
       <LandingRegister />
       <LandingPricingPlans />
       <LandingFaqs />
+      <LandingContact />
     </ContentStyle>
   </RootStyle>
 );

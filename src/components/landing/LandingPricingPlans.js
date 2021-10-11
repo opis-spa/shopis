@@ -34,6 +34,7 @@ const PLANS = [
 const RootStyle = styled(Element)(({ theme }) => ({
   paddingTop: theme.spacing(15),
   paddingBottom: theme.spacing(5),
+  overflow: 'hidden',
   [theme.breakpoints.up('md')]: {
     paddingBottom: theme.spacing(10)
   }

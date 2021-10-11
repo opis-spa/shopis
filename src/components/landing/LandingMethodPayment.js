@@ -3,16 +3,18 @@ import React from 'react';
 import { alpha, styled, useTheme } from '@mui/material/styles';
 import { Typography, Stack, Box, Container, Grid } from '@mui/material';
 //
-import { varFadeInUp, MotionInView } from '../animate';
+import { varFadeInUp, MotionInView, varFadeIn } from '../animate';
 
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
-  paddingTop: theme.spacing(5),
-  paddingBottom: theme.spacing(10),
+  padding: theme.spacing(5, 3, 10),
+  overflow: 'hidden',
   [theme.breakpoints.up('sm')]: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(12)
+    padding: theme.spacing(8, 3, 12)
+  },
+  [theme.breakpoints.up('sm')]: {
+    padding: theme.spacing(15, 3, 20)
   }
 }));
 
@@ -46,7 +48,22 @@ export default function LandingMethodPayment() {
       >
         <Container maxWidth="lg">
           <Grid container spacing={{ xs: 2, sm: 5, md: 5 }}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} sx={{ position: 'relative' }}>
+              <MotionInView variants={varFadeIn}>
+                <Box
+                  component="img"
+                  alt="stars icon"
+                  src="/static/img/stars-left.png"
+                  sx={{
+                    width: 42.79,
+                    position: 'absolute',
+                    top: -5,
+                    left: -35,
+                    [theme.breakpoints.up('sm')]: { width: 55, top: 5, left: -20 },
+                    [theme.breakpoints.up('md')]: { width: 68.18, top: 0, left: -35 }
+                  }}
+                />
+              </MotionInView>
               <MotionInView variants={varFadeInUp}>
                 <Typography
                   variant="h3"
@@ -99,8 +116,23 @@ export default function LandingMethodPayment() {
                 </Typography>
               </MotionInView>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} sx={{ position: 'relative' }}>
               <ContentStyle>
+                <MotionInView variants={varFadeIn}>
+                  <Box
+                    component="img"
+                    src="/static/img/stars-right.png"
+                    alt="icon stars"
+                    sx={{
+                      position: 'absolute',
+                      bottom: -30,
+                      right: -50,
+                      width: 86.47,
+                      [theme.breakpoints.up('sm')]: { width: 95, bottom: -40, right: -60 },
+                      [theme.breakpoints.up('md')]: { width: 109.71, bottom: 15, right: -45 }
+                    }}
+                  />
+                </MotionInView>
                 <Grid container spacing={4}>
                   <Grid item xs={6}>
                     <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>

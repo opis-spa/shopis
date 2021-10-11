@@ -11,6 +11,7 @@ import { varFadeInUp, MotionInView } from '../animate';
 const RootStyle = styled(Element)(({ theme }) => ({
   paddingTop: theme.spacing(10),
   paddingBottom: theme.spacing(10),
+  overflow: 'hidden',
   [theme.breakpoints.up('md')]: {
     paddingTop: theme.spacing(20),
     paddingBottom: theme.spacing(15)
