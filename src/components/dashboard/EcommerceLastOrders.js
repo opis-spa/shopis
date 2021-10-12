@@ -45,25 +45,23 @@ export default function EcommerceBestSalesman() {
             </TableHead>
             <TableBody>
               {sales.map((row) => {
-                const { orderCode, user, status, amount } = row;
+                const { orderCode, customer, paymentMethod, status, amountTotal } = row;
                 return (
                   <TableRow key={orderCode}>
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Avatar alt={user.name} src={user.photo} />
+                        <Avatar alt={customer.name} src={customer.photo} />
                         <Box sx={{ ml: 2 }}>
-                          <Typography variant="subtitle2"> {user.name}</Typography>
+                          <Typography variant="subtitle2"> {customer.name}</Typography>
                           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                            {user.email}
+                            {customer.email}
                           </Typography>
                         </Box>
                       </Box>
                     </TableCell>
                     <TableCell>{row.category}</TableCell>
-                    <TableCell>
-                      <img src={row.flag} alt="country flag" />
-                    </TableCell>
-                    <TableCell>{fCurrency(amount)}</TableCell>
+                    <TableCell>{paymentMethod.type}</TableCell>
+                    <TableCell>{fCurrency(amountTotal)}</TableCell>
                     <TableCell align="right">
                       <Label variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'} color="success">
                         {status}

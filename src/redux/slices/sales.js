@@ -33,7 +33,7 @@ const slice = createSlice({
     },
 
     // GET PRODUCTS
-    getSale(state, action) {
+    getSaleSuccess(state, action) {
       state.isLoading = false;
       state.sale = action.payload;
     }
@@ -52,7 +52,7 @@ export const getSales = () => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
     const response = await axios.get(`/api/v1/sales/partnership`);
-    dispatch(slice.actions.getStoreSuccess(response.data.sales));
+    dispatch(slice.actions.getSalesSuccess(response.data.sales));
   } catch (error) {
     dispatch(slice.actions.hasError(error));
   }
@@ -62,58 +62,10 @@ export const getSale = (orderId) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
     const response = await axios.get(`/api/v1/sales/order/${orderId}`);
-    dispatch(slice.actions.getStoreSuccess(response.data.order));
+    dispatch(slice.actions.getSaleSuccess(response.data.sale));
   } catch (error) {
     dispatch(slice.actions.hasError(error));
   }
 };
 
 // -----------------------------------------------------------------------
-
-export const createOrder = (partnershipID, paymentMethod, address, products, coupon) => async (dispatch) => {
-  dispatch(slice.actions.startLoading());
-  let payload = {};
-  if (coupon) {
-    payload = {
-      products,
-      partnershipID,
-      paymentMethod,
-      address,
-      coupon
-    };
-  } else {
-    payload = {
-      products,
-      partnershipID,
-      paymentMethod,
-      address
-    };
-  }
-  try {
-    const response = await axios.post('/api/v1/sales/order', { ...payload });
-    const { success, message, order } = response;
-    if (success === true) {
-      return order;
-    }
-    if (
-      message === 'Monto total de la compra es superior a tu saldo' ||
-      message === 'Insufficient balance' ||
-      message === 'Error: not enough found' ||
-      message === 'you dont have wallet whit this currency'
-    ) {
-      const error = new Error(message);
-      error.code = 'order/insufficient_funds';
-      throw error;
-    }
-    if (message === 'Insufficient Stock') {
-      const error = new Error(message);
-      error.code = 'order/insufficient_stock';
-      throw error;
-    }
-    const error = new Error(message);
-    error.code = 'order/error';
-    throw error;
-  } catch (error) {
-    return error;
-  }
-};

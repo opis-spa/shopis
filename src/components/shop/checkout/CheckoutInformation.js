@@ -9,8 +9,8 @@ import { Grid, Button, Link, Typography, Stack, TextField } from '@mui/material'
 import { useDispatch, useSelector } from '../../../redux/store';
 import { onNextStep, createInformation } from '../../../redux/slices/product';
 // components
+import LinkPartnership from '../../LinkPartnership';
 import LogoOpis from '../../LogoOpis';
-// utils
 
 const CheckOutSchema = Yup.object().shape({
   name: Yup.string().required('Nombre es requerido'),
@@ -61,19 +61,23 @@ const CheckoutInformation = () => {
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Grid item xs={12} display="flex" justifyContent="flex-end">
-          <Stack direction="row" alignItems="center" sx={{ mb: 4 }}>
-            <Typography color="textSecondary" variant="body2">
-              ¿Ya tienes una cuenta&nbsp;
-            </Typography>
-            <LogoOpis />
-            <Typography color="textSecondary" variant="body2">
-              ?&nbsp;
-            </Typography>
+        <Grid item xs={12} display="flex" sx={{ mb: 4 }}>
+          <Stack direction="row" justifyContent="space-between" sx={{ width: '100%' }}>
+            <LinkPartnership to="/cart">Volver</LinkPartnership>
 
-            <Link to="/auth/login" component={RouteLink}>
-              Iniciar Sesión
-            </Link>
+            <Stack direction="row" alignItems="center">
+              <Typography color="textSecondary" variant="body2">
+                ¿Ya tienes una cuenta&nbsp;
+              </Typography>
+              <LogoOpis />
+              <Typography color="textSecondary" variant="body2">
+                ?&nbsp;
+              </Typography>
+
+              <Link to="/auth/login" component={RouteLink}>
+                Iniciar Sesión
+              </Link>
+            </Stack>
           </Stack>
         </Grid>
         <Grid item xs={12}>
@@ -110,9 +114,11 @@ const CheckoutInformation = () => {
           </Stack>
         </Grid>
         <Grid item xs={12}>
-          <Button type="submit" variant="contained" color="primary" fullWidth disabled={isLoading}>
-            Continuar con el envío
-          </Button>
+          <Stack>
+            <Button type="submit" variant="contained" color="primary" fullWidth disabled={isLoading}>
+              Continuar con el envío
+            </Button>
+          </Stack>
         </Grid>
       </Form>
     </FormikProvider>

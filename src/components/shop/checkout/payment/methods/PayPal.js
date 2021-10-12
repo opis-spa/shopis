@@ -15,28 +15,35 @@ const propTypes = {
 };
 
 function PayPal({ amount }) {
-  console.log('amount');
-  console.log((amount / 730).toFixed(2));
   const paypal = useRef();
-
+  console.log(amount);
   useEffect(() => {
     window.paypal
       .Buttons({
-        createOrder: (data, actions) =>
-          actions.order.create({
+        createOrder: (data, actions) => {
+          const order = actions.order.create({
             intent: 'CAPTURE',
             purchase_units: [
               {
                 description: 'Cool looking table',
                 amount: {
                   currency_code: 'USD',
-                  value: 100
+                  value: amount
                 }
               }
             ]
-          }),
+          });
+          const { e } = order;
+          console.log(order);
+          if (e) {
+            console.log(' order ', e.value);
+          }
+          // here is important asociate this number
+          return order;
+        },
         onApprove: async (data, actions) => {
           const order = await actions.order.capture();
+          console.log(' return paypal');
           console.log(order);
         },
         onError: (err) => {
@@ -44,7 +51,7 @@ function PayPal({ amount }) {
         }
       })
       .render(paypal.current);
-  }, []);
+  }, [amount]);
 
   return <RootStyle ref={paypal} />;
 }

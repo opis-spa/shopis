@@ -28,7 +28,7 @@ const propTypes = {
   onGotoStep: PropTypes.func
 };
 
-function ProductSumary({ product, cart, onAddCart, onGotoStep }) {
+function ProductSummary({ product, cart, onAddCart, onGotoStep }) {
   const navigate = useNavigate();
   const { partnership } = usePartnership();
   const { nickname } = partnership;
@@ -130,6 +130,6 @@ function ProductSumary({ product, cart, onAddCart, onGotoStep }) {
   );
 }
 
-ProductSumary.propTypes = propTypes;
+ProductSummary.propTypes = propTypes;
 
-export default ProductSumary;
+export default ProductSummary;

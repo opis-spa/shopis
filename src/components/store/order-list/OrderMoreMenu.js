@@ -15,10 +15,10 @@ import { PATH_APP } from '../../../routes/paths';
 
 OrderMoreMenu.propTypes = {
   onDelete: PropTypes.func,
-  productName: PropTypes.string
+  id: PropTypes.string
 };
 
-export default function OrderMoreMenu({ onDelete, productName }) {
+export default function OrderMoreMenu({ onDelete, id }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -47,7 +47,7 @@ export default function OrderMoreMenu({ onDelete, productName }) {
 
         <MenuItem
           component={RouterLink}
-          to={`${PATH_APP.business.store}/product/${paramCase(productName)}/edit`}
+          to={`${PATH_APP.business.store}/order/${id}/edit`}
           sx={{ color: 'text.secondary' }}
         >
           <ListItemIcon>

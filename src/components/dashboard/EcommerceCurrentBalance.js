@@ -28,7 +28,7 @@ export default function EcommerceCurrentBalance() {
         </Typography>
 
         <Stack spacing={2}>
-          {isLoading ? <CircularProgress /> : <Typography variant="h3">{fCurrency(balance)}</Typography>}
+          {isLoading ? <CircularProgress /> : <Typography variant="h3">{fCurrency(balance?.amount)}</Typography>}
 
           <Stack direction={{ xs: 'row', md: 'row', lg: 'column' }} spacing={1.5} justifyContent="flex-end">
             <Button fullWidth variant="contained" onClick={handleRequest}>

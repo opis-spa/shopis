@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
-import editFill from '@iconify/icons-eva/edit-fill';
 // material
 import {
   Box,
@@ -26,8 +24,6 @@ CheckoutSummary.propTypes = {
   delivery: PropTypes.bool,
   subtotal: PropTypes.number,
   shipping: PropTypes.number,
-  onEdit: PropTypes.func,
-  enableEdit: PropTypes.bool,
   onApplyDiscount: PropTypes.func,
   enableDiscount: PropTypes.bool,
   preview: PropTypes.bool
@@ -35,13 +31,11 @@ CheckoutSummary.propTypes = {
 
 export default function CheckoutSummary({
   total,
-  onEdit,
   discount,
   delivery = false,
   subtotal,
   shipping = null,
   onApplyDiscount,
-  enableEdit = false,
   enableDiscount = false,
   preview = false
 }) {
@@ -56,17 +50,8 @@ export default function CheckoutSummary({
   };
 
   return (
-    <Card sx={{ mb: 3 }}>
-      <CardHeader
-        title="Resumen"
-        action={
-          enableEdit && (
-            <Button size="small" type="button" onClick={onEdit} startIcon={<Icon icon={editFill} />}>
-              Edit
-            </Button>
-          )
-        }
-      />
+    <Card sx={{ my: 3 }}>
+      <CardHeader title="Resumen" />
 
       <CardContent>
         <Stack spacing={2}>

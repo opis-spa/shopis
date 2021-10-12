@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
@@ -17,7 +17,9 @@ import {
   FormHelperText,
   FormControlLabel
 } from '@mui/material';
-//
+// redux
+import { useSelector } from '../../../redux/store';
+// components
 import PayPal from './payment/methods/PayPal';
 import { MHidden } from '../../@material-extend';
 
@@ -41,9 +43,13 @@ CheckoutPaymentMethods.propTypes = {
 };
 
 export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
+  const { total } = useSelector((state) => state.product.checkout);
   const { errors, touched, values, getFieldProps } = formik;
-  console.log('paymentOptions');
-  console.log(paymentOptions);
+
+  useEffect(() => {
+    console.log('value formik ');
+    console.log(values);
+  }, [values]);
   return (
     <Card sx={{ my: 3 }}>
       <CardHeader title="Forma de pago" />
@@ -96,7 +102,7 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
 
                     {hasChildren && (
                       <Collapse in={values.payment === 'paypal'} sx={{ width: '100%' }}>
-                        <PayPal amount={(5).toFixed(2)} />
+                        {values.payment === 'paypal' && <PayPal amount={parseFloat((total / 730).toFixed(2))} />}
                       </Collapse>
                     )}
                   </OptionStyle>

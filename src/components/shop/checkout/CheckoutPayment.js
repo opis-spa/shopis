@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
+import { Icon } from '@iconify/react';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
 import { Grid, Button } from '@mui/material';
@@ -10,7 +11,7 @@ import { LoadingButton } from '@mui/lab';
 import usePartnership from '../../../hooks/usePartnership';
 // redux
 import { useDispatch, useSelector } from '../../../redux/store';
-import { onGotoStep, onBackStep, onNextStep } from '../../../redux/slices/product';
+import { onBackStep, onNextStep, proccessCheckout } from '../../../redux/slices/product';
 //
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
@@ -20,26 +21,19 @@ import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 
 export default function CheckoutPayment() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { partnership } = usePartnership();
   const { data: payments } = useSelector((state) => state.payment);
-  const { checkout } = useSelector((state) => state.product);
-  const { total, discount, subtotal, shipping } = checkout;
+  const { checkout, checkoutResult } = useSelector((state) => state.product);
+  const { cart, total, discount, subtotal, shipping, isDelivery, data: customer, delivery } = checkout;
 
   const PAYMENT_OPTIONS = useMemo(() => {
     const { paymentMethods } = partnership;
     return payments.filter((item) => paymentMethods.indexOf(item.id) >= 0);
   }, [partnership, payments]);
 
-  const handleNextStep = () => {
-    dispatch(onNextStep());
-  };
-
   const handleBackStep = () => {
     dispatch(onBackStep());
-  };
-
-  const handleGotoStep = (step) => {
-    dispatch(onGotoStep(step));
   };
 
   const PaymentSchema = Yup.object().shape({
@@ -48,13 +42,16 @@ export default function CheckoutPayment() {
 
   const formik = useFormik({
     initialValues: {
-      delivery: shipping,
+      partnershipID: partnership.id,
+      customer,
+      products: cart.map((item) => ({ id: item.id, quantity: item.quantity })),
+      delivery,
       payment: ''
     },
     validationSchema: PaymentSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
-        handleNextStep();
+        await dispatch(proccessCheckout(values));
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -63,14 +60,26 @@ export default function CheckoutPayment() {
     }
   });
 
-  const { isSubmitting, handleSubmit } = formik;
+  const { values, isSubmitting, handleSubmit, setSubmitting } = formik;
+
+  useMemo(() => {
+    const { success } = checkoutResult;
+    if (success) {
+      if (values.payment !== 'webpay') {
+        setSubmitting(false);
+        dispatch(onNextStep());
+      } else {
+        // vamos a enviar a webpay
+        navigate(`/shop/${partnership.nickname}/checkout/payment`);
+      }
+    }
+  }, [dispatch, checkoutResult, setSubmitting, values.payment]);
 
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
-            <CheckoutPaymentMethods formik={formik} paymentOptions={PAYMENT_OPTIONS} />
             <Button
               type="button"
               size="small"
@@ -80,19 +89,20 @@ export default function CheckoutPayment() {
             >
               Volver
             </Button>
+            <CheckoutPaymentMethods formik={formik} paymentOptions={PAYMENT_OPTIONS} />
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <CheckoutBillingInfo onBackStep={handleBackStep} />
-            <CheckoutSummary
-              enableEdit
-              total={total}
-              subtotal={subtotal}
-              discount={discount}
-              shipping={shipping}
-              onEdit={() => handleGotoStep(0)}
-            />
-            <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+            {isDelivery && <CheckoutBillingInfo onBackStep={handleBackStep} />}
+            <CheckoutSummary total={total} subtotal={subtotal} discount={discount} shipping={shipping} />
+            <LoadingButton
+              fullWidth
+              disabled={values.payment === 'paypal'}
+              size="large"
+              type="submit"
+              variant="contained"
+              loading={isSubmitting}
+            >
               Completar orden
             </LoadingButton>
           </Grid>

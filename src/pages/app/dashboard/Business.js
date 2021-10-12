@@ -7,6 +7,7 @@ import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // redux
 import { useDispatch } from '../../../redux/store';
 import { getBalance } from '../../../redux/slices/wallet';
+import { getSales } from '../../../redux/slices/sales';
 import { getAnaliticys } from '../../../redux/slices/dashboard';
 // components
 import Page from '../../../components/Page';
@@ -31,6 +32,7 @@ export default function Business() {
     if (isMountedRef.current) {
       dispatch(getBalance());
       dispatch(getAnaliticys());
+      dispatch(getSales());
     }
   }, [dispatch, isMountedRef]);
 

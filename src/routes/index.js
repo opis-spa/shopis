@@ -98,7 +98,11 @@ export default function Router() {
             <LogoOnlyLayout />
           </PartnershipGuard>
         ),
-        children: [{ path: ':id/checkout', element: <RifopisCheckout /> }]
+        children: [{ path: 'checkout', element: <RifopisCheckout /> }]
+      },
+      {
+        path: 'payment',
+        element: <PaymentCheckout />
       }
     );
   } else {
@@ -163,6 +167,10 @@ export default function Router() {
         ),
         children: [{ path: ':id/checkout', element: <Checkout /> }]
       },
+      {
+        path: 'shop/:id/checkout/payment',
+        element: <PaymentCheckout />
+      },
 
       // Main Routes
       {
@@ -203,6 +211,7 @@ const ShopCart = Loadable(lazy(() => import('../pages/shop/Cart')));
 const ShopProduct = Loadable(lazy(() => import('../pages/shop/Product')));
 const ShopStore = Loadable(lazy(() => import('../pages/shop/Store')));
 const Checkout = Loadable(lazy(() => import('../pages/shop/Checkout')));
+const PaymentCheckout = Loadable(lazy(() => import('../pages/shop/Payment')));
 // Rifopis
 const RifopisHome = Loadable(lazy(() => import('../pages/rifopis/Home')));
 const RifopisCart = Loadable(lazy(() => import('../pages/rifopis/Cart')));

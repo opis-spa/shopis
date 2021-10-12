@@ -30,7 +30,8 @@ const initialState = {
     delivery: null,
     billing: null,
     isDelivery: false
-  }
+  },
+  checkoutResult: {}
 };
 
 const slice = createSlice({
@@ -214,6 +215,13 @@ const slice = createSlice({
       const shipping = action.payload;
       state.checkout.shipping = shipping;
       state.checkout.total = state.checkout.subtotal - state.checkout.discount + shipping;
+    },
+    getCheckoutSuccess(state, action) {
+      // state.checkout = initialState.checkout; // this is commment for not cart reload
+      state.checkoutResult = {
+        success: true,
+        ...action.payload
+      };
     }
   }
 });
@@ -269,6 +277,7 @@ export function getProductStore(nickname) {
     }
   };
 }
+
 // ----------------------------------------------------------------------
 
 export const aplicateCoupon = (body) => async (dispatch) => {
@@ -282,6 +291,8 @@ export const aplicateCoupon = (body) => async (dispatch) => {
   }
 };
 
+// ----------------------------------------------------------------------
+
 export const createProduct = (body) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
@@ -290,5 +301,41 @@ export const createProduct = (body) => async (dispatch) => {
   } catch (error) {
     console.error(error);
     dispatch(slice.actions.hasError(error));
+  }
+};
+
+// ----------------------------------------------------------------------
+
+export const proccessCheckout = (payload) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.post('/api/v1/sales/order', payload);
+    const { success, message, order } = response.data;
+    if (success === true) {
+      dispatch(slice.actions.getCheckoutSuccess(order));
+      return order;
+    }
+    if (
+      message === 'Monto total de la compra es superior a tu saldo' ||
+      message === 'Insufficient balance' ||
+      message === 'Error: not enough found' ||
+      message === 'you dont have wallet whit this currency'
+    ) {
+      const error = new Error(message);
+      error.code = 'order/insufficient_funds';
+      throw error;
+    }
+    if (message === 'Insufficient Stock') {
+      const error = new Error(message);
+      error.code = 'order/insufficient_stock';
+      throw error;
+    }
+    const error = new Error(message);
+    error.code = 'order/error';
+    throw error;
+  } catch (error) {
+    console.log(error);
+    dispatch(slice.actions.hasError(error));
+    throw error;
   }
 };

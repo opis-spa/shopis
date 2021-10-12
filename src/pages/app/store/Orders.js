@@ -143,9 +143,9 @@ export default function Order() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - sales.length) : 0;
 
-  const filteredProducts = applySortFilter(sales, getComparator(order, orderBy), filterName);
+  const filteredSales = applySortFilter(sales, getComparator(order, orderBy), filterName);
 
-  const isProductNotFound = filteredProducts.length === 0;
+  const isProductNotFound = filteredSales.length === 0;
 
   return (
     <Page title="Ordenes | shopis">
@@ -171,7 +171,7 @@ export default function Order() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredProducts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  {filteredSales.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { id, orderCode, amount, createdAt, stock } = row;
 
                     const isItemSelected = selected.indexOf(id) !== -1;
@@ -200,7 +200,7 @@ export default function Order() {
                         </TableCell>
                         <TableCell align="right">{fCurrency(amount)}</TableCell>
                         <TableCell align="right">
-                          <OrderMoreMenu onDelete={() => handleDeleteProduct(id)} productName={id} />
+                          <OrderMoreMenu id={id} />
                         </TableCell>
                       </TableRow>
                     );

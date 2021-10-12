@@ -51,7 +51,7 @@ export function getBalance() {
     try {
       const response = await axios.get('/api/v1/user/wallet/balance');
       const { result } = response.data;
-      dispatch(slice.actions.getBalanceSuccess(result.balance));
+      dispatch(slice.actions.getBalanceSuccess(result));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
