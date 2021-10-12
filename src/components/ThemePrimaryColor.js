@@ -16,7 +16,7 @@ ThemePrimaryColor.propTypes = {
 export default function ThemePrimaryColor({ children }) {
   const defaultTheme = useTheme();
   const { setColors } = useSettings();
-  console.log(setColors);
+
   const themeOptions = useMemo(
     () => ({
       ...defaultTheme,
@@ -37,6 +37,9 @@ export default function ThemePrimaryColor({ children }) {
 
   const theme = createTheme(themeOptions);
   theme.components = componentsOverride(theme);
+
+  console.log(' -- colors -- ');
+  console.log(theme);
 
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 }

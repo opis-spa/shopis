@@ -56,6 +56,9 @@ function SetColor(themeColor) {
   const RIFOPIS = {
     primary: PRIMARY_COLOR[1],
     secondary: SECONDARY_COLOR[1],
+    text: {
+      primary: '#fff'
+    },
     background: { paper: PRIMARY_COLOR[1].main, default: PRIMARY_COLOR[1].main, neutral: PRIMARY_COLOR[1].main }
   };
 
