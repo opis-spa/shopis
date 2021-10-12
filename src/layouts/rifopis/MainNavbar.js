@@ -38,19 +38,6 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   }
 }));
 
-const ToolbarShadowStyle = styled('div')(({ theme }) => ({
-  left: 0,
-  right: 0,
-  bottom: 0,
-  height: 24,
-  zIndex: -1,
-  margin: 'auto',
-  borderRadius: '50%',
-  position: 'absolute',
-  width: 'calc(100% - 48px)',
-  boxShadow: theme.customShadows.z8
-}));
-
 // ----------------------------------------------------------------------
 
 export default function MainNavbar() {
@@ -106,8 +93,6 @@ export default function MainNavbar() {
           </MHidden>
         </Container>
       </ToolbarStyle>
-
-      {isOffset && <ToolbarShadowStyle />}
     </RootStyle>
   );
 }
