@@ -17,7 +17,7 @@ const PRIMARY_COLOR = [
   {
     name: 'rifopis',
     lighter: '#CCDFFF',
-    light: '#6697FF',
+    light: '#936DB9',
     main: '#290E43',
     dark: '#0027B7',
     darker: '#00137A',
@@ -34,8 +34,8 @@ const SECONDARY_COLOR = [
   // PURPLE
   {
     name: 'rifopis',
-    lighter: '#CCDFFF',
-    light: '#6697FF',
+    lighter: '#FFEF85',
+    light: '#FFE431',
     main: '#FF8800',
     dark: '#0027B7',
     darker: '#00137A',

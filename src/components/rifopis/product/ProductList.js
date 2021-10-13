@@ -64,16 +64,16 @@ function ProductList({ max = 0, view }) {
   return (
     <GridStyle container spacing={3}>
       {filteredProducts.map((product) => {
-        const { _id } = product;
+        const { id } = product;
         if (view === 'module') {
           return (
-            <Grid key={_id} item xs={12} sm={6} md={4} lg={3}>
+            <Grid key={id} item xs={12} md={6}>
               <ProductItem product={product} />
             </Grid>
           );
         }
         return (
-          <Grid key={_id} item xs={12}>
+          <Grid key={id} item xs={12}>
             <ProductItemSimple product={product} />
           </Grid>
         );

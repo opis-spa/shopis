@@ -2,14 +2,33 @@ import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useFormik, FormikProvider } from 'formik';
 // material
-import { Button, Tooltip } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Box } from '@mui/material';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 // hooks
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // redux
 import { useDispatch } from '../../../redux/store';
 import { addCart, decreaseQuantity, increaseQuantity } from '../../../redux/slices/product';
 // components
-import Increment from '../../Increment';
+import ButtonTicket from '../ButtonTicket';
+import Increment from './Increment';
+
+const TooltipStyle = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)(
+  ({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      color: theme.palette.secondary.main,
+      padding: theme.spacing(2),
+      backgroundColor: theme.palette.common.white,
+      boxShadow: theme.shadows[1],
+      fontSize: 18,
+      fontWeight: 900
+    },
+    [`& .${tooltipClasses.arrow}`]: {
+      color: theme.palette.common.white
+    }
+  })
+);
 
 const propTypes = {
   title: PropTypes.string,
@@ -29,7 +48,7 @@ const defaultProps = {
 
 function ProductAdd(props) {
   const { product, title } = props;
-  const { id, quantity, stock, promo } = product;
+  const { id, quantity, stock, amount, promo } = product;
   const isTreeXTwo = promo === '3x2';
   const isMountedRef = useIsMountedRef();
   const [cartQuantity, setCartQuantity] = useState(quantity);
@@ -47,6 +66,15 @@ function ProductAdd(props) {
       setCartQuantity(product.quantity);
     }
   }, [dispatch, isMountedRef, product]);
+
+  const amountPromo = useMemo(() => {
+    let cant = cartQuantity;
+    if (isTreeXTwo) {
+      const discount = Math.trunc(cartQuantity / 3);
+      cant -= discount;
+    }
+    return amount * cant;
+  }, [isTreeXTwo, cartQuantity, amount]);
 
   const open = useMemo(() => {
     const isPrimo = (cartQuantity + 1) % 3 === 0;
@@ -68,7 +96,7 @@ function ProductAdd(props) {
   return (
     <FormikProvider value={formik}>
       {(cartQuantity || 0) > 0 ? (
-        <Tooltip
+        <TooltipStyle
           open={open}
           disableFocusListener
           disableHoverListener
@@ -79,18 +107,19 @@ function ProductAdd(props) {
         >
           <Increment
             name="quantity"
+            amount={amountPromo}
             quantity={cartQuantity}
             available={stock}
             onDecrease={handleDecrease}
             onIncrease={handleIncrease}
           />
-        </Tooltip>
+        </TooltipStyle>
       ) : (
-        <div>
-          <Button fullWidth variant="contained" color="primary" size="small" onClick={handleAddToCart}>
+        <Box display="flex" justifyContent="center">
+          <ButtonTicket fullWidth variant="contained" color="secondary" onClick={handleAddToCart}>
             {title}
-          </Button>
-        </div>
+          </ButtonTicket>
+        </Box>
       )}
     </FormikProvider>
   );

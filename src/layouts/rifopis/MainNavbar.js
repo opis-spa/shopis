@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Button, AppBar, Toolbar, Container } from '@mui/material';
+import { Box, Stack, Button, AppBar, Toolbar, Container } from '@mui/material';
 // routes
 import { PATH_AUTH } from '../../routes/paths';
 // hooks
@@ -11,6 +11,7 @@ import useOffSetTop from '../../hooks/useOffSetTop';
 import LogoRifopis from '../../components/LogoRifopis';
 import { MHidden } from '../../components/@material-extend';
 //
+import CartPopover from './CartPopover';
 import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
 import navConfig from './MenuConfig';
@@ -72,21 +73,24 @@ export default function MainNavbar() {
             <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
           </MHidden>
 
-          <MHidden width="mdDown">
-            <Button
-              component={RouterLink}
-              variant="text"
-              target="_blank"
-              to={PATH_AUTH.register}
-              sx={{
-                fontWeight: 900,
-                textTransform: 'uppercase',
-                color: 'secondary.main'
-              }}
-            >
-              Ingresar
-            </Button>
-          </MHidden>
+          <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
+            <MHidden width="mdDown">
+              <Button
+                component={RouterLink}
+                variant="text"
+                target="_blank"
+                to={PATH_AUTH.register}
+                sx={{
+                  fontWeight: 900,
+                  textTransform: 'uppercase',
+                  color: 'secondary.main'
+                }}
+              >
+                Ingresar
+              </Button>
+            </MHidden>
+            <CartPopover />
+          </Stack>
 
           <MHidden width="mdUp">
             <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />

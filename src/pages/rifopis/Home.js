@@ -14,7 +14,7 @@ import Page from '../../components/Page';
 import CarouselAnimation from '../../components/carousel/CarouselAnimation';
 import ProductList from '../../components/rifopis/product/ProductList';
 import { MotionInView, varFadeInUp } from '../../components/animate';
-import { RifopisHowWork } from '../../components/rifopis';
+import { RifopisHowWork, RifopisWinners } from '../../components/rifopis';
 
 const Home = () => {
   const { partnership, isLoading } = usePartnership();
@@ -50,7 +50,7 @@ const Home = () => {
               <Grid item xs={12}>
                 <Box>
                   <MotionInView variants={varFadeInUp}>
-                    <Typography variant="h3" sx={{ mb: 2, color: 'text.primary' }}>
+                    <Typography variant="h3" sx={{ mb: 2, color: 'text.primary', textTransform: 'uppercase' }}>
                       Sorteos Vigentes
                     </Typography>
                   </MotionInView>
@@ -64,6 +64,11 @@ const Home = () => {
           <Grid item xs={12}>
             <MotionInView variants={varFadeInUp}>
               <RifopisHowWork />
+            </MotionInView>
+          </Grid>
+          <Grid item xs={12}>
+            <MotionInView variants={varFadeInUp}>
+              <RifopisWinners />
             </MotionInView>
           </Grid>
         </Grid>
