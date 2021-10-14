@@ -15,21 +15,24 @@ ThemePrimaryColor.propTypes = {
 
 export default function ThemePrimaryColor({ children }) {
   const defaultTheme = useTheme();
-  const { setColor } = useSettings();
+  const { setColors } = useSettings();
 
   const themeOptions = useMemo(
     () => ({
       ...defaultTheme,
       palette: {
         ...defaultTheme.palette,
-        primary: setColor
+        ...setColors
       },
       customShadows: {
         ...defaultTheme.customShadows,
-        primary: `0 8px 16px 0 ${alpha(setColor.main, 0.24)}`
+        primary: `0 8px 16px 0 ${alpha(
+          setColors.primary || false ? setColors.primary.main : defaultTheme.palette.primary.main,
+          0.24
+        )}`
       }
     }),
-    [setColor, defaultTheme]
+    [setColors, defaultTheme]
   );
 
   const theme = createTheme(themeOptions);

@@ -7,6 +7,7 @@ function path(root, sublink) {
 const ROOTS_AUTH = '/auth';
 const ROOTS_APP = '/app';
 const ROOT_SHOP = '/shop';
+const ROOT_RIFOPIS = '/website';
 
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
@@ -48,4 +49,10 @@ export const PATH_APP = {
 
 export const PATH_SHOP = {
   root: ROOT_SHOP
+};
+
+export const PATH_RIFOPIS = {
+  root: ROOT_RIFOPIS,
+  cart: path(ROOT_RIFOPIS, '/cart'),
+  product: path(ROOT_RIFOPIS, '/product')
 };

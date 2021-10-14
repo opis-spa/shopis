@@ -69,7 +69,7 @@ function MenuDesktopItem({ item }) {
       to={path}
       onClick={handleScroller}
       sx={{
-        fontWeight: 200,
+        fontWeight: 900,
         color: 'text.primary'
       }}
     >

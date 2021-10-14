@@ -11,9 +11,10 @@ import { getPayments } from '../../redux/slices/payment';
 import { getDeliveries } from '../../redux/slices/delivery';
 // components
 import Page from '../../components/Page';
-import CarouselAnimation from '../../components/carousel/CarouselAnimation';
-import ProductList from '../../components/shop/product/ProductList';
+import CarouselRifopis from '../../components/carousel/CarouselRifopis';
+import ProductList from '../../components/rifopis/product/ProductList';
 import { MotionInView, varFadeInUp } from '../../components/animate';
+import { RifopisHowWork, RifopisWinners } from '../../components/rifopis';
 
 const Home = () => {
   const { partnership, isLoading } = usePartnership();
@@ -36,33 +37,42 @@ const Home = () => {
 
   return (
     <Page title={partnership.name}>
-      <Grid container spacing={2} sx={{ mb: 10 }}>
-        {isLoading ? (
-          <Grid item xs={12} style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>
-            <CircularProgress />
-          </Grid>
-        ) : (
-          <>
-            <Grid item xs={12}>
-              <CarouselAnimation />
+      <CarouselRifopis />
+
+      <Container maxWidth="lg">
+        <Grid container spacing={2} sx={{ mb: 10 }}>
+          {isLoading ? (
+            <Grid item xs={12} style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>
+              <CircularProgress />
             </Grid>
-            <Grid item xs={12}>
-              <Box sx={{ p: 5, mt: 10, textAlign: 'center' }}>
-                <MotionInView variants={varFadeInUp}>
-                  <Typography variant="h3" sx={{ mb: 3, mt: 3 }}>
-                    Sorteos Vigentes
-                  </Typography>
-                </MotionInView>
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Container>
+          ) : (
+            <Box sx={{ position: 'relative', mt: -15, width: '100%' }}>
+              <Grid item xs={12}>
+                <Box>
+                  <MotionInView variants={varFadeInUp}>
+                    <Typography variant="h3" sx={{ mb: 2, color: 'text.primary', textTransform: 'uppercase' }}>
+                      Sorteos Vigentes
+                    </Typography>
+                  </MotionInView>
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
                 <ProductList view="module" max={4} isLoad={false} />
-              </Container>
-            </Grid>
-          </>
-        )}
-      </Grid>
+              </Grid>
+            </Box>
+          )}
+          <Grid item xs={12}>
+            <MotionInView variants={varFadeInUp}>
+              <RifopisHowWork />
+            </MotionInView>
+          </Grid>
+          <Grid item xs={12}>
+            <MotionInView variants={varFadeInUp}>
+              <RifopisWinners />
+            </MotionInView>
+          </Grid>
+        </Grid>
+      </Container>
     </Page>
   );
 };
