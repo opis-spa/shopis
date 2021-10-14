@@ -5,6 +5,8 @@ import cartOutline from '@iconify/icons-eva/shopping-cart-outline';
 // material
 import { styled } from '@mui/material/styles';
 import { Badge } from '@mui/material';
+// route
+import { PATH_RIFOPIS } from '../../routes/paths';
 // components
 import { MIconButton } from '../../components/@material-extend';
 import LinkPartnership from '../../components/LinkPartnership';
@@ -21,7 +23,7 @@ export default function Searchbar() {
   const totalItems = cart.length;
 
   return (
-    <LinkPartnership to="/cart">
+    <LinkPartnership to={PATH_RIFOPIS.cart}>
       <MIconButton
         sx={{
           padding: 0,

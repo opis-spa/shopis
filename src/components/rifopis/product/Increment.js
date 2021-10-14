@@ -22,7 +22,9 @@ const ContentStyle = styled(Stack)(({ theme }) => ({
 const ButtonStyle = styled(MIconButton)(({ theme }) => ({
   background: 'linear-gradient(124.5deg, #FFED48 0%, #FFC155 21.15%, #FF9E21 63.44%, #FF8800 104.11%)',
   borderColor: theme.palette.secondary.lighter,
-  borderRadius: 5
+  borderRadius: 5,
+  height: 73,
+  width: 73
 }));
 
 const propType = {

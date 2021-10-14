@@ -23,7 +23,7 @@ const CardStyle = styled(Card)(({ theme }) => ({
 
 const ProductImgStyle = styled('img')({
   width: '100%',
-  maxHeight: 288,
+  height: 288,
   borderRadius: 6,
   objectFit: 'cover'
 });
@@ -65,7 +65,7 @@ function ProductItem({ product, ...other }) {
     if (photos) {
       return photos;
     }
-    return [photo];
+    return [photo, photo];
   }, [photos, photo]);
 
   const productCart = useMemo(() => {
@@ -96,7 +96,7 @@ function ProductItem({ product, ...other }) {
           </Label>
         </LinkPartnership>
 
-        <ProductImgStyle alt={name} src={image[0]} />
+        <ProductImgStyle alt={name} src={image[1]} />
       </Box>
 
       <Stack sx={{ p: 3 }} spacing={2}>

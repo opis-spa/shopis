@@ -38,8 +38,5 @@ export default function ThemePrimaryColor({ children }) {
   const theme = createTheme(themeOptions);
   theme.components = componentsOverride(theme);
 
-  console.log(' -- colors -- ');
-  console.log(theme);
-
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 }

@@ -11,7 +11,7 @@ import { getPayments } from '../../redux/slices/payment';
 import { getDeliveries } from '../../redux/slices/delivery';
 // components
 import Page from '../../components/Page';
-import CarouselAnimation from '../../components/carousel/CarouselAnimation';
+import CarouselRifopis from '../../components/carousel/CarouselRifopis';
 import ProductList from '../../components/rifopis/product/ProductList';
 import { MotionInView, varFadeInUp } from '../../components/animate';
 import { RifopisHowWork, RifopisWinners } from '../../components/rifopis';
@@ -37,7 +37,7 @@ const Home = () => {
 
   return (
     <Page title={partnership.name}>
-      <CarouselAnimation />
+      <CarouselRifopis />
 
       <Container maxWidth="lg">
         <Grid container spacing={2} sx={{ mb: 10 }}>
@@ -46,7 +46,7 @@ const Home = () => {
               <CircularProgress />
             </Grid>
           ) : (
-            <Box sx={{ position: 'relative', mt: -20, width: '100%' }}>
+            <Box sx={{ position: 'relative', mt: -15, width: '100%' }}>
               <Grid item xs={12}>
                 <Box>
                   <MotionInView variants={varFadeInUp}>

@@ -18,13 +18,6 @@ import { CarouselControlsArrowsIndex } from './controls';
 
 // ----------------------------------------------------------------------
 
-const MOCK_CAROUSELS = [...Array(5)].map((_, index) => ({
-  id: index,
-  title: 'Diego',
-  image: '',
-  description: 'Description'
-}));
-
 const CardStyle = styled(Card)({
   borderRadius: 0
 });
@@ -129,8 +122,8 @@ function CarouselItem({ item, isActive }) {
 export default function CarouselAnimation() {
   const theme = useTheme();
   const carouselRef = useRef();
-  const [currentIndex, setCurrentIndex] = useState(theme.direction === 'rtl' ? MOCK_CAROUSELS.length - 1 : 0);
   const { products } = useSelector((state) => state.product);
+  const [currentIndex, setCurrentIndex] = useState(theme.direction === 'rtl' ? products.length - 1 : 0);
 
   const settings = {
     speed: 800,
@@ -163,7 +156,7 @@ export default function CarouselAnimation() {
 
       <CarouselControlsArrowsIndex
         index={currentIndex}
-        total={MOCK_CAROUSELS.length}
+        total={products.length}
         onNext={handleNext}
         onPrevious={handlePrevious}
       />

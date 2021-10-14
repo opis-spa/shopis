@@ -8,11 +8,11 @@ const ButtonStyle = styled(Button)(({ theme }) => ({
   textTransform: 'uppercase',
   fontSize: 16,
   padding: '6px 12px',
-  border: '1px solid',
+  overflow: 'hidden',
+  height: 75,
   lineHeight: 1.5,
   maxWidth: 300,
-  background: 'linear-gradient(124.5deg, #FFED48 0%, #FFC155 21.15%, #FF9E21 63.44%, #FF8800 104.11%)',
-  borderColor: theme.palette.secondary.lighter,
+  background: `linear-gradient(124.5deg, ${theme.palette.secondary.lighter} 0%, ${theme.palette.secondary.light} 21.15%, ${theme.palette.secondary.main} 63.44%, ${theme.palette.secondary.dark} 104.11%)`,
   fontFamily: 'Nunito',
   '&:hover': {
     backgroundColor: '#0069d9',
@@ -26,6 +26,23 @@ const ButtonStyle = styled(Button)(({ theme }) => ({
   },
   '&:focus': {
     boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)'
+  },
+  '&:before': {
+    background: theme.palette.primary.main,
+    borderRadius: '50%',
+    boxShadow: [
+      `300px 0 0 0 ${theme.palette.primary.main}`,
+      `0 75px 0 0 ${theme.palette.primary.main}`,
+      `300px 75px 0 0 ${theme.palette.primary.main}`
+    ].join(','),
+    content: '" "',
+    display: 'block',
+    height: 30,
+    left: -15,
+    position: 'absolute',
+    top: -15,
+    width: 30,
+    zIndex: 10
   }
 }));
 
