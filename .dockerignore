@@ -1,4 +1,10 @@
+#docker
 Dockerfile
 .dockerignore
+
+# production
+/build
+
+# dependencies
 node_modules
-.env
+.vscode
