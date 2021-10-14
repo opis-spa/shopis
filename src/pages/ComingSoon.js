@@ -1,14 +1,34 @@
 import React from 'react';
 // icons
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { Icon } from '@iconify/react';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
 import discordFilled from '@iconify/icons-ic/baseline-discord';
+import closeFill from '@iconify/icons-eva/close-fill';
+import { useSnackbar } from 'notistack';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Button, Tooltip, Container, Typography, InputAdornment, OutlinedInput, Link } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  Tooltip,
+  Container,
+  Typography,
+  InputAdornment,
+  OutlinedInput,
+  Link,
+  FormHelperText,
+  FormControl
+} from '@mui/material';
 // hooks
 import useCountdown from '../hooks/useCountdown';
+import useIsMountedRef from '../hooks/useIsMountedRef';
+// redux
+import { useDispatch, useSelector } from '../redux/store';
+import { subscriptionNewsletter } from '../redux/slices/user';
 // components
 import { MIconButton } from '../components/@material-extend';
 import Page from '../components/Page';
@@ -56,10 +76,50 @@ const SeparatorStyle = styled(Typography)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function ComingSoon() {
-  const countdown = useCountdown(new Date('10/01/2021 07:57'));
+  const countdown = useCountdown(new Date('10/28/2021 00:00'));
+  const dispatch = useDispatch();
+  const isMountedRef = useIsMountedRef();
+  const { newsletter, isLoading } = useSelector((state) => state.user);
+  const isSubscription = newsletter.indexOf('shopis') >= 0;
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const subscriptionValidationSchema = Yup.object().shape({
+    email: Yup.string()
+      .email('El formato del correo electrónico no es correcto')
+      .required('El correo electrónico es requerido')
+  });
+
+  const formik = useFormik({
+    initialValues: { email: '', channel: 'shopis' },
+    validationSchema: subscriptionValidationSchema,
+    onSubmit: async (values, { setSubmitting, setErrors, resetForm }) => {
+      try {
+        await dispatch(subscriptionNewsletter(values));
+        enqueueSnackbar('Subscripción realizada con exito', {
+          variant: 'success',
+          action: (key) => (
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          )
+        });
+        if (isMountedRef.current) {
+          setSubmitting(false);
+        }
+      } catch (error) {
+        console.error(error);
+        resetForm();
+        if (isMountedRef.current) {
+          setSubmitting(false);
+          setErrors({ afterSubmit: error.message });
+        }
+      }
+    }
+  });
+  const { handleSubmit, getFieldProps, touched, errors } = formik;
 
   return (
-    <RootStyle title="Falta poco | shopis">
+    <RootStyle title="Falta poco | RIFOPIS">
       <Container>
         <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
           <Typography variant="h3" paragraph>
@@ -70,7 +130,7 @@ export default function ComingSoon() {
             <span role="img" aria-label="rocket">
               🚀
             </span>{' '}
-            para estar listos próximamente.
+            para que prontamente puedas participar en increibles sorteos!
           </Typography>
 
           <CountdownStyle>
@@ -101,33 +161,49 @@ export default function ComingSoon() {
             </div>
           </CountdownStyle>
 
-          <OutlinedInput
-            fullWidth
-            placeholder="Ingresa tu correo electrónico"
-            endAdornment={
-              <InputAdornment position="end">
-                <Button variant="contained" size="large">
-                  Notificame
-                </Button>
-              </InputAdornment>
-            }
-            sx={{
-              my: 5,
-              pr: 0.5,
-              transition: (theme) =>
-                theme.transitions.create('box-shadow', {
-                  easing: theme.transitions.easing.easeInOut,
-                  duration: theme.transitions.duration.shorter
-                }),
-              '&.Mui-focused': {
-                boxShadow: (theme) => theme.customShadows.z8
-              },
-              '& fieldset': {
-                borderWidth: `1px !important`,
-                borderColor: (theme) => `${theme.palette.grey[500_32]} !important`
-              }
-            }}
-          />
+          {isSubscription ? (
+            <Alert severity="success" sx={{ my: 5 }}>
+              Te avisaremos cuando estemos listos!
+            </Alert>
+          ) : (
+            <form onSubmit={handleSubmit} noValidate>
+              <FormControl fullWidth sx={{ my: 5 }}>
+                <OutlinedInput
+                  fullWidth
+                  disabled={isLoading}
+                  placeholder="Ingresa tu correo electrónico"
+                  {...getFieldProps('email')}
+                  error={Boolean(touched.email && errors.email)}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <Button type="submit" variant="contained" size="large">
+                        Avisame
+                      </Button>
+                    </InputAdornment>
+                  }
+                  sx={{
+                    pr: 0.5,
+                    transition: (theme) =>
+                      theme.transitions.create('box-shadow', {
+                        easing: theme.transitions.easing.easeInOut,
+                        duration: theme.transitions.duration.shorter
+                      }),
+                    '&.Mui-focused': {
+                      boxShadow: (theme) => theme.customShadows.z8
+                    },
+                    '& fieldset': {
+                      borderWidth: `1px !important`
+                    }
+                  }}
+                />
+                {Boolean(touched.email && errors.email) && (
+                  <FormHelperText error style={{ textAlign: 'left' }}>
+                    {(touched.email && errors.email) || ''}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </form>
+          )}
 
           <Box sx={{ textAlign: 'center', '& > *': { mx: 1 } }}>
             {SOCIALS.map((social) => (

@@ -73,7 +73,7 @@ export default function CheckoutPayment() {
         navigate(`/shop/${partnership.nickname}/checkout/payment`);
       }
     }
-  }, [dispatch, checkoutResult, setSubmitting, values.payment]);
+  }, [checkoutResult, values.payment, setSubmitting, dispatch, navigate, partnership.nickname]);
 
   return (
     <FormikProvider value={formik}>

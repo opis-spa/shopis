@@ -7,12 +7,10 @@ import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import emailOutline from '@iconify/icons-eva/email-outline';
 import whatsappFill from '@iconify/icons-ic/outline-whatsapp';
 import { Link as ScrollLink } from 'react-scroll';
-import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import {
   Grid,
-  Link,
   Divider,
   Container,
   Box,

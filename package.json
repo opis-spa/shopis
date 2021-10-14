@@ -1,7 +1,7 @@
 {
   "name": "shopis",
-  "author": "opis spa",
-  "version": "1.0.0",
+  "author": "OPIS SpA",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "react-scripts start",

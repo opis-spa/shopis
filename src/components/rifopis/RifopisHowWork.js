@@ -12,11 +12,6 @@ const RootStyle = styled('div')(({ theme }) => ({
   paddingBottom: theme.spacing(10)
 }));
 
-const ContentStyle = styled(Stack)(({ theme }) => ({
-  borderRadius: 5,
-  border: `1px dashed ${theme.palette.primary.main}`
-}));
-
 // ----------------------------------------------------------------------
 
 export default function RifopisHowWork() {

@@ -1,7 +1,7 @@
 import React from 'react';
 // material
 import { alpha, styled, useTheme } from '@mui/material/styles';
-import { Typography, Stack, Container, Grid, Box } from '@mui/material';
+import { Typography, Stack, Container, Grid } from '@mui/material';
 //
 import { varFadeInUp, MotionInView } from '../animate';
 
@@ -10,11 +10,6 @@ import { varFadeInUp, MotionInView } from '../animate';
 const RootStyle = styled('div')(({ theme }) => ({
   paddingTop: theme.spacing(15),
   paddingBottom: theme.spacing(10)
-}));
-
-const ContentStyle = styled(Stack)(({ theme }) => ({
-  borderRadius: 5,
-  border: `1px dashed ${theme.palette.primary.main}`
 }));
 
 // ----------------------------------------------------------------------

@@ -32,12 +32,26 @@ jobs:
           restore-keys: |
             nodeModules-
       - name: Install dependencies
-        run: npm install --frozen-lockfile
+        run: npm ci
         env:
           CI: true
 
       - name: Build Development
         run: npm run build
+        env:
+          FAST_REFRESH: false
+          REACT_APP_URL_API: ${{ secrets.DEV_URL_ENDPOINT }}
+          REACT_APP_FIREBASE_API_KEY: ${{ secrets.DEV_FIREBASE_API_KEY }}
+          REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.DEV_FIREBASE_AUTH_DOMAIN }}
+          REACT_APP_FIREBASE_DATABASE_URL: ${{ secrets.DEV_FIREBASE_DATABASE_URL }}
+          REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.DEV_FIREBASE_PROJECT_ID }}
+          REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.DEV_FIREBASE_STORAGE_BUCKET }}
+          REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.DEV_FIREBASE_MESSAGING_SENDER_ID }}
+          REACT_APP_FIREBASE_APPID: ${{ secrets.DEV_FIREBASE_APPID }}
+          REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ secrets.DEV_FIREBASE_MEASUREMENT_ID }}
+          REACT_APP_GA_MEASUREMENT_ID: ${{ secrets.DEV_GA_MEASUREMENT_ID }}
+          REACT_APP_HOTJAR: ${{ secrets.DEV_GA_MEASUREMENT_ID }}
+          REACT_APP_PAYPAL_ID: ${{ secrets.DEV_PAYPAL_ID }}
 
       - name: Archive Production Artifact
         uses: actions/upload-artifact@main

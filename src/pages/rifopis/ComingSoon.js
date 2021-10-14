@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { Icon } from '@iconify/react';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
-import discordFilled from '@iconify/icons-ic/baseline-discord';
+// import discordFilled from '@iconify/icons-ic/baseline-discord';
 import closeFill from '@iconify/icons-eva/close-fill';
 import { useSnackbar } from 'notistack';
 // material
@@ -37,19 +37,14 @@ import Page from '../../components/Page';
 
 const SOCIALS = [
   {
-    uri: 'https://facebook.com/shopiscl',
+    uri: 'https://facebook.com/rifopis',
     name: 'Facebook',
     icon: <Icon icon={facebookFill} width={24} height={24} color="#1877F2" />
   },
   {
-    uri: 'https://instagram.com/shopiscl',
+    uri: 'https://instagram.com/rifopis',
     name: 'Instagram',
     icon: <Icon icon={instagramFilled} width={24} height={24} color="#D7336D" />
-  },
-  {
-    uri: 'https://discord.gg/3PAtee5XRx',
-    name: 'Discord',
-    icon: <Icon icon={discordFilled} width={24} height={24} color="#006097" />
   }
 ];
 
