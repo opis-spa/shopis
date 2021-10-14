@@ -1,9 +1,7 @@
 import React from 'react';
-import { Icon } from '@iconify/react';
-import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 import { Element } from 'react-scroll';
 // material
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { Box, Grid, Container, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 //
 import { varFadeIn, MotionInView, varFadeInDown } from '../animate';
@@ -37,7 +35,7 @@ function FaqsList() {
   return (
     <>
       {FAQS.map((accordion) => (
-        <Grid key={accordion.id} item xs={12} md={4}>
+        <Grid key={accordion.id} item xs={12} sm={6} md={4}>
           <MotionInView
             variants={varFadeIn}
             sx={{
@@ -51,11 +49,13 @@ function FaqsList() {
                 height: '100%'
               }}
             >
-              <AccordionSummary expandIcon={<Icon icon={arrowIosDownwardFill} width={20} height={20} />}>
-                <Typography variant="subtitle1">{accordion.heading}</Typography>
+              <AccordionSummary>
+                <Typography variant="subtitle1" sx={{ color: '#3C568E', fontWeight: 900, fontSize: 18 }}>
+                  {accordion.heading}
+                </Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>{accordion.detail}</Typography>
+                <Typography sx={{ color: '#3C568E', fontSize: 16 }}>{accordion.detail}</Typography>
               </AccordionDetails>
             </Accordion>
           </MotionInView>
@@ -67,7 +67,8 @@ function FaqsList() {
 
 const RootStyle = styled(Element)(({ theme }) => ({
   paddingTop: theme.spacing(15),
-  paddingBottom: theme.spacing(15)
+  paddingBottom: theme.spacing(15),
+  overflow: 'hidden'
 }));
 
 const TypographyTitle = styled(Typography)(({ theme }) => ({
@@ -77,17 +78,27 @@ const TypographyTitle = styled(Typography)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function LandingFaqs() {
+  const theme = useTheme();
+
   return (
     <RootStyle name="faqs">
       <Container maxWidth="lg">
-        <Box sx={{ mb: 10 }}>
+        <Box sx={{ mb: 5 }}>
           <MotionInView variants={varFadeInDown}>
             <TypographyTitle
-              variant="h2"
+              variant="h3"
               sx={{
                 fontWeight: 900,
                 color: 'secondary.main',
-                mb: 5
+                mb: 5,
+                [theme.breakpoints.up('sm')]: {
+                  fontSize: 40,
+                  textAlign: 'center'
+                },
+                [theme.breakpoints.up('md')]: {
+                  textAlign: 'left',
+                  fontSize: 48
+                }
               }}
             >
               Preguntas Frecuentes

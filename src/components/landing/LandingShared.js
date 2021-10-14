@@ -9,16 +9,23 @@ import { varFadeInUp, MotionInView } from '../animate';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Element)(({ theme }) => ({
-  padding: theme.spacing(10, 0)
+  paddingTop: theme.spacing(10),
+  paddingBottom: theme.spacing(10),
+  overflow: 'hidden',
+  [theme.breakpoints.up('md')]: {
+    paddingTop: theme.spacing(20),
+    paddingBottom: theme.spacing(15)
+  }
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
   width: '100%',
   textAlign: 'left',
-  marginBottom: theme.spacing(10),
+  marginBottom: theme.spacing(2),
   [theme.breakpoints.up('md')]: {
     textAlign: 'left',
-    marginBottom: 0
+    marginBottom: 0,
+    maxWidth: 400
   }
 }));
 
@@ -30,43 +37,68 @@ export default function LandingOrdersAllTime() {
 
   return (
     <RootStyle name="que-ofrecemos">
-      <Box component="img" src="/static/img/shape.svg" sx={{ position: 'absolute' }} />
       <Container maxWidth="lg">
-        <Grid container spacing={5} justifyContent="center">
-          <Grid item xs={12} md={6} dir="ltr">
-            <img alt="shared-social-network" src="/static/img/shared-social-network.png" />
-          </Grid>
+        <Box sx={{ maxWidth: 958, margin: '0 auto' }}>
+          <Grid container columnSpacing={10} rowSpacing={5} justifyContent="center" direction="row-reverse">
+            <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', justifySelf: 'flex-end' }}>
+              <ContentStyle>
+                <MotionInView variants={varFadeInUp}>
+                  <Typography
+                    variant="h3"
+                    sx={{
+                      color: 'secondary.main',
+                      fontWeight: 900,
+                      textTransform: 'uppercase',
+                      mb: 3,
+                      [theme.breakpoints.up('sm')]: {
+                        textAlign: 'center',
+                        fontSize: 40
+                      },
+                      [theme.breakpoints.up('md')]: {
+                        fontSize: 48,
+                        textAlign: 'left'
+                      }
+                    }}
+                  >
+                    Comparte a tus redes
+                  </Typography>
+                </MotionInView>
 
-          <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center' }}>
-            <ContentStyle>
-              <MotionInView variants={varFadeInUp}>
-                <Typography
-                  variant="h2"
-                  sx={{
-                    color: 'secondary.main',
-                    fontWeight: 900,
-                    textTransform: 'uppercase',
-                    mb: 3
-                  }}
-                >
-                  Comparte a tus redes
-                </Typography>
-              </MotionInView>
-
-              <MotionInView variants={varFadeInUp}>
-                <Typography
-                  sx={{
-                    mb: 5,
-                    color: isLight ? 'text.secondary' : 'common.white'
-                  }}
-                >
-                  Con sólo un link o QR en tus redes sociales, tus clientes pueden conocer y comprar tus productos de
-                  manera fácil.
-                </Typography>
-              </MotionInView>
-            </ContentStyle>
+                <MotionInView variants={varFadeInUp}>
+                  <Typography
+                    sx={{
+                      mb: 0,
+                      color: isLight ? '#609FBF' : 'common.white',
+                      [theme.breakpoints.up('sm')]: {
+                        textAlign: 'center',
+                        fontSize: 20
+                      },
+                      [theme.breakpoints.up('md')]: {
+                        textAlign: 'left',
+                        fontSize: 24
+                      }
+                    }}
+                  >
+                    Carga <strong>Fotos</strong>, ingresa descripciones, <strong>precios, </strong>
+                    stock, <strong>descuentos</strong>
+                  </Typography>
+                </MotionInView>
+              </ContentStyle>
+            </Grid>
+            <Grid item xs={12} md={6} dir="ltr">
+              <Box
+                sx={{
+                  [theme.breakpoints.up('sm')]: {
+                    display: 'flex',
+                    justifyContent: 'center'
+                  }
+                }}
+              >
+                <img alt="shared-social-network" src="/static/img/shared-social-network.png" />
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
+        </Box>
       </Container>
     </RootStyle>
   );

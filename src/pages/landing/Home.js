@@ -9,7 +9,8 @@ import {
   LandingRegister,
   LandingOrdersAllTime,
   LandingMethodPayment,
-  LandingCategories
+  LandingCategories,
+  LandingContact
 } from '../../components/landing';
 
 const RootStyle = styled(Page)({
@@ -17,7 +18,6 @@ const RootStyle = styled(Page)({
 });
 
 const ContentStyle = styled('div')(({ theme }) => ({
-  overflow: 'hidden',
   position: 'relative',
   backgroundColor: theme.palette.background.default
 }));
@@ -26,13 +26,14 @@ const Landing = () => (
   <RootStyle title="shopis">
     <LandingHero />
     <ContentStyle>
-      <LandingShared />
       <LandingCategories />
+      <LandingShared />
       <LandingOrdersAllTime />
       <LandingMethodPayment />
       <LandingRegister />
       <LandingPricingPlans />
       <LandingFaqs />
+      <LandingContact />
     </ContentStyle>
   </RootStyle>
 );
