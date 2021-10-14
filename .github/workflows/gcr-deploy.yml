@@ -41,6 +41,7 @@ jobs:
         env:
           FAST_REFRESH: false
           REACT_APP_URL_API: ${{ secrets.DEV_URL_ENDPOINT }}
+          REACT_APP_PAYPAL_ID: ${{ secrets.DEV_PAYPAL_ID }}
           REACT_APP_FIREBASE_API_KEY: ${{ secrets.DEV_FIREBASE_API_KEY }}
           REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.DEV_FIREBASE_AUTH_DOMAIN }}
           REACT_APP_FIREBASE_DATABASE_URL: ${{ secrets.DEV_FIREBASE_DATABASE_URL }}
@@ -49,9 +50,6 @@ jobs:
           REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.DEV_FIREBASE_MESSAGING_SENDER_ID }}
           REACT_APP_FIREBASE_APPID: ${{ secrets.DEV_FIREBASE_APPID }}
           REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ secrets.DEV_FIREBASE_MEASUREMENT_ID }}
-          REACT_APP_GA_MEASUREMENT_ID: ${{ secrets.DEV_GA_MEASUREMENT_ID }}
-          REACT_APP_HOTJAR: ${{ secrets.DEV_GA_MEASUREMENT_ID }}
-          REACT_APP_PAYPAL_ID: ${{ secrets.DEV_PAYPAL_ID }}
 
       - name: Archive Production Artifact
         uses: actions/upload-artifact@main
@@ -74,27 +72,10 @@ jobs:
           name: build
           path: .docker/build
 
-      - name: Setup gcloud CLI
-        uses: google-github-actions/setup-gcloud@master
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@main
         with:
-          version: '290.0.1'
-          service_account_key: ${{ secrets.GCR_SA_KEY }}
-          project_id: ${{ secrets.GCR_PROJECT }}
-
-      # Build and push image to Google Container Registry
-      - name: Build & Push
-        run: |-
-          gcloud builds submit \
-            --quiet \
-            --tag "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
-        working-directory: .docker
-
-      # Deploy image to Cloud Run
-      - name: Deploy GCR
-        run: |-
-          gcloud run deploy "$SERVICE_NAME" \
-            --quiet \
-            --region "$RUN_REGION" \
-            --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
-            --platform "managed" \
-            --allow-unauthenticated
+          service: ${{ env.SERVICE_NAME }}
+          image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}
+          credentials: ${{ secrets.GCP_SA_KEY }}
