@@ -7,8 +7,8 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCR_PROJECT }}
-  RUN_REGION: us-central1
-  SERVICE_NAME: dev-opis-front
+  REGION: us-central1
+  SERVICE: dev-opis-front
 
 jobs:
   build:
@@ -76,8 +76,8 @@ jobs:
 
       - uses: google-github-actions/setup-gcloud@master
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.GCR_PROJECT }}
+          service_account_key: ${{ secrets.GCR_SA_KEY }}
           export_default_credentials: true
 
       - name: Authorize Docker push
