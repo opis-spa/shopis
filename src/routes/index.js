@@ -92,13 +92,13 @@ export default function Router() {
         ]
       },
       {
-        path: '',
+        path: 'website',
         element: (
           <PartnershipGuard>
             <LogoOnlyLayout />
           </PartnershipGuard>
         ),
-        children: [{ path: ':id/checkout', element: <RifopisCheckout /> }]
+        children: [{ path: 'checkout', element: <RifopisCheckout /> }]
       }
     );
   } else {
@@ -112,7 +112,7 @@ export default function Router() {
           </AuthGuard>
         ),
         children: [
-          { element: <Navigate to="/app/dashboard" replace /> },
+          { path: '', element: <Navigate to="/app/dashboard" replace /> },
           { path: 'dashboard', element: <DashboardBusiness /> },
           { path: 'store', element: <Store /> },
           { path: 'products', element: <Products /> },
@@ -151,7 +151,7 @@ export default function Router() {
           </PartnershipGuard>
         ),
         children: [
-          { element: <ShopHome /> },
+          { path: '', element: <ShopHome /> },
           { path: 'cart', element: <ShopCart /> },
           { path: 'store', element: <ShopStore /> },
           { path: 'product/:name', element: <ShopProduct /> }
