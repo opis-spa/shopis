@@ -3,7 +3,7 @@ Dockerfile
 .dockerignore
 
 # production
-/build
+build
 
 # dependencies
 node_modules
