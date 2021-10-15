@@ -12,7 +12,6 @@ import { MIconButton } from '../../@material-extend';
 import { fCurrency } from '../../../utils/formatNumber';
 
 const ContentStyle = styled(Stack)(({ theme }) => ({
-  py: 0.5,
   px: 0.75,
   border: `1px solid ${theme.palette.secondary.lighter}`,
   lineHeight: 0,
@@ -22,12 +21,12 @@ const ContentStyle = styled(Stack)(({ theme }) => ({
 const ButtonStyle = styled(MIconButton)(({ theme }) => ({
   background: 'linear-gradient(124.5deg, #FFED48 0%, #FFC155 21.15%, #FF9E21 63.44%, #FF8800 104.11%)',
   borderColor: theme.palette.secondary.lighter,
-  borderRadius: 5,
-  height: 73,
-  width: 73
+  borderRadius: 5
 }));
 
 const propType = {
+  big: PropTypes.bool,
+  simple: PropTypes.bool,
   available: PropTypes.number,
   quantity: PropTypes.number,
   amount: PropTypes.number,
@@ -40,7 +39,7 @@ const defaultProps = {
 };
 
 const Increment = forwardRef((props, ref) => {
-  const { available, quantity, onIncrease, onDecrease, amount } = props;
+  const { big = true, simple, available, quantity, onIncrease, onDecrease, amount, ...other } = props;
 
   const incrementQuantity = () => {
     onIncrease();
@@ -50,14 +49,22 @@ const Increment = forwardRef((props, ref) => {
   };
 
   return (
-    <ContentStyle ref={ref} direction="row" justifyContent="space-between" alignItems="center">
-      <ButtonStyle disabled={quantity === 0} onClick={decrementQuantity}>
+    <ContentStyle ref={ref} direction="row" justifyContent="space-between" alignItems="center" {...other}>
+      <ButtonStyle
+        disabled={quantity === 0}
+        onClick={decrementQuantity}
+        sx={{ width: big ? 73 : 30, height: big ? 73 : 30 }}
+      >
         <Icon icon={minusFill} width={20} height={20} color="#fff" />
       </ButtonStyle>
       <Typography component="span" sx={{ textTransform: 'uppercase', fontWeight: 900, color: 'secondary.light' }}>
-        {`${quantity} tickets = ${fCurrency(amount)}`}
+        {simple ? <>{`${quantity}`}</> : <>{`${quantity} tickets = ${fCurrency(amount)}`}</>}
       </Typography>
-      <ButtonStyle disabled={quantity >= available && available >= 0} onClick={incrementQuantity}>
+      <ButtonStyle
+        disabled={quantity >= available && available >= 0}
+        onClick={incrementQuantity}
+        sx={{ width: big ? 73 : 30, height: big ? 73 : 30 }}
+      >
         <Icon icon={plusFill} width={20} height={20} color="#fff" />
       </ButtonStyle>
     </ContentStyle>

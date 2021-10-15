@@ -94,8 +94,8 @@ export default function Router() {
       {
         path: 'website',
         element: (
-          <PartnershipGuard>
-            <LogoOnlyLayout />
+          <PartnershipGuard init="rifopis">
+            <LogoOnlyLayoutRifopis />
           </PartnershipGuard>
         ),
         children: [{ path: 'checkout', element: <RifopisCheckout /> }]

@@ -14,7 +14,7 @@ import Page from '../../components/Page';
 import CarouselRifopis from '../../components/carousel/CarouselRifopis';
 import ProductList from '../../components/rifopis/product/ProductList';
 import { MotionInView, varFadeInUp } from '../../components/animate';
-import { RifopisHowWork, RifopisWinners } from '../../components/rifopis';
+import { RifopisHowWork, RifopisWinners, RifopisCart } from '../../components/rifopis';
 
 const Home = () => {
   const { partnership, isLoading } = usePartnership();
@@ -38,7 +38,7 @@ const Home = () => {
   return (
     <Page title={partnership.name}>
       <CarouselRifopis />
-
+      <RifopisCart />
       <Container maxWidth="lg">
         <Grid container spacing={2} sx={{ mb: 10 }}>
           {isLoading ? (

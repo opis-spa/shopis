@@ -32,6 +32,8 @@ const TooltipStyle = styled(({ className, ...props }) => <Tooltip {...props} cla
 
 const propTypes = {
   title: PropTypes.string,
+  simple: PropTypes.bool,
+  big: PropTypes.bool,
   product: PropTypes.shape({
     id: PropTypes.string,
     quantity: PropTypes.number,
@@ -43,11 +45,12 @@ const propTypes = {
 };
 
 const defaultProps = {
-  title: 'Agregar'
+  title: 'Agregar',
+  big: true
 };
 
 function ProductAdd(props) {
-  const { product, title } = props;
+  const { product, title, simple, big, ...other } = props;
   const { id, quantity, stock, amount, promo } = product;
   const isTreeXTwo = promo === '3x2';
   const isMountedRef = useIsMountedRef();
@@ -106,16 +109,19 @@ function ProductAdd(props) {
           arrow
         >
           <Increment
+            big={big}
+            simple={simple}
             name="quantity"
             amount={amountPromo}
             quantity={cartQuantity}
             available={stock}
             onDecrease={handleDecrease}
             onIncrease={handleIncrease}
+            {...other}
           />
         </TooltipStyle>
       ) : (
-        <Box display="flex" justifyContent="center">
+        <Box display="flex" justifyContent="center" {...other}>
           <ButtonTicket fullWidth variant="contained" color="secondary" onClick={handleAddToCart}>
             {title}
           </ButtonTicket>
