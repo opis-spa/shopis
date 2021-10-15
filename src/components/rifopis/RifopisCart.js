@@ -142,6 +142,7 @@ export default function RifopisCart() {
               </Box>
               <Scrollbar>
                 <ProductList
+                  direction="column"
                   formik={formik}
                   onDelete={handleDeleteProduct}
                   onIncreaseQuantity={handleIncrementCart}

@@ -14,8 +14,6 @@ import LinkPartnership from '../../LinkPartnership';
 // ----------------------------------------------------------------------
 
 function applyFilter(products, sortBy, filters) {
-  console.log('filter');
-  console.log(products);
   // SORT BY
   if (sortBy === 'priceDesc') {
     products = orderBy(products, ['amount'], ['desc']);
@@ -45,24 +43,26 @@ const SkeletonLoad = (
 
 const propTypes = {
   view: PropTypes.string,
-  max: PropTypes.number
+  max: PropTypes.number,
+  direction: PropTypes.oneOf('row', 'column')
 };
 
 const defaultProps = {
   max: 0,
-  view: PropTypes.string
+  view: 'simple',
+  direction: 'row'
 };
 
 const StackStyle = styled(Stack)(() => ({
   justifyContent: 'flex-start'
 }));
 
-function ProductList({ max = 0, view }) {
+function ProductList({ max = 0, view, direction }) {
   const { products, sortBy, filters, isLoading } = useSelector((state) => state.product);
   const filteredProducts = applyFilter(products, sortBy, filters);
 
   return (
-    <StackStyle spacing={3} direction="row">
+    <StackStyle spacing={3} direction={direction}>
       {filteredProducts.map((product) => {
         const { id } = product;
         if (view === 'module') {
