@@ -118,9 +118,9 @@ export default function ComingSoon() {
       <Container>
         <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
           <Typography variant="h3" paragraph>
-            Ya casi!
+            Falta poco!
           </Typography>
-          <Typography sx={{ color: 'text.secondary', mb: (theme) => theme.spacing(10) }}>
+          <Typography sx={{ mb: (theme) => theme.spacing(10) }}>
             Estamos trabajando fuertemente{' '}
             <span role="img" aria-label="rocket">
               🚀
@@ -157,7 +157,7 @@ export default function ComingSoon() {
           </CountdownStyle>
 
           {isSubscription ? (
-            <Alert severity="success" sx={{ my: 5 }}>
+            <Alert severity="success" sx={{ my: 5, justifyContent: 'center' }}>
               Te avisaremos cuando estemos listos!
             </Alert>
           ) : (
@@ -165,13 +165,23 @@ export default function ComingSoon() {
               <FormControl fullWidth sx={{ my: 5 }}>
                 <OutlinedInput
                   fullWidth
+                  color="primary"
                   disabled={isLoading}
                   placeholder="Ingresa tu correo electrónico"
                   {...getFieldProps('email')}
                   error={Boolean(touched.email && errors.email)}
                   endAdornment={
                     <InputAdornment position="end">
-                      <Button type="submit" variant="contained" size="large">
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        size="large"
+                        sx={{
+                          '&:hover': {
+                            backgroundColor: (theme) => theme.palette.secondary.main
+                          }
+                        }}
+                      >
                         Avisame
                       </Button>
                     </InputAdornment>
@@ -184,7 +194,11 @@ export default function ComingSoon() {
                         duration: theme.transitions.duration.shorter
                       }),
                     '&.Mui-focused': {
-                      boxShadow: (theme) => theme.customShadows.z8
+                      backgroundColor: (theme) => theme.palette.primary.light
+                    },
+                    '&.MuiOutlinedInput-input': {
+                      boxShadow: 'none',
+                      backgroundColor: (theme) => theme.palette.primary.light
                     },
                     '& fieldset': {
                       borderWidth: `1px !important`

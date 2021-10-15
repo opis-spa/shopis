@@ -33,6 +33,7 @@ function PartnershipGuard({ init, children }) {
     if (isMountedRef.current) {
       await handleInit(init || id);
       onChangeColor({ target: { value: init || id } });
+      // onChangeMode({ target: { value: 'dark' } });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [init, isInitialized, id]);

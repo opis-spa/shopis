@@ -98,7 +98,14 @@ function CarouselItem({ item, isActive, index }) {
       >
         <Grid
           container
-          sx={{ height: '100%', display: 'flex', flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}
+          sx={{
+            height: '100%',
+            display: 'flex',
+            flex: 1,
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            flexWrap: 'wrap-reverse'
+          }}
         >
           <Grid item xs={6}>
             <MotionContainer open={isActive}>
@@ -132,8 +139,8 @@ function CarouselItem({ item, isActive, index }) {
                   <Box
                     sx={{
                       border: 20,
-                      maxWidth: 400,
-                      height: '30%',
+                      maxWidth: 350,
+                      height: '100%',
                       minHeight: 300,
                       borderStyle: 'solid',
                       borderColor: '#fff',
@@ -143,8 +150,9 @@ function CarouselItem({ item, isActive, index }) {
                   />
                   <Box
                     sx={{
-                      maxWidth: 400,
-                      minHeight: 80,
+                      marginTop: -1,
+                      maxWidth: 350,
+                      minHeight: 85,
                       backgroundColor: '#fff',
                       borderBottomRightRadius: 3,
                       borderBottomLeftRadius: 3,
@@ -182,6 +190,7 @@ export default function CarouselAnimation() {
     speed: 1500,
     dots: false,
     arrows: false,
+    autoplaySpeed: 6000,
     autoplay: true,
     slidesToShow: 1,
     slidesToScroll: 1,

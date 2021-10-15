@@ -11,6 +11,7 @@ import { getPayments } from '../../redux/slices/payment';
 import { getDeliveries } from '../../redux/slices/delivery';
 // components
 import Page from '../../components/Page';
+import Scrollbar from '../../components/Scrollbar';
 import CarouselRifopis from '../../components/carousel/CarouselRifopis';
 import ProductList from '../../components/rifopis/product/ProductList';
 import { MotionInView, varFadeInUp } from '../../components/animate';
@@ -57,7 +58,9 @@ const Home = () => {
                 </Box>
               </Grid>
               <Grid item xs={12}>
-                <ProductList view="module" max={4} isLoad={false} />
+                <Scrollbar style={{ maxWidth: '100%' }}>
+                  <ProductList view="module" max={4} isLoad={false} />
+                </Scrollbar>
               </Grid>
             </Box>
           )}

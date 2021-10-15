@@ -4,7 +4,7 @@ import { Link as RouteLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Skeleton, Grid } from '@mui/material';
+import { Box, Skeleton, Grid, Stack } from '@mui/material';
 // redux
 import { useSelector } from '../../../redux/store';
 // components
@@ -53,7 +53,7 @@ const defaultProps = {
   view: PropTypes.string
 };
 
-const GridStyle = styled(Grid)(() => ({
+const StackStyle = styled(Stack)(() => ({
   justifyContent: 'flex-start'
 }));
 
@@ -62,15 +62,11 @@ function ProductList({ max = 0, view }) {
   const filteredProducts = applyFilter(products, sortBy, filters);
 
   return (
-    <GridStyle container spacing={3}>
+    <StackStyle spacing={3} direction="row">
       {filteredProducts.map((product) => {
         const { id } = product;
         if (view === 'module') {
-          return (
-            <Grid key={id} item xs={12} md={6}>
-              <ProductItem product={product} />
-            </Grid>
-          );
+          return <ProductItem product={product} />;
         }
         return (
           <Grid key={id} item xs={12}>
@@ -96,7 +92,7 @@ function ProductList({ max = 0, view }) {
           </LinkPartnership>
         </Box>
       )}
-    </GridStyle>
+    </StackStyle>
   );
 }
 

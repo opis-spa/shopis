@@ -18,7 +18,11 @@ import { fCurrency } from '../../../utils/formatNumber';
 // ----------------------------------------------------------------------
 
 const CardStyle = styled(Card)(({ theme }) => ({
-  border: `1px solid ${theme.palette.primary.light}`
+  border: `1px solid ${theme.palette.primary.light}`,
+  minWidth: '40%',
+  [theme.breakpoints.down('md')]: {
+    minWidth: '80%!important'
+  }
 }));
 
 const ProductImgStyle = styled('img')({
