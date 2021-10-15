@@ -98,7 +98,10 @@ export default function Router() {
             <LogoOnlyLayoutRifopis />
           </PartnershipGuard>
         ),
-        children: [{ path: 'checkout', element: <RifopisCheckout /> }]
+        children: [
+          { path: 'checkout', element: <RifopisCheckout /> },
+          { path: 'payment', element: <Payment /> }
+        ]
       }
     );
   } else {
@@ -164,23 +167,28 @@ export default function Router() {
             <LogoOnlyLayout />
           </PartnershipGuard>
         ),
-        children: [{ path: ':id/checkout', element: <Checkout /> }]
-      },
-
-      // Main Routes
-      {
-        path: '*',
-        element: <LogoOnlyLayout />,
         children: [
-          { path: 'coming-soon', element: <ComingSoon /> },
-          { path: 'maintenance', element: <Maintenance /> },
-          { path: '500', element: <Page500 /> },
-          { path: '404', element: <Page404 /> },
-          { path: '*', element: <Navigate to="/404" replace /> }
+          { path: ':id/checkout', element: <Checkout /> },
+          { path: 'payment', element: <Payment /> }
         ]
       }
     );
   }
+
+  routes.push(
+    // Main Routes
+    {
+      path: '*',
+      element: <LogoOnlyLayout />,
+      children: [
+        { path: 'coming-soon', element: <ComingSoon /> },
+        { path: 'maintenance', element: <Maintenance /> },
+        { path: '500', element: <Page500 /> },
+        { path: '404', element: <Page404 /> },
+        { path: '*', element: <Navigate to="/404" replace /> }
+      ]
+    }
+  );
 
   return useRoutes(routes);
 }
@@ -206,6 +214,7 @@ const ShopCart = Loadable(lazy(() => import('../pages/shop/Cart')));
 const ShopProduct = Loadable(lazy(() => import('../pages/shop/Product')));
 const ShopStore = Loadable(lazy(() => import('../pages/shop/Store')));
 const Checkout = Loadable(lazy(() => import('../pages/shop/Checkout')));
+const Payment = Loadable(lazy(() => import('../pages/shop/Payment')));
 // Rifopis
 const RifopisHome = Loadable(lazy(() => import('../pages/rifopis/Home')));
 const RifopisCart = Loadable(lazy(() => import('../pages/rifopis/Cart')));

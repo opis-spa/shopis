@@ -21,8 +21,8 @@ export const PATH_PAGE = {
   notexists: '/not-exists',
   comingSoon: '/coming-soon',
   maintenance: '/maintenance',
-  page404: 'error/404',
-  page500: 'error/500'
+  page404: '/404',
+  page500: '/500'
 };
 
 export const PATH_APP = {
@@ -55,5 +55,6 @@ export const PATH_RIFOPIS = {
   root: ROOT_RIFOPIS,
   cart: path(ROOT_RIFOPIS, '/cart'),
   checkout: path(ROOT_RIFOPIS, '/checkout'),
-  product: path(ROOT_RIFOPIS, '/product')
+  product: path(ROOT_RIFOPIS, '/product'),
+  payment: path(ROOT_RIFOPIS, '/payment')
 };

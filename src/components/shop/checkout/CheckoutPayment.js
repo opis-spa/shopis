@@ -12,7 +12,9 @@ import usePartnership from '../../../hooks/usePartnership';
 // redux
 import { useDispatch, useSelector } from '../../../redux/store';
 import { onBackStep, onNextStep, proccessCheckout } from '../../../redux/slices/product';
-//
+// route
+import { PATH_RIFOPIS } from '../../../routes/paths';
+// components
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
@@ -68,12 +70,13 @@ export default function CheckoutPayment() {
       if (values.payment !== 'webpay') {
         setSubmitting(false);
         dispatch(onNextStep());
+      } else if (partnership.nickname === 'rifopis') {
+        navigate(PATH_RIFOPIS.payment);
       } else {
-        // vamos a enviar a webpay
         navigate(`/shop/${partnership.nickname}/checkout/payment`);
       }
     }
-  }, [checkoutResult, values.payment, setSubmitting, dispatch, navigate, partnership.nickname]);
+  }, [dispatch, navigate, checkoutResult, values.payment, setSubmitting, partnership.nickname]);
 
   return (
     <FormikProvider value={formik}>
