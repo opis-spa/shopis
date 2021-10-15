@@ -34,7 +34,7 @@ const QontoConnector = styled(StepConnector)(({ theme }) => ({
   },
   '&.Mui-active, &.Mui-completed': {
     '& .MuiStepConnector-line': {
-      borderColor: theme.palette.primary.main
+      borderColor: theme.palette.primary.light
     }
   }
 }));
@@ -54,7 +54,7 @@ function QontoStepIcon({ active, completed }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: active ? 'primary.main' : 'divider',
+        color: active ? 'secondary.main' : 'divider',
         bgcolor: 'background.default'
       }}
     >
@@ -66,7 +66,7 @@ function QontoStepIcon({ active, completed }) {
             zIndex: 1,
             width: 20,
             height: 20,
-            color: 'primary.main'
+            color: 'primary.light'
           }}
         />
       ) : (
@@ -152,7 +152,7 @@ export default function EcommerceCheckout() {
           <>
             {activeStep === 1 && <CheckoutInformation />}
             {isDelivery && activeStep === 2 && <CheckoutDelivery />}
-            {activeStep === 3 - (isDelivery ? 1 : 0) && <CheckoutPayment />}
+            {activeStep === 2 + (isDelivery ? 1 : 0) && <CheckoutPayment />}
           </>
         ) : (
           <CheckoutOrderComplete open={isComplete} />

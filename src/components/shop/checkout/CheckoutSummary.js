@@ -51,15 +51,30 @@ export default function CheckoutSummary({
 
   return (
     <Card sx={{ my: 3 }}>
-      <CardHeader title="Resumen" />
+      <CardHeader title="Resumen de tu pedido" />
 
       <CardContent>
         <Stack spacing={2}>
+          {total !== subtotal && (
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                Subtotal
+              </Typography>
+              <Typography variant="subtitle2">{fCurrency(subtotal)}</Typography>
+            </Stack>
+          )}
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Subtotal
+            <Typography variant="subtitle1" sx={{ color: 'primary.light' }}>
+              Total a pagar
             </Typography>
-            <Typography variant="subtitle2">{fCurrency(subtotal)}</Typography>
+            <Box sx={{ textAlign: 'right' }}>
+              <Typography variant="subtitle1" sx={{ color: 'primary.light' }}>
+                {fCurrency(total)}
+              </Typography>
+              <Typography variant="caption" sx={{ color: 'secondary.light', fontStyle: 'italic' }}>
+                (Todos los impuestos incluidos)
+              </Typography>
+            </Box>
           </Stack>
 
           {discount > 0 && (
@@ -83,18 +98,6 @@ export default function CheckoutSummary({
           <Box sx={{ mb: 2 }}>
             <Divider />
           </Box>
-
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="subtitle1">Total</Typography>
-            <Box sx={{ textAlign: 'right' }}>
-              <Typography variant="subtitle1" sx={{ color: 'error.main' }}>
-                {fCurrency(total)}
-              </Typography>
-              <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
-                (Todos los impuestos incluidos)
-              </Typography>
-            </Box>
-          </Stack>
 
           {enableDiscount && (
             <TextField

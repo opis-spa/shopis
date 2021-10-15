@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useMemo } from 'react';
 // material
 import { alpha, ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
 // hooks
 import useSettings from '../hooks/useSettings';
 //
@@ -38,5 +39,10 @@ export default function ThemePrimaryColor({ children }) {
   const theme = createTheme(themeOptions);
   theme.components = componentsOverride(theme);
 
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {children}
+    </ThemeProvider>
+  );
 }

@@ -30,7 +30,7 @@ export default function RifopisWinners() {
                 sx={{
                   textTransform: 'uppercase',
                   fontWeight: 900,
-                  color: 'secondary.main',
+                  color: 'primary.light',
                   mb: 5,
                   ...(!isLight && {
                     textShadow: (theme) => `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`

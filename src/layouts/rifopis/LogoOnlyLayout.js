@@ -9,8 +9,7 @@ import PowerBy from '../../components/PowerBy';
 
 // ----------------------------------------------------------------------
 
-const ContanetStyle = styled('div')(({ theme }) => ({
-  backgroundColor: theme.palette.background.default,
+const ContanetStyle = styled('div')(() => ({
   height: '100vh'
 }));
 

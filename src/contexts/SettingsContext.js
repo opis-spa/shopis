@@ -16,11 +16,11 @@ const PRIMARY_COLOR = [
   // PURPLE
   {
     name: 'rifopis',
-    lighter: '#CCDFFF',
-    light: '#936DB9',
-    main: '#290E43',
-    dark: '#0027B7',
-    darker: '#00137A',
+    lighter: '#FFEF85',
+    light: '#FFE431',
+    main: '#FF8800',
+    dark: '#FF6A00',
+    darker: '#FF6A00',
     contrastText: '#fff'
   }
 ];
@@ -33,12 +33,11 @@ const SECONDARY_COLOR = [
   },
   // PURPLE
   {
-    name: 'rifopis',
-    lighter: '#FFEF85',
-    light: '#FFE431',
-    main: '#FF8800',
-    dark: '#FF6A00',
-    darker: '#FF6A00',
+    lighter: '#CCDFFF',
+    light: '#936DB9',
+    main: '#290E43',
+    dark: '#0027B7',
+    darker: '#00137A',
     contrastText: '#fff'
   }
 ];
@@ -59,7 +58,7 @@ function SetColor(themeColor) {
     text: {
       primary: '#fff'
     },
-    background: { paper: PRIMARY_COLOR[1].main, default: PRIMARY_COLOR[1].main, neutral: PRIMARY_COLOR[1].main }
+    background: { paper: SECONDARY_COLOR[1].main, default: SECONDARY_COLOR[1].main, neutral: SECONDARY_COLOR[1].main }
   };
 
   switch (themeColor) {

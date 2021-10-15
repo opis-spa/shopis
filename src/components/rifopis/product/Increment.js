@@ -13,14 +13,14 @@ import { fCurrency } from '../../../utils/formatNumber';
 
 const ContentStyle = styled(Stack)(({ theme }) => ({
   px: 0.75,
-  border: `1px solid ${theme.palette.secondary.lighter}`,
+  border: `1px solid ${theme.palette.primary.lighter}`,
   lineHeight: 0,
   borderRadius: 6
 }));
 
 const ButtonStyle = styled(MIconButton)(({ theme }) => ({
   background: 'linear-gradient(124.5deg, #FFED48 0%, #FFC155 21.15%, #FF9E21 63.44%, #FF8800 104.11%)',
-  borderColor: theme.palette.secondary.lighter,
+  borderColor: theme.palette.primary.lighter,
   borderRadius: 5
 }));
 
@@ -57,7 +57,7 @@ const Increment = forwardRef((props, ref) => {
       >
         <Icon icon={minusFill} width={20} height={20} color="#fff" />
       </ButtonStyle>
-      <Typography component="span" sx={{ textTransform: 'uppercase', fontWeight: 900, color: 'secondary.light' }}>
+      <Typography component="span" sx={{ textTransform: 'uppercase', fontWeight: 900, color: 'primary.light' }}>
         {simple ? <>{`${quantity}`}</> : <>{`${quantity} tickets = ${fCurrency(amount)}`}</>}
       </Typography>
       <ButtonStyle

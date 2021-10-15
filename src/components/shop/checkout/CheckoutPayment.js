@@ -45,7 +45,7 @@ export default function CheckoutPayment() {
       partnershipID: partnership.id,
       customer,
       products: cart.map((item) => ({ id: item.id, quantity: item.quantity })),
-      delivery,
+      ...(isDelivery && { delivery }),
       payment: ''
     },
     validationSchema: PaymentSchema,

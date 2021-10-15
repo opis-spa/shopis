@@ -18,7 +18,7 @@ import { fCurrency } from '../../../utils/formatNumber';
 // ----------------------------------------------------------------------
 
 const CardStyle = styled(Card)(({ theme }) => ({
-  border: `1px solid ${theme.palette.primary.light}`,
+  border: `1px solid ${theme.palette.secondary.light}`,
   minWidth: '40%',
   [theme.breakpoints.down('md')]: {
     minWidth: '80%!important'
@@ -36,11 +36,11 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
   borderRadius: 5,
   [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.primary.main
   },
   [`& .${linearProgressClasses.bar}`]: {
     borderRadius: 0,
-    backgroundColor: theme.palette.secondary.lighter
+    backgroundColor: theme.palette.primary.lighter
   }
 }));
 
@@ -105,9 +105,13 @@ function ProductItem({ product, ...other }) {
 
       <Stack sx={{ p: 3 }} spacing={2}>
         <Stack spacing={1}>
-          <Typography variant="subtitle1" noWrap color="secondary" sx={{ textTransform: 'uppercase' }}>
+          <Typography variant="subtitle1" noWrap color="primary" sx={{ textTransform: 'uppercase' }}>
             Primer Lugar
-            <Typography component="span" variant="caption" sx={{ color: 'primary.light', textTransform: 'uppercase' }}>
+            <Typography
+              component="span"
+              variant="caption"
+              sx={{ color: 'secondary.light', textTransform: 'uppercase' }}
+            >
               &nbsp;- 1 premio
             </Typography>
           </Typography>
@@ -132,7 +136,7 @@ function ProductItem({ product, ...other }) {
               <Typography
                 component="span"
                 variant="caption"
-                sx={{ color: 'primary.light', textTransform: 'uppercase' }}
+                sx={{ color: 'secondary.light', textTransform: 'uppercase' }}
               >
                 &nbsp;- 2 premios
               </Typography>
@@ -159,7 +163,7 @@ function ProductItem({ product, ...other }) {
               <Typography
                 component="span"
                 variant="caption"
-                sx={{ color: 'primary.light', textTransform: 'uppercase' }}
+                sx={{ color: 'secondary.light', textTransform: 'uppercase' }}
               >
                 &nbsp;- 10 premios
               </Typography>
@@ -178,7 +182,7 @@ function ProductItem({ product, ...other }) {
 
         <Typography
           variant="caption"
-          sx={{ fontWeight: 900, textTransform: 'uppercase', color: 'secondary.light', textAlign: 'right' }}
+          sx={{ fontWeight: 900, textTransform: 'uppercase', color: 'primary.light', textAlign: 'right' }}
         >{`¡Quedan solo ${stock} tickets!`}</Typography>
         <BorderLinearProgress variant="determinate" value={stock === 0 ? 100 : 100 - (stock / 1333) * 100} />
 

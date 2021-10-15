@@ -33,7 +33,7 @@ import { fCurrency } from '../../utils/formatNumber';
 // ----------------------------------------------------------------------
 
 const TypographyStyle = styled(Typography)(({ theme }) => ({
-  color: theme.palette.secondary.light,
+  color: theme.palette.primary.light,
   textTransform: 'uppercase',
   fontWeight: 900
 }));
@@ -162,10 +162,10 @@ export default function RifopisCart() {
               <Stack direction="row" justifyContent="flex-start">
                 <Checkbox
                   sx={{
-                    color: 'secondary.light',
+                    color: 'primary.light',
                     '&:hover': { bgcolor: 'transparent' }
                   }}
-                  color="secondary"
+                  color="primary"
                 />
                 <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
                   Al momento de presionar el botón "COMPRAR TICKETS" accedo a las Bases del sorteo y a las Politica de
@@ -177,10 +177,9 @@ export default function RifopisCart() {
                 <LinkPartnership
                   to={PATH_RIFOPIS.checkout}
                   variant="contained"
-                  color="primary"
                   disabled={checkout.subtotal === 0 || checkout.subtotal < partnership.deliveryAmountMin}
                 >
-                  <ButtonTicket fullWidth>Comprar tokens</ButtonTicket>
+                  <ButtonTicket fullWidth>Comprar ticket</ButtonTicket>
                 </LinkPartnership>
               </Box>
             </Box>

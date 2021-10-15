@@ -83,7 +83,7 @@ export default function MainNavbar() {
                 sx={{
                   fontWeight: 900,
                   textTransform: 'uppercase',
-                  color: 'secondary.main'
+                  color: 'primary.light'
                 }}
               >
                 Ingresar

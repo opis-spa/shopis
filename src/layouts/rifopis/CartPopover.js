@@ -13,7 +13,7 @@ import { MIconButton } from '../../components/@material-extend';
 // ----------------------------------------------------------------------
 
 const IconStyle = styled(Icon)(({ theme }) => ({
-  color: theme.palette.secondary.main
+  color: theme.palette.primary.light
 }));
 
 export default function Searchbar() {

@@ -15,7 +15,7 @@ const MainStyle = styled('div')(() => ({
 
 export default function MainLayout() {
   return (
-    <Box sx={{ backgroundColor: 'background.default' }}>
+    <Box>
       <MainNavbar />
       <MainStyle>
         <Outlet />

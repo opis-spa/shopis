@@ -160,7 +160,7 @@ function CarouselItem({ item, isActive, index }) {
                     }}
                   >
                     <Stack spacing={1}>
-                      <Typography color="secondary" sx={{ textTransform: 'uppercase', fontWeight: 900 }}>
+                      <Typography color="primary" sx={{ textTransform: 'uppercase', fontWeight: 900 }}>
                         Primer lugar
                       </Typography>
                       <Typography sx={{ textTransform: 'uppercase', color: 'black', fontFamily: 'Permanent Marker' }}>
