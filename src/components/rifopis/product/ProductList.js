@@ -66,13 +66,9 @@ function ProductList({ max = 0, view, direction }) {
       {filteredProducts.map((product) => {
         const { id } = product;
         if (view === 'module') {
-          return <ProductItem product={product} />;
+          return <ProductItem key={id} product={product} />;
         }
-        return (
-          <Grid key={id} item xs={12}>
-            <ProductItemSimple product={product} />
-          </Grid>
-        );
+        return <ProductItemSimple key={id} product={product} />;
       })}
 
       {isLoading && SkeletonLoad}

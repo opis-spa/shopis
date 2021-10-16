@@ -16,9 +16,10 @@ import Increment from './Increment';
 
 const TooltipStyle = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)(
   ({ theme }) => ({
+    zIndex: 3000,
     [`& .${tooltipClasses.tooltip}`]: {
-      color: theme.palette.secondary.main,
-      padding: theme.spacing(2),
+      color: theme.palette.primary.main,
+      padding: theme.spacing(1),
       backgroundColor: theme.palette.common.white,
       boxShadow: theme.shadows[1],
       fontSize: 18,
@@ -33,7 +34,9 @@ const TooltipStyle = styled(({ className, ...props }) => <Tooltip {...props} cla
 const propTypes = {
   title: PropTypes.string,
   simple: PropTypes.bool,
+  min: PropTypes.number,
   big: PropTypes.bool,
+  tooltip: PropTypes.bool,
   product: PropTypes.shape({
     id: PropTypes.string,
     quantity: PropTypes.number,
@@ -46,11 +49,13 @@ const propTypes = {
 
 const defaultProps = {
   title: 'Agregar',
-  big: true
+  big: true,
+  tooltip: true,
+  min: 0
 };
 
 function ProductAdd(props) {
-  const { product, title, simple, big, ...other } = props;
+  const { product, title, simple, big, tooltip, min, ...other } = props;
   const { id, quantity, stock, amount, promo } = product;
   const isTreeXTwo = promo === '3x2';
   const isMountedRef = useIsMountedRef();
@@ -88,7 +93,9 @@ function ProductAdd(props) {
     dispatch(increaseQuantity(id));
   };
   const handleDecrease = () => {
-    dispatch(decreaseQuantity(id));
+    if (quantity - 1 >= min || min === 0) {
+      dispatch(decreaseQuantity(id));
+    }
   };
   const handleAddToCart = async () => {
     const addQuantity = isTreeXTwo ? 3 : 1;
@@ -100,7 +107,7 @@ function ProductAdd(props) {
     <FormikProvider value={formik}>
       {(cartQuantity || 0) > 0 ? (
         <TooltipStyle
-          open={open}
+          open={tooltip && open}
           disableFocusListener
           disableHoverListener
           disableTouchListener

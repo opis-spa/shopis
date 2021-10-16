@@ -63,7 +63,7 @@ ProductItem.propTypes = {
 
 function ProductItem({ product, ...other }) {
   const { name, photo, photos, amount, discountPartnership: discount, stock } = product;
-  const { cart } = useSelector((state) => state.product.checkout);
+  const { cart, open } = useSelector((state) => state.product.checkout);
 
   const image = useMemo(() => {
     if (photos) {
@@ -186,7 +186,7 @@ function ProductItem({ product, ...other }) {
         >{`¡Quedan solo ${stock} tickets!`}</Typography>
         <BorderLinearProgress variant="determinate" value={stock === 0 ? 100 : 100 - (stock / 1333) * 100} />
 
-        <ProductAdd title="Comprar ticket" product={productCart} />
+        <ProductAdd tooltip={!open} title="Comprar ticket" product={productCart} />
       </Stack>
     </CardStyle>
   );

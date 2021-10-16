@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import trashFill from '@iconify/icons-eva/trash-2-fill';
 // material
 import { styled } from '@mui/material/styles';
-import { Typography, Stack } from '@mui/material';
+import { Typography, Stack, Divider } from '@mui/material';
 // redux
 import { useSelector } from '../../../redux/store';
 // utils
@@ -32,7 +32,7 @@ const propTypes = {
 
 const ProductItemSimple = ({ product }) => {
   const { name, photo, photos, amount, discountPartnership: discount } = product;
-  const { cart } = useSelector((state) => state.product.checkout);
+  const { cart, open } = useSelector((state) => state.product.checkout);
 
   const image = useMemo(() => {
     if (photos) {
@@ -46,8 +46,12 @@ const ProductItemSimple = ({ product }) => {
     if (cartNew) {
       return cartNew;
     }
-    return product;
+    return { ...product, quantity: 0 };
   }, [cart, product]);
+
+  if (productCart.quantity === 0) {
+    return <></>;
+  }
 
   return (
     <RootStyle container>
@@ -64,10 +68,18 @@ const ProductItemSimple = ({ product }) => {
             <MIconButton>
               <Icon icon={trashFill} width={20} height={20} color="white" />
             </MIconButton>
-            <ProductAdd simple big={false} product={productCart} sx={{ width: 100, height: 31 }} />
+            <ProductAdd
+              tooltip={open}
+              simple
+              big={false}
+              product={productCart}
+              min={1}
+              sx={{ width: 100, height: 31 }}
+            />
           </Stack>
         </Stack>
       </Stack>
+      <Divider variant="middle" sx={{ mt: 2 }} />
     </RootStyle>
   );
 };
