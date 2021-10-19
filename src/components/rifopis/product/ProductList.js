@@ -10,6 +10,7 @@ import { useSelector } from '../../../redux/store';
 // components
 import ProductItem from './ProductItem';
 import ProductItemSimple from './ProductItemSimple';
+import ProductItemSummary from './ProductItemSummary';
 import LinkPartnership from '../../LinkPartnership';
 // ----------------------------------------------------------------------
 
@@ -67,6 +68,9 @@ function ProductList({ max = 0, view, direction }) {
         const { id } = product;
         if (view === 'module') {
           return <ProductItem key={id} product={product} />;
+        }
+        if (view === 'resumen') {
+          return <ProductItemSummary key={id} product={product} />;
         }
         return <ProductItemSimple key={id} product={product} />;
       })}

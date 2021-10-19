@@ -75,7 +75,10 @@ export default function Router() {
       {
         path: '',
         element: <LogoOnlyLayoutRifopis />,
-        children: [{ path: '', element: <RifopisComingSoon /> }]
+        children: [
+          { path: '', element: <RifopisComingSoon /> },
+          { path: 'payment/result', element: <RifopisPaymentResult /> }
+        ]
       },
       {
         path: 'website',
@@ -169,7 +172,8 @@ export default function Router() {
         ),
         children: [
           { path: ':id/checkout', element: <Checkout /> },
-          { path: 'payment', element: <Payment /> }
+          { path: 'payment', element: <Payment /> },
+          { path: 'payment/result', element: <PaymentResult /> }
         ]
       }
     );
@@ -215,12 +219,14 @@ const ShopProduct = Loadable(lazy(() => import('../pages/shop/Product')));
 const ShopStore = Loadable(lazy(() => import('../pages/shop/Store')));
 const Checkout = Loadable(lazy(() => import('../pages/shop/Checkout')));
 const Payment = Loadable(lazy(() => import('../pages/shop/Payment')));
+const PaymentResult = Loadable(lazy(() => import('../pages/shop/PaymentResult')));
 // Rifopis
 const RifopisHome = Loadable(lazy(() => import('../pages/rifopis/Home')));
 const RifopisCart = Loadable(lazy(() => import('../pages/rifopis/Cart')));
 const RifopisProduct = Loadable(lazy(() => import('../pages/rifopis/Product')));
 const RifopisStore = Loadable(lazy(() => import('../pages/rifopis/Store')));
 const RifopisCheckout = Loadable(lazy(() => import('../pages/rifopis/Checkout')));
+const RifopisPaymentResult = Loadable(lazy(() => import('../pages/rifopis/PaymentResult')));
 // Main
 const LandingPage = Loadable(lazy(() => import('../pages/landing/Home')));
 const ComingSoon = Loadable(lazy(() => import('../pages/ComingSoon')));

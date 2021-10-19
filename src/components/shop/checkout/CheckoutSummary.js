@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 // material
 import {
@@ -13,6 +13,14 @@ import {
   CardContent,
   InputAdornment
 } from '@mui/material';
+// hooks
+import useIsMountedRef from '../../../hooks/useIsMountedRef';
+// redux
+import { useSelector, useDispatch } from '../../../redux/store';
+import { getCart } from '../../../redux/slices/product';
+// component
+import Scrollbar from '../../Scrollbar';
+import ProductList from '../../rifopis/product/ProductList';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
 
@@ -39,6 +47,10 @@ export default function CheckoutSummary({
   enableDiscount = false,
   preview = false
 }) {
+  const dispatch = useDispatch();
+  const isMountedRef = useIsMountedRef();
+  const { checkout } = useSelector((state) => state.product);
+  const { cart } = checkout;
   const fnDelivery = (totals) => {
     if (delivery === -1) {
       return 'Envío por pagar';
@@ -48,6 +60,12 @@ export default function CheckoutSummary({
     }
     return fCurrency(totals.delivery);
   };
+
+  useMemo(() => {
+    if (isMountedRef.current) {
+      dispatch(getCart(cart));
+    }
+  }, [dispatch, isMountedRef, cart]);
 
   return (
     <Card sx={{ my: 3 }}>
@@ -76,6 +94,11 @@ export default function CheckoutSummary({
               </Typography>
             </Box>
           </Stack>
+          <Box sx={{ minHeight: 200, flex: 1, px: 2 }}>
+            <Scrollbar>
+              <ProductList view="resumen" direction="column" />
+            </Scrollbar>
+          </Box>
 
           {discount > 0 && (
             <Stack direction="row" justifyContent="space-between">

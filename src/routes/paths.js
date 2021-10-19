@@ -56,5 +56,6 @@ export const PATH_RIFOPIS = {
   cart: path(ROOT_RIFOPIS, '/cart'),
   checkout: path(ROOT_RIFOPIS, '/checkout'),
   product: path(ROOT_RIFOPIS, '/product'),
-  payment: path(ROOT_RIFOPIS, '/payment')
+  payment: path(ROOT_RIFOPIS, '/payment'),
+  result: path(ROOT_RIFOPIS, '/payment/result')
 };

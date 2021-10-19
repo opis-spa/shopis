@@ -32,7 +32,12 @@ const CheckOutSchema = Yup.object().shape({
   lastName: Yup.string().required('Apellidos es requerido'),
   email: Yup.string()
     .required('Correo electrónico es requerido')
-    .email('El formato del correo elecrónico no es correcto')
+    .email('El formato del correo elecrónico no es correcto'),
+  phone: Yup.string().required('El número de teléfono es requerido'),
+  password: Yup.string().when('type', {
+    is: 'register',
+    then: Yup.string().required('La contraseña es requerida')
+  })
 });
 
 const propTypes = {
@@ -61,7 +66,9 @@ const CheckoutInformation = () => {
       type: 'gest',
       name: '',
       lastName: '',
-      email: ''
+      email: '',
+      phone: '',
+      password: ''
     },
     validationSchema: CheckOutSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { Icon } from '@iconify/react';
@@ -11,7 +12,7 @@ import { LoadingButton } from '@mui/lab';
 import usePartnership from '../../../hooks/usePartnership';
 // redux
 import { useDispatch, useSelector } from '../../../redux/store';
-import { onBackStep, onNextStep, proccessCheckout } from '../../../redux/slices/product';
+import { onBackStep, onNextStep, proccessCheckout, clearCart } from '../../../redux/slices/product';
 // route
 import { PATH_RIFOPIS } from '../../../routes/paths';
 // components
@@ -22,11 +23,12 @@ import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 // ----------------------------------------------------------------------
 
 export default function CheckoutPayment() {
+  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { partnership } = usePartnership();
   const { data: payments } = useSelector((state) => state.payment);
-  const { checkout, checkoutResult } = useSelector((state) => state.product);
+  const { checkout, checkoutResult, isLoading, error } = useSelector((state) => state.product);
   const { cart, total, discount, subtotal, shipping, isDelivery, data: customer, delivery } = checkout;
 
   const PAYMENT_OPTIONS = useMemo(() => {
@@ -54,10 +56,13 @@ export default function CheckoutPayment() {
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
         await dispatch(proccessCheckout(values));
+        dispatch(clearCart());
       } catch (error) {
-        console.error(error);
         setSubmitting(false);
         setErrors(error.message);
+        enqueueSnackbar('Se produjo un error al procesar la orden, por favor intentelo más tarde', {
+          variant: 'error'
+        });
       }
     }
   });
@@ -66,6 +71,7 @@ export default function CheckoutPayment() {
 
   useMemo(() => {
     const { success } = checkoutResult;
+    console.log(' error ? ');
     if (success) {
       if (values.payment !== 'webpay') {
         setSubmitting(false);
@@ -78,11 +84,17 @@ export default function CheckoutPayment() {
     }
   }, [dispatch, navigate, checkoutResult, values.payment, setSubmitting, partnership.nickname]);
 
+  useMemo(() => {
+    if (!isLoading && error) {
+      console.log('error');
+    }
+  }, [isLoading, error]);
+
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={6}>
             <Button
               type="button"
               size="small"
@@ -95,7 +107,7 @@ export default function CheckoutPayment() {
             <CheckoutPaymentMethods formik={formik} paymentOptions={PAYMENT_OPTIONS} />
           </Grid>
 
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={6}>
             {isDelivery && <CheckoutBillingInfo onBackStep={handleBackStep} />}
             <CheckoutSummary total={total} subtotal={subtotal} discount={discount} shipping={shipping} />
             <LoadingButton

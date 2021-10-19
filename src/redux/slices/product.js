@@ -343,6 +343,7 @@ export const proccessCheckout = (payload) => async (dispatch) => {
     }
     const error = new Error(message);
     error.code = 'order/error';
+    console.log('hola');
     throw error;
   } catch (error) {
     console.log(error);
