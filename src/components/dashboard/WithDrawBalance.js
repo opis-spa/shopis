@@ -127,13 +127,13 @@ function WithDrawBalance(props) {
             />
 
             <MuiSlider
-              disabled={balance === 0}
+              disabled={balance.amount === 0}
               value={typeof amount === 'number' ? amount : 0}
               valueLabelDisplay="auto"
               step={STEP}
               marks
               min={MIN_AMOUNT}
-              max={balance < MIN_AMOUNT ? MIN_AMOUNT : balance}
+              max={balance.amount < MIN_AMOUNT ? MIN_AMOUNT : balance.amount}
               onChange={handleSliderChange}
             />
 
@@ -141,7 +141,7 @@ function WithDrawBalance(props) {
               <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                 Tu balance
               </Typography>
-              <Typography variant="subtitle1">{fCurrency(balance)}</Typography>
+              <Typography variant="subtitle1">{fCurrency(balance.amount)}</Typography>
             </Stack>
           </Stack>
         </DialogContent>
