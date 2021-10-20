@@ -18,6 +18,12 @@
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,500,700,900" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
 
+  <!-- GOAL 1 -->
+  <% if (process.env.NODE_ENV !== 'production') { %>
+      <!-- avoid being crawled -->
+      <meta name="robots" content="noindex" />
+  <% } %>
+
   <title>Shopis</title>
   <meta name="description"
     content="Vende en redes sociales, tienda online y puntos de venta, fácil, rápido y automatizado. En solo minutos tu tienda online estará abierta para millones de compradores en internet, comenzar es gratis!" />
