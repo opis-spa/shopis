@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { Icon } from '@iconify/react';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
-import discordFilled from '@iconify/icons-ic/baseline-discord';
+// import discordFilled from '@iconify/icons-ic/baseline-discord';
 import closeFill from '@iconify/icons-eva/close-fill';
 import { useSnackbar } from 'notistack';
 // material
@@ -37,19 +37,14 @@ import Page from '../../components/Page';
 
 const SOCIALS = [
   {
-    uri: 'https://facebook.com/shopiscl',
+    uri: 'https://facebook.com/rifopis',
     name: 'Facebook',
     icon: <Icon icon={facebookFill} width={24} height={24} color="#1877F2" />
   },
   {
-    uri: 'https://instagram.com/shopiscl',
+    uri: 'https://instagram.com/rifopis',
     name: 'Instagram',
     icon: <Icon icon={instagramFilled} width={24} height={24} color="#D7336D" />
-  },
-  {
-    uri: 'https://discord.gg/3PAtee5XRx',
-    name: 'Discord',
-    icon: <Icon icon={discordFilled} width={24} height={24} color="#006097" />
   }
 ];
 
@@ -123,9 +118,9 @@ export default function ComingSoon() {
       <Container>
         <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
           <Typography variant="h3" paragraph>
-            Ya casi!
+            Falta poco!
           </Typography>
-          <Typography sx={{ color: 'text.secondary', mb: (theme) => theme.spacing(10) }}>
+          <Typography sx={{ mb: (theme) => theme.spacing(10) }}>
             Estamos trabajando fuertemente{' '}
             <span role="img" aria-label="rocket">
               🚀
@@ -162,7 +157,7 @@ export default function ComingSoon() {
           </CountdownStyle>
 
           {isSubscription ? (
-            <Alert severity="success" sx={{ my: 5 }}>
+            <Alert severity="success" sx={{ my: 5, justifyContent: 'center' }}>
               Te avisaremos cuando estemos listos!
             </Alert>
           ) : (
@@ -170,13 +165,23 @@ export default function ComingSoon() {
               <FormControl fullWidth sx={{ my: 5 }}>
                 <OutlinedInput
                   fullWidth
+                  color="primary"
                   disabled={isLoading}
                   placeholder="Ingresa tu correo electrónico"
                   {...getFieldProps('email')}
                   error={Boolean(touched.email && errors.email)}
                   endAdornment={
                     <InputAdornment position="end">
-                      <Button type="submit" variant="contained" size="large">
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        size="large"
+                        sx={{
+                          '&:hover': {
+                            backgroundColor: (theme) => theme.palette.secondary.main
+                          }
+                        }}
+                      >
                         Avisame
                       </Button>
                     </InputAdornment>
@@ -189,7 +194,11 @@ export default function ComingSoon() {
                         duration: theme.transitions.duration.shorter
                       }),
                     '&.Mui-focused': {
-                      boxShadow: (theme) => theme.customShadows.z8
+                      backgroundColor: (theme) => theme.palette.primary.light
+                    },
+                    '&.MuiOutlinedInput-input': {
+                      boxShadow: 'none',
+                      backgroundColor: (theme) => theme.palette.primary.light
                     },
                     '& fieldset': {
                       borderWidth: `1px !important`

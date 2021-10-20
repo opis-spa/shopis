@@ -18,7 +18,7 @@ const menuConfig = [
     path: '#sorteos'
   },
   {
-    title: '¿Como funciona?',
+    title: 'Cómo funciona',
     icon: <Icon icon={homeFill} {...ICON_SIZE} />,
     path: '#como-funciona'
   },

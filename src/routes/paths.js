@@ -7,6 +7,7 @@ function path(root, sublink) {
 const ROOTS_AUTH = '/auth';
 const ROOTS_APP = '/app';
 const ROOT_SHOP = '/shop';
+const ROOT_RIFOPIS = '/website';
 
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
@@ -20,8 +21,8 @@ export const PATH_PAGE = {
   notexists: '/not-exists',
   comingSoon: '/coming-soon',
   maintenance: '/maintenance',
-  page404: 'error/404',
-  page500: 'error/500'
+  page404: '/404',
+  page500: '/500'
 };
 
 export const PATH_APP = {
@@ -48,4 +49,13 @@ export const PATH_APP = {
 
 export const PATH_SHOP = {
   root: ROOT_SHOP
+};
+
+export const PATH_RIFOPIS = {
+  root: ROOT_RIFOPIS,
+  cart: path(ROOT_RIFOPIS, '/cart'),
+  checkout: path(ROOT_RIFOPIS, '/checkout'),
+  product: path(ROOT_RIFOPIS, '/product'),
+  payment: path(ROOT_RIFOPIS, '/payment'),
+  result: path(ROOT_RIFOPIS, '/payment/result')
 };

@@ -1,4 +1,5 @@
 export * from './controls';
+export { default as CarouselRifopis } from './CarouselRifopis';
 export { default as CarouselAnimation } from './CarouselAnimation';
 export { default as CarouselBasic1 } from './CarouselBasic1';
 export { default as CarouselBasic2 } from './CarouselBasic2';

@@ -20,6 +20,7 @@ const initialState = {
     rating: ''
   },
   checkout: {
+    open: false,
     data: {},
     activeStep: 1,
     cart: [],
@@ -68,6 +69,14 @@ const slice = createSlice({
         });
       }
       state.checkout.cart = uniqBy([...state.checkout.cart, product], 'id');
+    },
+
+    setOpenCart(state, action) {
+      state.checkout.open = action.payload;
+    },
+
+    clearCart(state) {
+      state.checkout = initialState.checkout;
     },
 
     getCart(state, action) {
@@ -231,6 +240,8 @@ export default slice.reducer;
 
 // Actions
 export const {
+  setOpenCart,
+  clearCart,
   getCart,
   addCart,
   getProduct,
@@ -332,6 +343,7 @@ export const proccessCheckout = (payload) => async (dispatch) => {
     }
     const error = new Error(message);
     error.code = 'order/error';
+    console.log('hola');
     throw error;
   } catch (error) {
     console.log(error);

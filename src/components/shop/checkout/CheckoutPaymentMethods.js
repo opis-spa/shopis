@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
@@ -46,13 +46,9 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
   const { total } = useSelector((state) => state.product.checkout);
   const { errors, touched, values, getFieldProps } = formik;
 
-  useEffect(() => {
-    console.log('value formik ');
-    console.log(values);
-  }, [values]);
   return (
     <Card sx={{ my: 3 }}>
-      <CardHeader title="Forma de pago" />
+      <CardHeader title="Selecciona un medio de pago" />
       <CardContent>
         <RadioGroup row {...getFieldProps('payment')}>
           <Grid container spacing={2}>

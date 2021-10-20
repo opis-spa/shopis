@@ -65,9 +65,11 @@ function AuthProvider({ children }) {
             if (success) {
               setProfile(userData);
 
+              console.log('init');
+              console.log({ payload: { isAuthenticated: true, user: userData } });
               dispatch({
                 type: 'INITIALISE',
-                payload: { isAuthenticated: true, user }
+                payload: { isAuthenticated: true, user: userData }
               });
 
               return true;
@@ -95,6 +97,7 @@ function AuthProvider({ children }) {
 
     if (success === true) {
       const user = await signInWithCustomToken(auth, token);
+      console.log(user);
       return user;
     }
 

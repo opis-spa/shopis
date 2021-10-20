@@ -15,6 +15,8 @@ import ThemePrimaryColor from './components/ThemePrimaryColor';
 import NotistackProvider from './components/NotistackProvider';
 import { BaseOptionChartStyle } from './components/charts/BaseOptionChart';
 import LoadingScreen, { ProgressBarStyle } from './components/LoadingScreen';
+// configs
+import { isProduction } from './config';
 
 // ----------------------------------------------------------------------
 
@@ -31,9 +33,9 @@ export default function App() {
             <ProgressBarStyle />
             <BaseOptionChartStyle />
             <ScrollToTop />
-            <GoogleAnalytics />
-            <Hotjar />
-            {isInitialized ? <Router /> : <LoadingScreen />}
+            {isProduction && <GoogleAnalytics />}
+            {isProduction && <Hotjar />}
+            {isInitialized ? <Router /> : <LoadingScreen generic />}
           </NotistackProvider>
         </RtlLayout>
       </ThemePrimaryColor>

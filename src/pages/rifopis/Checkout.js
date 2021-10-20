@@ -7,12 +7,13 @@ import { styled } from '@mui/material/styles';
 import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getCart, createBilling, onGotoStep } from '../../redux/slices/product';
+import { getCart, createBilling, onGotoStep, getProductStore } from '../../redux/slices/product';
 import { getDeliveries } from '../../redux/slices/delivery';
 import { getPayments } from '../../redux/slices/payment';
 // hooks
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import useSettings from '../../hooks/useSettings';
+import usePartnership from '../../hooks/usePartnership';
 // components
 import Page from '../../components/Page';
 import {
@@ -34,7 +35,7 @@ const QontoConnector = styled(StepConnector)(({ theme }) => ({
   },
   '&.Mui-active, &.Mui-completed': {
     '& .MuiStepConnector-line': {
-      borderColor: theme.palette.primary.main
+      borderColor: theme.palette.primary.light
     }
   }
 }));
@@ -54,7 +55,7 @@ function QontoStepIcon({ active, completed }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: active ? 'primary.main' : 'divider',
+        color: active ? 'secondary.main' : 'divider',
         bgcolor: 'background.default'
       }}
     >
@@ -66,7 +67,7 @@ function QontoStepIcon({ active, completed }) {
             zIndex: 1,
             width: 20,
             height: 20,
-            color: 'primary.main'
+            color: 'primary.light'
           }}
         />
       ) : (
@@ -98,6 +99,8 @@ const MainStyle = styled(Page)(({ theme }) => ({
 export default function EcommerceCheckout() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
+  const { partnership } = usePartnership();
+  const { nickname } = partnership;
   const isMountedRef = useIsMountedRef();
   const { checkout } = useSelector((state) => state.product);
   const { cart, activeStep, isDelivery } = checkout;
@@ -110,12 +113,13 @@ export default function EcommerceCheckout() {
 
   useEffect(() => {
     if (isMountedRef.current) {
+      dispatch(getProductStore(nickname));
       dispatch(getCart(cart));
       dispatch(getDeliveries());
       dispatch(getPayments());
       dispatch(onGotoStep(1));
     }
-  }, [dispatch, isMountedRef, cart]);
+  }, [dispatch, isMountedRef, cart, nickname]);
 
   useEffect(() => {
     if (activeStep === 1) {
@@ -152,7 +156,7 @@ export default function EcommerceCheckout() {
           <>
             {activeStep === 1 && <CheckoutInformation />}
             {isDelivery && activeStep === 2 && <CheckoutDelivery />}
-            {activeStep === 3 - (isDelivery ? 1 : 0) && <CheckoutPayment />}
+            {activeStep === 2 + (isDelivery ? 1 : 0) && <CheckoutPayment />}
           </>
         ) : (
           <CheckoutOrderComplete open={isComplete} />

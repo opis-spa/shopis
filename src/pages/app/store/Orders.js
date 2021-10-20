@@ -137,10 +137,6 @@ export default function Order() {
     setFilterName(event.target.value);
   };
 
-  const handleDeleteProduct = () => {
-    // dispatch(deleteProduct(productId));
-  };
-
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - sales.length) : 0;
 
   const filteredSales = applySortFilter(sales, getComparator(order, orderBy), filterName);

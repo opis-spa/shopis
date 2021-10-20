@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
-// material
-import { Container, Typography, FormHelperText, Stack } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { Icon } from '@iconify/react';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
+// material
+import { styled } from '@mui/material/styles';
+import { Container, Typography, FormHelperText, Stack, Box } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { decreaseQuantity, deleteCart, increaseQuantity, getCart } from '../../redux/slices/product';
@@ -15,10 +15,10 @@ import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
-import EmptyContent from '../../components/shop/cart/EmptyContent';
 import ProductList from '../../components/shop/cart/ProductList';
 import Summary from '../../components/shop/cart/Summary';
 import LinkPartnership from '../../components/LinkPartnership';
+import { EmptyCartIllustration } from '../../assets';
 // utils
 import { fCurrency } from '../../utils/formatNumber';
 
@@ -51,8 +51,6 @@ export default function EcommerceCheckout() {
   };
 
   const handleIncrementCart = (id) => {
-    console.log('produt');
-    console.log(id);
     dispatch(increaseQuantity(id));
   };
 
@@ -90,11 +88,10 @@ export default function EcommerceCheckout() {
             </LinkPartnership>
 
             {isEmpty ? (
-              <EmptyContent
-                title="Tu carrito está actualmente vacío"
-                description=""
-                img="/static/illustrations/illustration_empty_cart.svg"
-              />
+              <>
+                <EmptyCartIllustration sx={{ height: 240, mb: 3 }} />
+                <Box sx={{ flexGrow: 1 }} />
+              </>
             ) : (
               <Scrollbar>
                 <ProductList
