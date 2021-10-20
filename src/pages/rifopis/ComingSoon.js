@@ -123,8 +123,8 @@ export default function ComingSoon() {
           </Typography>
           <Typography sx={{ mb: (theme) => theme.spacing(10) }}>
             Estamos trabajando fuertemente{' '}
-            <span role="img" aria-label="rocket">
-              🚀
+            <span role="img" aria-label="strong">
+              💪🏻
             </span>{' '}
             para que muy pronto puedas participar por increíbles premios!
           </Typography>
