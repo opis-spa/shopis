@@ -32,6 +32,7 @@ import { subscriptionNewsletter } from '../../redux/slices/user';
 // components
 import { MIconButton } from '../../components/@material-extend';
 import Page from '../../components/Page';
+import { ComingSoonIllustrationRifopis } from '../../assets';
 
 // ----------------------------------------------------------------------
 
@@ -125,8 +126,10 @@ export default function ComingSoon() {
             <span role="img" aria-label="rocket">
               🚀
             </span>{' '}
-            para que prontamente puedas participar en increibles sorteos!
+            para que muy pronto puedas participar por increíbles premios!
           </Typography>
+
+          <ComingSoonIllustrationRifopis sx={{ my: 10, height: 240 }} />
 
           <CountdownStyle>
             <div>
@@ -169,7 +172,6 @@ export default function ComingSoon() {
                   disabled={isLoading}
                   placeholder="Ingresa tu correo electrónico"
                   {...getFieldProps('email')}
-                  error={Boolean(touched.email && errors.email)}
                   endAdornment={
                     <InputAdornment position="end">
                       <Button
@@ -178,7 +180,7 @@ export default function ComingSoon() {
                         size="large"
                         sx={{
                           '&:hover': {
-                            backgroundColor: (theme) => theme.palette.secondary.main
+                            backgroundColor: (theme) => theme.palette.primary.main
                           }
                         }}
                       >
@@ -193,12 +195,13 @@ export default function ComingSoon() {
                         easing: theme.transitions.easing.easeInOut,
                         duration: theme.transitions.duration.shorter
                       }),
+                    color: 'common.white',
                     '&.Mui-focused': {
-                      backgroundColor: (theme) => theme.palette.primary.light
+                      backgroundColor: (theme) => theme.palette.secondary.dark
                     },
                     '&.MuiOutlinedInput-input': {
                       boxShadow: 'none',
-                      backgroundColor: (theme) => theme.palette.primary.light
+                      backgroundColor: (theme) => theme.palette.secondary.dark
                     },
                     '& fieldset': {
                       borderWidth: `1px !important`

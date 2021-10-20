@@ -36,7 +36,7 @@ const SECONDARY_COLOR = [
     lighter: '#CCDFFF',
     light: '#936DB9',
     main: '#290E43',
-    dark: '#0027B7',
+    dark: '#1A0033',
     darker: '#00137A',
     contrastText: '#fff'
   }
