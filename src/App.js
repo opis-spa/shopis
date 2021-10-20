@@ -35,7 +35,7 @@ export default function App() {
             <ScrollToTop />
             {isProduction && <GoogleAnalytics />}
             {isProduction && <Hotjar />}
-            {isInitialized ? <Router /> : <LoadingScreen />}
+            {isInitialized ? <Router /> : <LoadingScreen generic />}
           </NotistackProvider>
         </RtlLayout>
       </ThemePrimaryColor>

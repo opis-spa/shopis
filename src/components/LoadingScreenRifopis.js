@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { styled, useTheme } from '@mui/material/styles';
 import { CircularProgress, GlobalStyles } from '@mui/material';
 //
-import LogoShopis from './LogoShopis';
+import LogoRifopis from './LogoRifopis';
 
 // ----------------------------------------------------------------------
 
@@ -69,10 +69,7 @@ function ProgressBar() {
   return null;
 }
 
-export default function LoadingScreen({ ...other }) {
-  const DOMAIN_HOST = window.location.host;
-  const isRifopis = DOMAIN_HOST.indexOf('rifopis.cl') >= 0;
-
+export default function LoadingScreen({ generic, ...other }) {
   return (
     <>
       <ProgressBar />
@@ -86,7 +83,7 @@ export default function LoadingScreen({ ...other }) {
             repeat: Infinity
           }}
         >
-          {isRifopis ? <CircularProgress /> : <LogoShopis sx={{ width: 64, height: 64 }} />}
+          {generic ? <CircularProgress /> : <LogoRifopis sx={{ width: 64, height: 64 }} />}
         </motion.div>
       </RootStyle>
     </>
