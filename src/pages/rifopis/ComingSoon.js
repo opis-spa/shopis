@@ -165,7 +165,7 @@ export default function ComingSoon() {
               <FormControl fullWidth sx={{ my: 5 }}>
                 <OutlinedInput
                   fullWidth
-                  color="primary"
+                  color="secondary"
                   disabled={isLoading}
                   placeholder="Ingresa tu correo electrónico"
                   {...getFieldProps('email')}
