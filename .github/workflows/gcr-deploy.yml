@@ -1,7 +1,10 @@
-name: Google Cloud Run Deploy
+name: Google Cloud Run Deploy Developer
 # https://github.com/google-github-actions/setup-gcloud
 on:
   push:
+    branches:
+      - master
+  pull_request:
     branches:
       - master
 
