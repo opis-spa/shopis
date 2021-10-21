@@ -588,6 +588,7 @@ module.exports = function (webpackEnv) {
         Object.assign(
           {},
           {
+            filename: 'rifopis/index.html',
             inject: true,
             template: paths.appRifopisHtml,
           },
