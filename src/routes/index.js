@@ -74,7 +74,11 @@ export default function Router() {
     routes.push(
       {
         path: '',
-        element: <LogoOnlyLayoutRifopis />,
+        element: (
+          <PartnershipGuard init="rifopis">
+            <LogoOnlyLayoutRifopis />
+          </PartnershipGuard>
+        ),
         children: [
           { path: '', element: <RifopisComingSoon /> },
           { path: 'payment/result', element: <RifopisPaymentResult /> }
