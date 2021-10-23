@@ -129,13 +129,13 @@ function ProductItem({ product, ...other }) {
 
         <StackStyles justifyContent="center" alignItems="center">
           <Typography>
-            1 ticket x <Typography component="span">{fCurrency(amount - (discount || 0))}</Typography>
+            1 token x <Typography component="span">{fCurrency(amount - (discount || 0))}</Typography>
           </Typography>
         </StackStyles>
 
         <RaffleProgress stock={stock} quantity={1333} />
 
-        <ProductAdd tooltip={!open} title="Comprar ticket" product={productCart} />
+        <ProductAdd tooltip={!open} title="Comprar token" product={productCart} />
       </Stack>
     </CardStyle>
   );

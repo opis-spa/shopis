@@ -30,7 +30,7 @@ function RaffleProgress({ stock, quantity }) {
         variant="caption"
         sx={{ fontWeight: 900, textTransform: 'uppercase', color: 'primary.light', textAlign: 'right' }}
       >
-        {`¡Quedan solo ${stock} tickets!`}
+        {`¡Quedan solo ${stock} tokens!`}
       </Typography>
       <BorderLinearProgress variant="determinate" value={stock === 0 ? 100 : 100 - (stock / quantity) * 100} />
     </Stack>

@@ -9,6 +9,7 @@ import RafflePrizes from './RafflePrizes';
 import ButtonTicket from '../ButtonTicket';
 import Scrollbar from '../../Scrollbar';
 import RifopisPolaroid from '../RifopisPolaroid';
+import { MHidden } from '../../@material-extend';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   boxShadow: '-2px -2px 14px rgba(255, 194, 36, 0.2)',
@@ -24,7 +25,8 @@ const StyledBox = styled(Box)(({ theme }) => ({
   borderRadius: 10,
   backgroundColor: alpha(theme.palette.common.white, 0.05),
   padding: theme.spacing(1),
-  minWidth: 250
+  minWidth: 250,
+  width: '100%'
 }));
 
 const propTypes = {
@@ -43,7 +45,7 @@ function Raffles(props) {
   const { stock, quantity, name, photos } = raffle;
 
   return (
-    <Stack direction="row">
+    <Stack direction={{ xs: 'column', md: 'row' }}>
       <RifopisPolaroid
         small
         title="Primer lugar"
@@ -53,8 +55,8 @@ function Raffles(props) {
       />
 
       <StyledCard>
-        <Stack direction="row" spacing={3} alignItems="flex-start">
-          <Box sx={{ flex: 1 }}>
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems="flex-start">
+          <Box sx={{ flex: 1, width: '100%' }}>
             <Stack spacing={2}>
               <RafflePrizes
                 photo="/static/icons/ic-bitcoin.png"
@@ -74,9 +76,11 @@ function Raffles(props) {
             </Stack>
           </Box>
 
-          <Button color="inherit" variant="outlined">
-            Detalle
-          </Button>
+          <MHidden width="mdDown">
+            <Button color="inherit" variant="outlined">
+              Detalle
+            </Button>
+          </MHidden>
 
           <StyledBox>
             <Typography
@@ -107,11 +111,17 @@ function Raffles(props) {
           </StyledBox>
         </Stack>
 
-        <Stack direction="row" justifyContent="space-between" sx={{ mt: (theme) => theme.spacing(2) }}>
-          <Box sx={{ flex: 1, ml: (theme) => theme.spacing(4), mr: (theme) => theme.spacing(2) }}>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={2}
+          sx={{ mt: (theme) => theme.spacing(2) }}
+        >
+          <Box sx={{ flex: 1, width: '100%', ml: (theme) => theme.spacing(4), mr: (theme) => theme.spacing(2) }}>
             <RaffleProgress stock={stock} quantity={1333} />
           </Box>
-          <ButtonTicket title="Comprar más tickets" sx={{ width: 250 }} />
+          <ButtonTicket title="Comprar más Tokens" sx={{ width: 250 }} />
         </Stack>
       </StyledCard>
     </Stack>
