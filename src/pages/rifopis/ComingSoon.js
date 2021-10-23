@@ -40,12 +40,12 @@ const SOCIALS = [
   {
     uri: 'https://facebook.com/rifopis',
     name: 'Facebook',
-    icon: <Icon icon={facebookFill} width={24} height={24} color="#1877F2" />
+    icon: <Icon icon={facebookFill} width={24} height={24} color="#ffffff" />
   },
   {
     uri: 'https://instagram.com/rifopis',
     name: 'Instagram',
-    icon: <Icon icon={instagramFilled} width={24} height={24} color="#D7336D" />
+    icon: <Icon icon={instagramFilled} width={24} height={24} color="#ffffff" />
   }
 ];
 
@@ -59,7 +59,8 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 const CountdownStyle = styled('div')({
   display: 'flex',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  mb: 10
 });
 
 const SeparatorStyle = styled(Typography)(({ theme }) => ({
@@ -117,19 +118,17 @@ export default function ComingSoon() {
   return (
     <RootStyle title="Falta poco | RIFOPIS">
       <Container>
-        <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
+        <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: { sm: 'left', md: 'center' } }}>
           <Typography variant="h3" paragraph>
             Falta poco!
           </Typography>
-          <Typography sx={{ mb: (theme) => theme.spacing(10) }}>
+          <Typography sx={{ mb: (theme) => theme.spacing(5) }}>
             Estamos trabajando fuertemente{' '}
             <span role="img" aria-label="strong">
               💪🏻
             </span>{' '}
             para que muy pronto puedas participar por increíbles premios!
           </Typography>
-
-          <ComingSoonIllustrationRifopis sx={{ my: 10, height: 240 }} />
 
           <CountdownStyle>
             <div>
@@ -160,17 +159,20 @@ export default function ComingSoon() {
           </CountdownStyle>
 
           {isSubscription ? (
-            <Alert severity="success" sx={{ my: 5, justifyContent: 'center' }}>
+            <Alert severity="success" sx={{ my: (theme) => theme.spacing(5), justifyContent: 'center' }}>
               Te avisaremos cuando estemos listos!
             </Alert>
           ) : (
             <form onSubmit={handleSubmit} noValidate>
-              <FormControl fullWidth sx={{ my: 5 }}>
+              <Typography sx={{ textAlign: 'left', mt: (theme) => theme.spacing(5) }}>
+                ¡Déjanos tu correo para recibir información!
+              </Typography>
+              <FormControl fullWidth sx={{ mt: (theme) => theme.spacing(2), mb: (theme) => theme.spacing(5) }}>
                 <OutlinedInput
                   fullWidth
                   color="secondary"
                   disabled={isLoading}
-                  placeholder="Ingresa tu correo electrónico"
+                  placeholder="Correo electrónico"
                   {...getFieldProps('email')}
                   endAdornment={
                     <InputAdornment position="end">
@@ -217,7 +219,9 @@ export default function ComingSoon() {
             </form>
           )}
 
-          <Box sx={{ textAlign: 'center', '& > *': { mx: 1 } }}>
+          <ComingSoonIllustrationRifopis sx={{ my: (theme) => theme.spacing(2), height: 200 }} />
+
+          <Box sx={{ mt: (theme) => theme.spacing(4), textAlign: 'center', '& > *': { mx: 1 } }}>
             {SOCIALS.map((social) => (
               <Link key={social.name} href={social.uri} target="_blank">
                 <Tooltip title={social.name}>

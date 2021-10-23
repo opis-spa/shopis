@@ -34,7 +34,7 @@ export default function RegisterForm() {
 
   const formik = useFormik({
     initialValues: {
-      firstName: '',
+      name: '',
       lastName: '',
       email: '',
       password: ''
@@ -42,7 +42,7 @@ export default function RegisterForm() {
     validationSchema: RegisterSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
-        await signup(values.email, values.password, values.firstName, values.lastName);
+        await signup(values);
         enqueueSnackbar('Cuenta creada satisfactoriamente', {
           variant: 'success',
           action: (key) => (
@@ -76,9 +76,9 @@ export default function RegisterForm() {
             <TextField
               fullWidth
               label="Nombre"
-              {...getFieldProps('firstName')}
-              error={Boolean(touched.firstName && errors.firstName)}
-              helperText={touched.firstName && errors.firstName}
+              {...getFieldProps('name')}
+              error={Boolean(touched.name && errors.name)}
+              helperText={touched.name && errors.name}
             />
 
             <TextField

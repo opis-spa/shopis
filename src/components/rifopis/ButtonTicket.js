@@ -1,51 +1,38 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 // material
 import { styled } from '@mui/material/styles';
-import { Button } from '@mui/material';
+import { ButtonBase, Typography } from '@mui/material';
+// asset
+import { BackgroundTicket } from '../../assets';
 
-const ButtonStyle = styled(Button)(({ theme }) => ({
+const ButtonStyle = styled(ButtonBase)(() => ({
   boxShadow: 'none',
   textTransform: 'uppercase',
   fontSize: 16,
-  padding: '6px 12px',
   overflow: 'hidden',
+  width: '100%',
   height: 75,
   lineHeight: 1.5,
   maxWidth: 300,
-  background: `linear-gradient(124.5deg, ${theme.palette.primary.lighter} 0%, ${theme.palette.primary.light} 21.15%, ${theme.palette.primary.main} 63.44%, ${theme.palette.primary.dark} 104.11%)`,
   fontFamily: 'Nunito',
-  '&:hover': {
-    backgroundColor: '#0069d9',
-    borderColor: '#0062cc',
-    boxShadow: 'none'
-  },
-  '&:active': {
-    boxShadow: 'none',
-    backgroundColor: '#0062cc',
-    borderColor: '#005cbf'
-  },
-  '&:focus': {
-    boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)'
-  },
-  '&:before': {
-    background: theme.palette.background.default,
-    borderRadius: '50%',
-    boxShadow: [
-      `300px 0 0 0 ${theme.palette.background.default}`,
-      `0 75px 0 0 ${theme.palette.background.default}`,
-      `300px 75px 0 0 ${theme.palette.background.default}`
-    ].join(','),
-    content: '" "',
-    display: 'block',
-    height: 30,
-    left: -15,
-    position: 'absolute',
-    top: -15,
-    width: 30,
-    zIndex: 10
-  }
+  background: 'none'
 }));
 
-export default function ButtonTicket({ ...props }) {
-  return <ButtonStyle {...props} />;
+const propTypes = {
+  title: PropTypes.string
+};
+
+function ButtonTicket({ ...props }) {
+  const { title } = props;
+  return (
+    <ButtonStyle {...props}>
+      <BackgroundTicket sx={{ position: 'absolute', top: 0, right: 0, left: 0, bottom: 0 }} />
+      <Typography sx={{ color: 'common.white', fontWeight: 900, zIndex: 10 }}>{title}</Typography>
+    </ButtonStyle>
+  );
 }
+
+ButtonTicket.propTypes = propTypes;
+
+export default ButtonTicket;

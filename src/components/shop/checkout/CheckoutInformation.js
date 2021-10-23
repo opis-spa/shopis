@@ -6,7 +6,9 @@ import { Icon } from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 // material
+import { styled } from '@mui/material/styles';
 import {
+  Alert,
   Box,
   Divider,
   Button,
@@ -20,8 +22,10 @@ import {
   InputAdornment
 } from '@mui/material';
 // redux
-import { useDispatch, useSelector } from '../../../redux/store';
+import { useDispatch } from '../../../redux/store';
 import { onNextStep, createInformation } from '../../../redux/slices/product';
+// hooks
+import useAuth from '../../../hooks/useAuth';
 // components
 import { LoginForm } from '../../authentication/login';
 import AuthFirebaseSocials from '../../authentication/AuthFirebaseSocial';
@@ -40,6 +44,13 @@ const CheckOutSchema = Yup.object().shape({
   })
 });
 
+const StackStyle = styled(Stack)(({ theme }) => ({
+  border: `1px solid ${theme.palette.secondary.light}`,
+  padding: theme.spacing(3),
+  borderRadius: 10,
+  boxSizing: 'border-box'
+}));
+
 const propTypes = {
   loading: PropTypes.bool,
   cart: PropTypes.object,
@@ -57,7 +68,7 @@ const defaultProps = {
 
 const CheckoutInformation = () => {
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.product);
+  const { signup } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
@@ -74,25 +85,29 @@ const CheckoutInformation = () => {
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
         setSubmitting(true);
-        dispatch(createInformation(values));
+        if (values.type === 'gest') {
+          dispatch(createInformation(values));
+        } else {
+          await signup({ ...values, role: 'user' });
+        }
         dispatch(onNextStep());
-      } catch (err) {
-        setErrors(err.message);
+      } catch (error) {
+        setErrors({ afterSubmit: error.message });
       }
       setSubmitting(false);
     }
   });
-  const { handleSubmit, values, setFieldValue, touched, errors, getFieldProps } = formik;
+  const { handleSubmit, values, setFieldValue, touched, errors, getFieldProps, isSubmitting } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
 
   return (
-    <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Stack spacing={4} direction={{ xs: 'column', md: 'row' }}>
-          <Box sx={{ flex: 1 }}>
+    <StackStyle spacing={4} direction={{ xs: 'column', md: 'row', padding: 3 }}>
+      <Box sx={{ flex: 1 }}>
+        <FormikProvider value={formik}>
+          <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
             <Typography sx={{ mb: 2, fontWeight: 900 }}>Ingresa los siguientes datos</Typography>
             <Typography sx={{ mb: 2, fontSize: 14 }}>
               Si ganas, te contactaremos con los datos que proporciones. Por favor asegurate de ingresarlos
@@ -133,9 +148,11 @@ const CheckoutInformation = () => {
 
               {values.type === 'register' && <AuthFirebaseSocials />}
 
+              {errors.afterSubmit && <Alert severity="error">{errors.afterSubmit}</Alert>}
+
               <Stack spacing={2} direction="row">
                 <TextField
-                  disabled={isLoading}
+                  disabled={isSubmitting}
                   variant="outlined"
                   fullWidth
                   required
@@ -149,7 +166,7 @@ const CheckoutInformation = () => {
                   helperText={(touched.name && errors.name) || ''}
                 />
                 <TextField
-                  disabled={isLoading}
+                  disabled={isSubmitting}
                   variant="outlined"
                   fullWidth
                   required
@@ -165,7 +182,7 @@ const CheckoutInformation = () => {
               </Stack>
 
               <TextField
-                disabled={isLoading}
+                disabled={isSubmitting}
                 variant="outlined"
                 fullWidth
                 required
@@ -181,7 +198,7 @@ const CheckoutInformation = () => {
 
               <Stack spacing={2} direction="row">
                 <TextField
-                  disabled={isLoading}
+                  disabled={isSubmitting}
                   variant="outlined"
                   fullWidth
                   required
@@ -198,7 +215,7 @@ const CheckoutInformation = () => {
 
               {values.type === 'register' && (
                 <TextField
-                  disabled={isLoading}
+                  disabled={isSubmitting}
                   variant="outlined"
                   fullWidth
                   required
@@ -224,22 +241,22 @@ const CheckoutInformation = () => {
             </Stack>
 
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button size="large" type="submit" variant="contained" color="primary">
+              <Button disabled={isSubmitting} size="large" type="submit" variant="contained" color="primary">
                 Continuar
               </Button>
             </Box>
-          </Box>
+          </Form>
+        </FormikProvider>
+      </Box>
 
-          <Divider orientation="vertical" flexItem variant="middle" sx={{ py: 20, borderColor: 'primary.light' }} />
+      <Divider orientation="vertical" flexItem variant="middle" sx={{ py: 20, borderColor: 'secondary.light' }} />
 
-          <Box sx={{ flex: 1 }}>
-            <Typography sx={{ mb: 2, fontWeight: 900 }}>O inicia sesión si ya estás registrado</Typography>
-            <AuthFirebaseSocials />
-            <LoginForm />
-          </Box>
-        </Stack>
-      </Form>
-    </FormikProvider>
+      <Box sx={{ flex: 1 }}>
+        <Typography sx={{ mb: 2, fontWeight: 900 }}>O inicia sesión si ya estás registrado</Typography>
+        <AuthFirebaseSocials />
+        <LoginForm />
+      </Box>
+    </StackStyle>
   );
 };
 

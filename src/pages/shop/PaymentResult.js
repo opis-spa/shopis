@@ -109,7 +109,7 @@ const Payment = () => {
             </ContentStyle>
 
             <Box sx={{ textAlign: 'center', mb: 10 }}>
-              <ButtonTicket component={RouteLink} to={PATH_RIFOPIS.root} fullWidth>
+              <ButtonTicket title="Explorar otros sorteos" component={RouteLink} to={PATH_RIFOPIS.root} fullWidth>
                 Explorar otros sorteos
               </ButtonTicket>
             </Box>

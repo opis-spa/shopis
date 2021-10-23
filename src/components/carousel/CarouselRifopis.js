@@ -125,6 +125,7 @@ function CarouselItem({ item, isActive, index }) {
                   component={RouteLink}
                   to={`${PATH_SHOP.root}/${nickname}/product/${paramCase(item.name)}`}
                   variant="contained"
+                  title="Participar"
                   sx={{ mt: 3 }}
                 >
                   Participar
@@ -138,21 +139,25 @@ function CarouselItem({ item, isActive, index }) {
                 <motion.div variants={varZoomIn}>
                   <Box
                     sx={{
+                      display: 'flex',
                       border: 20,
-                      maxWidth: 350,
-                      height: '100%',
-                      minHeight: 300,
+                      width: 400,
+                      height: 350,
                       borderStyle: 'solid',
                       borderColor: '#fff',
                       borderTopRightRadius: 3,
-                      borderTopLeftRadius: 3
+                      borderTopLeftRadius: 3,
+                      overflow: 'hidden',
+                      justifyContent: 'center'
                     }}
-                  />
+                  >
+                    <Box component="img" src="/static/brand/rifopis.png" sx={{ height: 350 }} />
+                  </Box>
                   <Box
                     sx={{
                       marginTop: -1,
-                      maxWidth: 350,
-                      minHeight: 85,
+                      width: 400,
+                      height: 85,
                       backgroundColor: '#fff',
                       borderBottomRightRadius: 3,
                       borderBottomLeftRadius: 3,
