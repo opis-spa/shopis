@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 // material
 import { alpha, useTheme, styled } from '@mui/material/styles';
-import { Box, Card, Container, Grid, Paper, Typography, Stack } from '@mui/material';
+import { Box, Card, Container, Grid, Paper, Typography } from '@mui/material';
 // hooks
 import usePartnership from '../../hooks/usePartnership';
 // routes
@@ -16,6 +16,7 @@ import { PATH_SHOP } from '../../routes/paths';
 import { varFadeInRight, varZoomIn, MotionContainer } from '../animate';
 import { CarouselControlsArrowsBasic2 } from './controls';
 import { ButtonTicket } from '../rifopis';
+import RifopisPolaroid from '../rifopis/RifopisPolaroid';
 
 // ----------------------------------------------------------------------
 
@@ -137,42 +138,7 @@ function CarouselItem({ item, isActive, index }) {
             <Box sx={{ transform: `rotate(${rotateDeg}deg)` }}>
               <MotionContainer open={isActive}>
                 <motion.div variants={varZoomIn}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      border: 20,
-                      width: 400,
-                      height: 350,
-                      borderStyle: 'solid',
-                      borderColor: '#fff',
-                      borderTopRightRadius: 3,
-                      borderTopLeftRadius: 3,
-                      overflow: 'hidden',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    <Box component="img" src="/static/brand/rifopis.png" sx={{ height: 350 }} />
-                  </Box>
-                  <Box
-                    sx={{
-                      marginTop: -1,
-                      width: 400,
-                      height: 85,
-                      backgroundColor: '#fff',
-                      borderBottomRightRadius: 3,
-                      borderBottomLeftRadius: 3,
-                      px: (theme) => theme.spacing(2)
-                    }}
-                  >
-                    <Stack spacing={1}>
-                      <Typography color="primary" sx={{ textTransform: 'uppercase', fontWeight: 900 }}>
-                        Primer lugar
-                      </Typography>
-                      <Typography sx={{ textTransform: 'uppercase', color: 'black', fontFamily: 'Permanent Marker' }}>
-                        {name}
-                      </Typography>
-                    </Stack>
-                  </Box>
+                  <RifopisPolaroid title="Primer lugar" subtitle={name} photo="/static/brand/rifopis.png" />
                 </motion.div>
               </MotionContainer>
             </Box>
@@ -196,7 +162,7 @@ export default function CarouselAnimation() {
     dots: false,
     arrows: false,
     autoplaySpeed: 6000,
-    autoplay: true,
+    autoplay: false,
     slidesToShow: 1,
     slidesToScroll: 1,
     rtl: Boolean(theme.direction === 'rtl'),

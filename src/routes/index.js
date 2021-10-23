@@ -119,7 +119,10 @@ export default function Router() {
             </AuthGuard>
           </PartnershipGuard>
         ),
-        children: [{ path: 'user/profile', element: <RifopisProfile /> }]
+        children: [
+          { path: '', element: <Navigate to="/app/user/profile" replace /> },
+          { path: 'user/profile', element: <RifopisProfile /> }
+        ]
       }
     );
   } else {
