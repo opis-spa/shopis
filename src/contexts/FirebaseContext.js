@@ -75,9 +75,11 @@ function AuthProvider({ children }) {
               return true;
             }
           } catch (error) {
+            console.log(' error auth ');
             signOut(auth);
           }
         }
+        console.log(' por aquí no ');
         dispatch({
           type: 'INITIALISE',
           payload: { isAuthenticated: false, user: null }
@@ -97,7 +99,6 @@ function AuthProvider({ children }) {
 
     if (success === true) {
       const user = await signInWithCustomToken(auth, token);
-      console.log(user);
       return user;
     }
 
@@ -133,23 +134,32 @@ function AuthProvider({ children }) {
     return response.data;
   };
 
-  const signup = async (email, password, name, lastName, role = 'business') => {
-    const response = await axios.post('/api/v1/user/create', {
-      name,
-      lastName,
-      email,
-      password,
-      role
-    });
+  const signup = async ({ email, password, name, lastName, phone, role = 'business' }) => {
+    try {
+      const response = await axios.post('/api/v1/user/create', {
+        name,
+        lastName,
+        email,
+        password,
+        phone,
+        role
+      });
+      const { success, token, message } = response.data;
 
-    const { success, token, message } = response.data;
+      if (success) {
+        const user = await signInWithCustomToken(auth, token);
+        return user;
+      }
 
-    if (success) {
-      const user = await signInWithCustomToken(auth, token);
-      return user;
+      throw new Error(message);
+    } catch (error) {
+      console.log(' aqui ');
+      const { message } = error;
+      if (message === 'User already exist') {
+        throw new Error('El correo electrónico ya se encuentra registrado');
+      }
+      throw error;
     }
-
-    return new Error(message);
   };
 
   const logout = async () => {

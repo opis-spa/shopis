@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon } from '@iconify/react';
 import cartOutline from '@iconify/icons-eva/shopping-cart-outline';
 // material
-import { styled } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 import { Badge } from '@mui/material';
 // redux
 import { useSelector, useDispatch } from '../../redux/store';
@@ -12,8 +12,25 @@ import { MIconButton } from '../../components/@material-extend';
 
 // ----------------------------------------------------------------------
 
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  marginLeft: 10,
+  '& .MuiBadge-badge': {
+    top: 10,
+    border: `2px solid transparent`,
+    backgroundColor: theme.palette.primary.lighter,
+    padding: '0 10px',
+    color: theme.palette.secondary.main
+  }
+}));
+
 const IconStyle = styled(Icon)(({ theme }) => ({
-  color: theme.palette.primary.light
+  color: theme.palette.primary.lighter,
+  '& .MuiButtonBase-root:hover': {
+    backgroundColor: alpha(theme.palette.primary.main, 0.08),
+    boxShadow: 'none'
+  },
+  marginRight: 20,
+  marginLeft: 10
 }));
 
 export default function Searchbar() {
@@ -35,9 +52,9 @@ export default function Searchbar() {
         height: 44
       }}
     >
-      <Badge badgeContent={totalItems} color="error" max={99} variant="dot">
-        <IconStyle icon={cartOutline} width={20} height={20} />
-      </Badge>
+      <StyledBadge badgeContent={totalItems} color="primary" max={99}>
+        <IconStyle color="primary" icon={cartOutline} width={20} height={20} />
+      </StyledBadge>
     </MIconButton>
   );
 }

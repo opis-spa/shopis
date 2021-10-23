@@ -4,9 +4,10 @@ import { NavLink as RouterLink, useLocation } from 'react-router-dom';
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Stack, Button, AppBar, Toolbar, Container } from '@mui/material';
 // routes
-import { PATH_AUTH } from '../../routes/paths';
+import { PATH_AUTH, PATH_APP } from '../../routes/paths';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
+import useAuth from '../../hooks/useAuth';
 // components
 import LogoRifopis from '../../components/LogoRifopis';
 import { MHidden } from '../../components/@material-extend';
@@ -43,6 +44,7 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
 
 export default function MainNavbar() {
   const isOffset = useOffSetTop(100);
+  const { isAuthenticated } = useAuth();
   const { pathname } = useLocation();
   const isHome = pathname === '/';
 
@@ -75,19 +77,35 @@ export default function MainNavbar() {
 
           <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
             <MHidden width="mdDown">
-              <Button
-                component={RouterLink}
-                variant="text"
-                target="_blank"
-                to={PATH_AUTH.register}
-                sx={{
-                  fontWeight: 900,
-                  textTransform: 'uppercase',
-                  color: 'primary.light'
-                }}
-              >
-                Ingresar
-              </Button>
+              {isAuthenticated ? (
+                <Button
+                  component={RouterLink}
+                  variant="text"
+                  target="_blank"
+                  to={PATH_APP.user.profile}
+                  sx={{
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    color: 'primary.lighter'
+                  }}
+                >
+                  Mis Sorteos
+                </Button>
+              ) : (
+                <Button
+                  component={RouterLink}
+                  variant="text"
+                  target="_blank"
+                  to={PATH_AUTH.login}
+                  sx={{
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    color: 'primary.lighter'
+                  }}
+                >
+                  Ingresar
+                </Button>
+              )}
             </MHidden>
             <CartPopover />
           </Stack>

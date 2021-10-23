@@ -11,6 +11,7 @@ import { getCart, createBilling, onGotoStep, getProductStore } from '../../redux
 import { getDeliveries } from '../../redux/slices/delivery';
 import { getPayments } from '../../redux/slices/payment';
 // hooks
+import useAuth from '../../hooks/useAuth';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import useSettings from '../../hooks/useSettings';
 import usePartnership from '../../hooks/usePartnership';
@@ -99,6 +100,7 @@ const MainStyle = styled(Page)(({ theme }) => ({
 export default function EcommerceCheckout() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
+  const { isAuthenticated } = useAuth();
   const { partnership } = usePartnership();
   const { nickname } = partnership;
   const isMountedRef = useIsMountedRef();
@@ -112,12 +114,17 @@ export default function EcommerceCheckout() {
   const isComplete = activeStep === STEPS.length;
 
   useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(onGotoStep(2));
+    }
+  }, [dispatch, isAuthenticated]);
+
+  useEffect(() => {
     if (isMountedRef.current) {
       dispatch(getProductStore(nickname));
       dispatch(getCart(cart));
       dispatch(getDeliveries());
       dispatch(getPayments());
-      dispatch(onGotoStep(1));
     }
   }, [dispatch, isMountedRef, cart, nickname]);
 

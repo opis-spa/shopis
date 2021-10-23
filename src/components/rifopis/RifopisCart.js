@@ -5,7 +5,7 @@ import trashFill from '@iconify/icons-eva/trash-2-fill';
 import { useFormik } from 'formik';
 // material
 import { styled } from '@mui/material/styles';
-import { Checkbox, Box, Backdrop, Button, Paper, Divider, Typography, Stack } from '@mui/material';
+import { Box, Backdrop, Button, Paper, Divider, Typography, Stack } from '@mui/material';
 // hooks
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import usePartnership from '../../hooks/usePartnership';
@@ -110,7 +110,7 @@ export default function RifopisCart() {
           right: 0,
           position: 'fixed',
           zIndex: 2001,
-          ...(open && { right: 12 })
+          ...(open && { right: 0 })
         }}
       >
         <Paper
@@ -160,13 +160,6 @@ export default function RifopisCart() {
               </Stack>
 
               <Stack direction="row" justifyContent="flex-start">
-                <Checkbox
-                  sx={{
-                    color: 'primary.light',
-                    '&:hover': { bgcolor: 'transparent' }
-                  }}
-                  color="primary"
-                />
                 <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
                   Al momento de presionar el botón "COMPRAR TICKETS" accedo a las Bases del sorteo y a las Politica de
                   privacidad
@@ -179,7 +172,9 @@ export default function RifopisCart() {
                   variant="contained"
                   disabled={checkout.subtotal === 0 || checkout.subtotal < partnership.deliveryAmountMin}
                 >
-                  <ButtonTicket fullWidth>Comprar ticket</ButtonTicket>
+                  <ButtonTicket title="Comprar ticket" fullWidth>
+                    Comprar ticket
+                  </ButtonTicket>
                 </LinkPartnership>
               </Box>
             </Box>

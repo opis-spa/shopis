@@ -129,7 +129,7 @@ function ProductAdd(props) {
         </TooltipStyle>
       ) : (
         <Box display="flex" justifyContent="center" {...other}>
-          <ButtonTicket fullWidth variant="contained" color="secondary" onClick={handleAddToCart}>
+          <ButtonTicket title={title} fullWidth variant="contained" color="secondary" onClick={handleAddToCart}>
             {title}
           </ButtonTicket>
         </Box>

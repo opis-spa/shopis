@@ -6,6 +6,7 @@ import { Box, Card, Container, Divider, Typography, Stack } from '@mui/material'
 // hooks
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import useQuery from '../../hooks/useQuery';
+import useAuth from '../../hooks/useAuth';
 // redux
 import { useSelector, useDispatch } from '../../redux/store';
 import { getSale } from '../../redux/slices/sales';
@@ -44,13 +45,16 @@ const ContentStyle = styled(Stack)(({ theme }) => ({
   textAlign: 'left'
 }));
 
-const Payment = () => {
+const Profile = () => {
   const query = useQuery();
   const isMountedRef = useIsMountedRef();
   const dispatch = useDispatch();
+  const { user } = useAuth();
   const { sale } = useSelector((state) => state.sale);
   const order = query.get('order');
   const status = query.get('status');
+
+  const { displayName } = user;
 
   useMemo(() => {
     dispatch(getSale(order));
@@ -83,11 +87,7 @@ const Payment = () => {
               />
 
               <Typography variant="h4" sx={{ color: 'primary.light', mt: 4, fontWeight: 900 }}>
-                Listo! Te damos la bienvenida al sorteo.
-              </Typography>
-              <Typography variant="caption" sx={{ fontWight: 400 }}>
-                Enviaremos el resumen de tu pedido y las instrucciones de los siguientes pasos a tu correo. Te
-                avisaremos el día en que se realice el sorteo.
+                {displayName}
               </Typography>
             </Stack>
 
@@ -126,4 +126,4 @@ const Payment = () => {
   );
 };
 
-export default Payment;
+export default Profile;

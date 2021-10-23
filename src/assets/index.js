@@ -11,3 +11,4 @@ export { default as MotivationIllustration } from './illustration_motivation';
 export { default as UploadIllustration } from './illustration_upload';
 export { default as EmptyCartIllustration } from './illustration_empty_cart';
 export { default as ComingSoonIllustrationRifopis } from './illustration_coming_soon_rifopis';
+export { default as BackgroundTicket } from './background_ticket';
