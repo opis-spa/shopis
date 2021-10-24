@@ -6,8 +6,8 @@ import Slider from 'react-slick';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 // material
-import { alpha, useTheme, styled } from '@mui/material/styles';
-import { Box, Card, Container, Grid, Paper, Typography } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
+import { Box, Card, Container, Grid, Typography } from '@mui/material';
 // hooks
 import usePartnership from '../../hooks/usePartnership';
 // routes
@@ -24,12 +24,6 @@ const CardStyle = styled(Card)({
   borderRadius: 0
 });
 
-const CarouselImgStyle = styled('img')({
-  width: '100vh',
-  objectFit: 'cover',
-  position: 'absolute'
-});
-
 // ----------------------------------------------------------------------
 
 CarouselItem.propTypes = {
@@ -41,7 +35,6 @@ CarouselItem.propTypes = {
 function CarouselItem({ item, isActive, index }) {
   const { partnership } = usePartnership();
   const { nickname } = partnership;
-  const theme = useTheme();
   const { photo, photos, name } = item;
 
   const rotateDeg = useMemo(() => {

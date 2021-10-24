@@ -146,11 +146,9 @@ function MenuMobileItem({ item, isOpen, isActive, onOpen }) {
   );
 }
 
-MenuMobile.propTypes = {
-  isOffset: PropTypes.bool
-};
+MenuMobile.propTypes = {};
 
-export default function MenuMobile({ isOffset }) {
+export default function MenuMobile() {
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
