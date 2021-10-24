@@ -97,10 +97,15 @@ const CheckoutInformation = () => {
       setSubmitting(false);
     }
   });
-  const { handleSubmit, values, setFieldValue, touched, errors, getFieldProps, isSubmitting } = formik;
+  const { handleSubmit, values, setFieldValue, touched, errors, getFieldProps, isSubmitting, setErrors } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
+  };
+
+  const handleError = (error) => {
+    console.log(' está llegando ');
+    setErrors({ errorWithSocial: error });
   };
 
   return (
@@ -253,8 +258,9 @@ const CheckoutInformation = () => {
 
       <Box sx={{ flex: 1 }}>
         <Typography sx={{ mb: 2, fontWeight: 900 }}>O inicia sesión si ya estás registrado</Typography>
-        <AuthFirebaseSocials />
-        <LoginForm />
+        <AuthFirebaseSocials onHasError={handleError} />
+        {errors.errorWithSocial && <Alert severity="error">{errors.errorWithSocial}</Alert>}
+        <LoginForm onHasError={handleError} />
       </Box>
     </StackStyle>
   );

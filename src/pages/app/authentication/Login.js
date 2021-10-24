@@ -1,14 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Card, Stack, Link, Container, Typography } from '@mui/material';
+import { Alert, Box, Stack, Link, Container, Typography } from '@mui/material';
 // routes
 import { PATH_AUTH } from '../../../routes/paths';
 // hooks
 import useAuth from '../../../hooks/useAuth';
-// layouts
-import AuthLayout from '../../../layouts/AuthLayout';
 // components
 import Page from '../../../components/Page';
 import { MHidden } from '../../../components/@material-extend';
@@ -24,13 +22,20 @@ const RootStyle = styled(Page)(({ theme }) => ({
   }
 }));
 
-const SectionStyle = styled(Card)(({ theme }) => ({
+const HeaderStyle = styled('header')(({ theme }) => ({
+  top: 0,
+  zIndex: 110,
+  lineHeight: 0,
   width: '100%',
-  maxWidth: 464,
   display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  margin: theme.spacing(2, 0, 2, 2)
+  alignItems: 'center',
+  position: 'absolute',
+  padding: theme.spacing(3),
+  justifyContent: 'flex-end',
+  [theme.breakpoints.up('md')]: {
+    alignItems: 'flex-start',
+    padding: theme.spacing(7, 5, 0, 7)
+  }
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
@@ -47,24 +52,30 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Login() {
   const { method } = useAuth();
+  const [error, setError] = useState();
+
+  const handleError = (error) => {
+    console.log(' está llegando ');
+    setError(error);
+  };
 
   return (
-    <RootStyle title="Inicio de sesión | shopis">
-      <AuthLayout>
-        Aún no tienes cuenta&nbsp;
-        <LogoOpis />? &nbsp;
-        <Link underline="none" variant="subtitle2" component={RouterLink} to={PATH_AUTH.register}>
-          Registrate
-        </Link>
-      </AuthLayout>
-
-      <MHidden width="mdDown">
-        <SectionStyle>
-          <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-            Bienvenido
+    <RootStyle title="Inicio de sesión | opis">
+      <HeaderStyle>
+        <MHidden width="smDown">
+          <Typography
+            variant="body2"
+            sx={{
+              mt: { md: -2 }
+            }}
+          >
+            Aún no tienes cuenta&nbsp;
+            <Link underline="none" variant="subtitle2" component={RouterLink} to={PATH_AUTH.register}>
+              Registrate
+            </Link>
           </Typography>
-        </SectionStyle>
-      </MHidden>
+        </MHidden>
+      </HeaderStyle>
 
       <Container maxWidth="sm">
         <ContentStyle>
@@ -77,7 +88,13 @@ export default function Login() {
             </Box>
           </Stack>
 
-          {method === 'firebase' && <AuthFirebaseSocials />}
+          {method === 'firebase' && <AuthFirebaseSocials onHasError={handleError} />}
+
+          {error && (
+            <Alert severity="error" sx={{ mb: (theme) => theme.spacing(2) }}>
+              {error}
+            </Alert>
+          )}
 
           <LoginForm />
 

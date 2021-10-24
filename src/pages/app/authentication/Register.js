@@ -24,13 +24,20 @@ const RootStyle = styled(Page)(({ theme }) => ({
   }
 }));
 
-const SectionStyle = styled(Card)(({ theme }) => ({
+const HeaderStyle = styled('header')(({ theme }) => ({
+  top: 0,
+  zIndex: 110,
+  lineHeight: 0,
   width: '100%',
-  maxWidth: 464,
   display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  margin: theme.spacing(2, 0, 2, 2)
+  alignItems: 'center',
+  position: 'absolute',
+  padding: theme.spacing(3),
+  justifyContent: 'flex-end',
+  [theme.breakpoints.up('md')]: {
+    alignItems: 'flex-start',
+    padding: theme.spacing(7, 5, 0, 7)
+  }
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
@@ -49,22 +56,22 @@ export default function Register() {
   const { method } = useAuth();
 
   return (
-    <RootStyle title="Registro | shopis">
-      <AuthLayout>
-        Ya tienes una cuenta&nbsp;
-        <LogoOpis />? &nbsp;
-        <Link underline="none" variant="subtitle2" component={RouterLink} to={PATH_AUTH.login}>
-          Inicia Sesión
-        </Link>
-      </AuthLayout>
-
-      <MHidden width="mdDown">
-        <SectionStyle>
-          <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-            Bienvenido
+    <RootStyle title="Registro | opis">
+      <HeaderStyle>
+        <MHidden width="smDown">
+          <Typography
+            variant="body2"
+            sx={{
+              mt: { md: -2 }
+            }}
+          >
+            Ya tienes una cuenta?&nbsp;
+            <Link variant="subtitle2" component={RouterLink} to={PATH_AUTH.login}>
+              Inicia Sesión
+            </Link>
           </Typography>
-        </SectionStyle>
-      </MHidden>
+        </MHidden>
+      </HeaderStyle>
 
       <Container>
         <ContentStyle>
@@ -96,7 +103,6 @@ export default function Register() {
           <MHidden width="smUp">
             <Typography variant="subtitle2" sx={{ mt: 3, textAlign: 'center' }}>
               Ya tienes una cuenta&nbsp;
-              <LogoOpis />? &nbsp;
               <Link to={PATH_AUTH.login} component={RouterLink}>
                 Inicia Sesión
               </Link>

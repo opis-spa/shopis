@@ -14,6 +14,7 @@ const ContanetStyle = styled('div')(() => ({
 }));
 
 const HeaderStyle = styled('header')(({ theme }) => ({
+  display: 'flex',
   top: 0,
   left: 0,
   lineHeight: 0,
