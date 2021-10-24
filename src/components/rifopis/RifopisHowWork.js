@@ -44,7 +44,7 @@ export default function RifopisHowWork() {
             <Stack>
               <Box component="img" src="/static/illustrations/illustration-step-1.svg" sx={{ maxHeight: 150, mb: 1 }} />
               <Typography sx={{ color: 'text.primary', textAlign: 'center', fontWeight: 400 }}>
-                Selecciona un sorteo y cúantos tickets quieres
+                Selecciona un sorteo y cúantos tokens quieres
               </Typography>
             </Stack>
           </Grid>

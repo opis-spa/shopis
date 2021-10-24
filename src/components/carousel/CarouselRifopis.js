@@ -6,8 +6,8 @@ import Slider from 'react-slick';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 // material
-import { alpha, useTheme, styled } from '@mui/material/styles';
-import { Box, Card, Container, Grid, Paper, Typography, Stack } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
+import { Box, Card, Container, Grid, Typography } from '@mui/material';
 // hooks
 import usePartnership from '../../hooks/usePartnership';
 // routes
@@ -16,19 +16,12 @@ import { PATH_SHOP } from '../../routes/paths';
 import { varFadeInRight, varZoomIn, MotionContainer } from '../animate';
 import { CarouselControlsArrowsBasic2 } from './controls';
 import { ButtonTicket } from '../rifopis';
+import RifopisPolaroid from '../rifopis/RifopisPolaroid';
 
 // ----------------------------------------------------------------------
 
 const CardStyle = styled(Card)({
   borderRadius: 0
-});
-
-const CarouselImgStyle = styled('img')({
-  top: 0,
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
-  position: 'absolute'
 });
 
 // ----------------------------------------------------------------------
@@ -42,7 +35,6 @@ CarouselItem.propTypes = {
 function CarouselItem({ item, isActive, index }) {
   const { partnership } = usePartnership();
   const { nickname } = partnership;
-  const theme = useTheme();
   const { photo, photos, name } = item;
 
   const rotateDeg = useMemo(() => {
@@ -61,39 +53,18 @@ function CarouselItem({ item, isActive, index }) {
   }, [index]);
 
   return (
-    <Paper
+    <Box
       sx={{
-        position: 'relative',
-        paddingTop: {
-          xs: '100%',
-          md: '50%'
-        }
+        width: '100%',
+        background: `url(${photo || photos[0]})`
       }}
     >
-      <CarouselImgStyle alt={name} src={photo || photos[0]} />
-      <Box
-        sx={{
-          top: 0,
-          width: '100%',
-          height: '100%',
-          position: 'absolute',
-          backgroundImage: `linear-gradient(to top, ${theme.palette.grey[900]} 0%,${alpha(
-            theme.palette.grey[900],
-            0
-          )} 100%)`
-        }}
-      />
-
       <Container
         maxWidth="lg"
         sx={{
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
           width: '100%',
-          position: 'absolute',
-          color: 'common.white'
+          color: 'common.white',
+          py: (theme) => theme.spacing(20)
         }}
       >
         <Grid
@@ -102,12 +73,11 @@ function CarouselItem({ item, isActive, index }) {
             height: '100%',
             display: 'flex',
             flex: 1,
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            flexWrap: 'wrap-reverse'
+            justifyContent: { xs: 'center', md: 'flex-start' },
+            alignItems: 'center'
           }}
         >
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
             <MotionContainer open={isActive}>
               <motion.div variants={varFadeInRight}>
                 <Typography variant="h3" gutterBottom sx={{ textTransform: 'uppercase' }}>
@@ -126,60 +96,30 @@ function CarouselItem({ item, isActive, index }) {
                   to={`${PATH_SHOP.root}/${nickname}/product/${paramCase(item.name)}`}
                   variant="contained"
                   title="Participar"
-                  sx={{ mt: 3 }}
+                  sx={{ mt: 3, zIndex: 100 }}
                 >
                   Participar
                 </ButtonTicket>
               </motion.div>
             </MotionContainer>
           </Grid>
-          <Grid item xs={6} justifyContent="center" alignItems="center">
+          <Grid item xs={12} md={6} display="flex" justifyContent="center" alignItems="center">
             <Box sx={{ transform: `rotate(${rotateDeg}deg)` }}>
               <MotionContainer open={isActive}>
                 <motion.div variants={varZoomIn}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      border: 20,
-                      width: 400,
-                      height: 350,
-                      borderStyle: 'solid',
-                      borderColor: '#fff',
-                      borderTopRightRadius: 3,
-                      borderTopLeftRadius: 3,
-                      overflow: 'hidden',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    <Box component="img" src="/static/brand/rifopis.png" sx={{ height: 350 }} />
-                  </Box>
-                  <Box
-                    sx={{
-                      marginTop: -1,
-                      width: 400,
-                      height: 85,
-                      backgroundColor: '#fff',
-                      borderBottomRightRadius: 3,
-                      borderBottomLeftRadius: 3,
-                      px: (theme) => theme.spacing(2)
-                    }}
-                  >
-                    <Stack spacing={1}>
-                      <Typography color="primary" sx={{ textTransform: 'uppercase', fontWeight: 900 }}>
-                        Primer lugar
-                      </Typography>
-                      <Typography sx={{ textTransform: 'uppercase', color: 'black', fontFamily: 'Permanent Marker' }}>
-                        {name}
-                      </Typography>
-                    </Stack>
-                  </Box>
+                  <RifopisPolaroid
+                    title="Primer lugar"
+                    subtitle={name}
+                    photo="/static/brand/rifopis.png"
+                    sx={{ zIndex: 0 }}
+                  />
                 </motion.div>
               </MotionContainer>
             </Box>
           </Grid>
         </Grid>
       </Container>
-    </Paper>
+    </Box>
   );
 }
 
@@ -196,9 +136,10 @@ export default function CarouselAnimation() {
     dots: false,
     arrows: false,
     autoplaySpeed: 6000,
-    autoplay: true,
+    autoplay: false,
     slidesToShow: 1,
     slidesToScroll: 1,
+    adaptiveHeight: true,
     rtl: Boolean(theme.direction === 'rtl'),
     beforeChange: (current, next) => setCurrentIndex(next)
   };
@@ -213,7 +154,7 @@ export default function CarouselAnimation() {
 
   return (
     <CardStyle>
-      <Slider ref={carouselRef} {...settings}>
+      <Slider adaptiveHeight ref={carouselRef} {...settings}>
         {productsList.map((item, index) => (
           <CarouselItem key={item.name} item={item} index={index} isActive={index === currentIndex} />
         ))}

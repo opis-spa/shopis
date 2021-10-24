@@ -41,7 +41,7 @@ const ProductItemSummary = ({ product }) => {
     if (cartNew) {
       return cartNew;
     }
-    return { ...product };
+    return { ...product, quantity: 0 };
   }, [cart, product]);
 
   if (productCart.quantity === 0) {
@@ -59,7 +59,7 @@ const ProductItemSummary = ({ product }) => {
             <Typography sx={{ fontWeight: 900 }}>{fCurrency(amount - (discount || 0))}</Typography>
           </Stack>
 
-          <Typography>{`${productCart.quantity} ticket`}</Typography>
+          <Typography>{`${productCart.quantity} tokens`}</Typography>
         </Stack>
       </Stack>
       <Divider variant="middle" sx={{ mt: 2 }} />

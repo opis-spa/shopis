@@ -105,22 +105,48 @@ function AuthProvider({ children }) {
     return new Error(message);
   };
 
-  const loginWithGoogle = async () => {
+  const loginWithGoogle = async (signIn = true) => {
     const provider = new GoogleAuthProvider();
     const user = await signInWithPopup(auth, provider);
-    const { role } = user;
+
+    console.log(' == aqui == ');
+    console.log(user);
+
+    const { role } = user.user;
     if (!role) {
-      await register();
+      try {
+        await register();
+      } catch (error) {
+        const { message } = error;
+        if (message === 'User register with other provider') {
+          if (signIn) {
+            throw new Error('Parece que te equivocaste en la opción de inicio de sesión');
+          }
+          throw new Error('El correo electrónico ya está registrado con otra opción de inicio de sesión');
+        }
+        throw new Error(message);
+      }
     }
     return user;
   };
 
-  const loginWithFaceBook = async () => {
+  const loginWithFaceBook = async (signIn = true) => {
     const provider = new FacebookAuthProvider();
     const user = await signInWithPopup(auth, provider);
     const { role } = user;
     if (!role) {
-      await register();
+      try {
+        await register();
+      } catch (error) {
+        const { message } = error;
+        if (message === 'User register with other provider') {
+          if (signIn) {
+            throw new Error('Parece que te equivocaste en la opción de inicio de sesión');
+          }
+          throw new Error('El correo electrónico ya está registrado con otra opción de inicio de sesión');
+        }
+        throw new Error(message);
+      }
     }
     return user;
   };

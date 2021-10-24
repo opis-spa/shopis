@@ -44,31 +44,7 @@ const Loadable = (Component) => (props) => {
 export default function Router() {
   const DOMAIN_HOST = window.location.host;
 
-  const routes = [
-    {
-      path: 'auth',
-      children: [
-        {
-          path: 'login',
-          element: (
-            <GuestGuard>
-              <Login />
-            </GuestGuard>
-          )
-        },
-        {
-          path: 'register',
-          element: (
-            <GuestGuard>
-              <Register />
-            </GuestGuard>
-          )
-        },
-        { path: 'reset-password', element: <ResetPassword /> },
-        { path: 'verify', element: <VerifyCode /> }
-      ]
-    }
-  ];
+  const routes = [];
 
   if (DOMAIN_HOST.indexOf('rifopis.cl') >= 0) {
     routes.push(
@@ -82,6 +58,30 @@ export default function Router() {
         children: [
           { path: '', element: <RifopisComingSoon /> },
           { path: 'payment/result', element: <RifopisPaymentResult /> }
+        ]
+      },
+      {
+        path: 'auth',
+        element: <LogoOnlyLayoutRifopis />,
+        children: [
+          {
+            path: 'login',
+            element: (
+              <GuestGuard>
+                <Login />
+              </GuestGuard>
+            )
+          },
+          {
+            path: 'register',
+            element: (
+              <GuestGuard>
+                <Register />
+              </GuestGuard>
+            )
+          },
+          { path: 'reset-password', element: <ResetPassword /> },
+          { path: 'verify', element: <VerifyCode /> }
         ]
       },
       {
@@ -119,11 +119,37 @@ export default function Router() {
             </AuthGuard>
           </PartnershipGuard>
         ),
-        children: [{ path: 'user/profile', element: <RifopisProfile /> }]
+        children: [
+          { path: '', element: <Navigate to="/app/user/profile" replace /> },
+          { path: 'user/profile', element: <RifopisProfile /> }
+        ]
       }
     );
   } else {
     routes.push(
+      {
+        path: 'auth',
+        children: [
+          {
+            path: 'login',
+            element: (
+              <GuestGuard>
+                <Login />
+              </GuestGuard>
+            )
+          },
+          {
+            path: 'register',
+            element: (
+              <GuestGuard>
+                <Register />
+              </GuestGuard>
+            )
+          },
+          { path: 'reset-password', element: <ResetPassword /> },
+          { path: 'verify', element: <VerifyCode /> }
+        ]
+      },
       // Dashboard Routes
       {
         path: 'app',

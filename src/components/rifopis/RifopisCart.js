@@ -161,7 +161,7 @@ export default function RifopisCart() {
 
               <Stack direction="row" justifyContent="flex-start">
                 <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
-                  Al momento de presionar el botón "COMPRAR TICKETS" accedo a las Bases del sorteo y a las Politica de
+                  Al momento de presionar el botón "COMPRAR TOKENS" accedo a las Bases del sorteo y a las Politica de
                   privacidad
                 </Typography>
               </Stack>
@@ -172,8 +172,8 @@ export default function RifopisCart() {
                   variant="contained"
                   disabled={checkout.subtotal === 0 || checkout.subtotal < partnership.deliveryAmountMin}
                 >
-                  <ButtonTicket title="Comprar ticket" fullWidth>
-                    Comprar ticket
+                  <ButtonTicket title="Comprar token" fullWidth>
+                    Comprar token
                   </ButtonTicket>
                 </LinkPartnership>
               </Box>

@@ -4,7 +4,7 @@ import { NavLink as RouterLink, useLocation } from 'react-router-dom';
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Stack, Button, AppBar, Toolbar, Container } from '@mui/material';
 // routes
-import { PATH_AUTH, PATH_APP } from '../../routes/paths';
+import { PATH_AUTH, PATH_APP, PATH_RIFOPIS } from '../../routes/paths';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 import useAuth from '../../hooks/useAuth';
@@ -66,7 +66,10 @@ export default function MainNavbar() {
             justifyContent: 'space-between'
           }}
         >
-          <RouterLink to="">
+          <MHidden width="mdUp">
+            <MenuMobile isOffset={false} isHome navConfig={navConfig} />
+          </MHidden>
+          <RouterLink to={PATH_RIFOPIS.root}>
             <LogoRifopis diapo={!isOffset} />
           </RouterLink>
           <Box sx={{ flexGrow: 1 }} />
@@ -95,7 +98,6 @@ export default function MainNavbar() {
                 <Button
                   component={RouterLink}
                   variant="text"
-                  target="_blank"
                   to={PATH_AUTH.login}
                   sx={{
                     fontWeight: 900,
@@ -109,10 +111,6 @@ export default function MainNavbar() {
             </MHidden>
             <CartPopover />
           </Stack>
-
-          <MHidden width="mdUp">
-            <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
-          </MHidden>
         </Container>
       </ToolbarStyle>
     </RootStyle>

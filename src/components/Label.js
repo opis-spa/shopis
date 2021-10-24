@@ -51,11 +51,11 @@ const RootStyle = styled('span')(({ theme, ownerState }) => {
           ...(variant === 'outlined' && {
             backgroundColor: 'transparent',
             color: theme.palette.text.primary,
-            border: `1px solid ${theme.palette.grey[500_32]}`
+            border: `1px solid ${theme.palette.grey['500_32']}`
           }),
           ...(variant === 'ghost' && {
             color: isLight ? theme.palette.text.secondary : theme.palette.common.white,
-            backgroundColor: theme.palette.grey[500_16]
+            backgroundColor: theme.palette.grey['500_16']
           })
         })
   };
@@ -63,7 +63,13 @@ const RootStyle = styled('span')(({ theme, ownerState }) => {
 
 // ----------------------------------------------------------------------
 
-export default function Label({ color = 'default', variant = 'ghost', children, ...other }) {
+const propTypes = {
+  children: PropTypes.node,
+  color: PropTypes.oneOf(['default', 'primary', 'secondary', 'info', 'success', 'warning', 'error']),
+  variant: PropTypes.oneOf(['filled', 'outlined', 'ghost'])
+};
+
+function Label({ color = 'default', variant = 'ghost', children, ...other }) {
   return (
     <RootStyle ownerState={{ color, variant }} {...other}>
       {children}
@@ -71,8 +77,6 @@ export default function Label({ color = 'default', variant = 'ghost', children, 
   );
 }
 
-Label.propTypes = {
-  children: PropTypes.node,
-  color: PropTypes.oneOf(['default', 'primary', 'secondary', 'info', 'success', 'warning', 'error']),
-  variant: PropTypes.oneOf(['filled', 'outlined', 'ghost'])
-};
+Label.propTypes = propTypes;
+
+export default Label;

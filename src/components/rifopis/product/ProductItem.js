@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { paramCase } from 'change-case';
 // material
 import { styled, alpha } from '@mui/material/styles';
-import { Avatar, Box, Card, Stack, Typography, Divider } from '@mui/material';
-import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import { Box, Card, Stack, Typography, Divider } from '@mui/material';
 
 // redux
 import { useSelector } from '../../../redux/store';
 // components
 import Label from '../../Label';
+import RaffleProgress from '../raffles/RaffleProgress';
+import RafflePrizes from '../raffles/RafflePrizes';
 import ProductAdd from './ProductAdd';
 import LinkPartnership from '../../LinkPartnership';
 // utils
@@ -31,18 +32,6 @@ const ProductImgStyle = styled('img')({
   borderRadius: 6,
   objectFit: 'cover'
 });
-
-const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-  height: 10,
-  borderRadius: 5,
-  [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor: theme.palette.primary.main
-  },
-  [`& .${linearProgressClasses.bar}`]: {
-    borderRadius: 0,
-    backgroundColor: theme.palette.primary.lighter
-  }
-}));
 
 const StackStyles = styled(Stack)(({ theme }) => ({
   border: `1px solid ${theme.palette.common.white}`,
@@ -120,73 +109,33 @@ function ProductItem({ product, ...other }) {
           </Typography>
         </Stack>
 
-        <Divider variant="middle" sx={{ background: '#000000' }} />
+        <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
 
-        <Stack direction="row" spacing={2}>
-          <Avatar src="/static/icons/ic-bitcoin.png" sx={{ width: 40, height: 40 }} />
+        <RafflePrizes
+          photo="/static/icons/ic-bitcoin.png"
+          quantity={2}
+          prize="$50.000 pesos en Bitcoin"
+          position="Segundo"
+        />
 
-          <Stack>
-            <Typography
-              variant="caption"
-              noWrap
-              color="secondary"
-              sx={{ color: 'primary.light', textTransform: 'uppercase' }}
-            >
-              Segundo lugar
-              <Typography
-                component="span"
-                variant="caption"
-                sx={{ color: 'secondary.light', textTransform: 'uppercase' }}
-              >
-                &nbsp;- 2 premios
-              </Typography>
-            </Typography>
-            <Typography variant="subtitle2" noWrap color="secondary" sx={{ color: 'text.main' }}>
-              $50.000 pesos en Bitcoin
-            </Typography>
-          </Stack>
-        </Stack>
+        <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
 
-        <Divider variant="middle" sx={{ background: '#000000' }} />
-
-        <Stack direction="row" spacing={2}>
-          <Avatar src="/static/icons/ic-stellar.png" sx={{ width: 40, height: 40 }} />
-
-          <Stack>
-            <Typography
-              variant="caption"
-              noWrap
-              color="secondary"
-              sx={{ color: 'primary.light', textTransform: 'uppercase' }}
-            >
-              Tercer lugar
-              <Typography
-                component="span"
-                variant="caption"
-                sx={{ color: 'secondary.light', textTransform: 'uppercase' }}
-              >
-                &nbsp;- 10 premios
-              </Typography>
-            </Typography>
-            <Typography variant="subtitle2" noWrap color="secondary" sx={{ color: 'text.main' }}>
-              $25.000 pesos en Stellar
-            </Typography>
-          </Stack>
-        </Stack>
+        <RafflePrizes
+          photo="/static/icons/ic-stellar.png"
+          quantity={10}
+          prize="$25.000 pesos en Stellar"
+          position="Tercer"
+        />
 
         <StackStyles justifyContent="center" alignItems="center">
           <Typography>
-            1 ticket x <Typography component="span">{fCurrency(amount - (discount || 0))}</Typography>
+            1 token x <Typography component="span">{fCurrency(amount - (discount || 0))}</Typography>
           </Typography>
         </StackStyles>
 
-        <Typography
-          variant="caption"
-          sx={{ fontWeight: 900, textTransform: 'uppercase', color: 'primary.light', textAlign: 'right' }}
-        >{`¡Quedan solo ${stock} tickets!`}</Typography>
-        <BorderLinearProgress variant="determinate" value={stock === 0 ? 100 : 100 - (stock / 1333) * 100} />
+        <RaffleProgress stock={stock} quantity={1333} />
 
-        <ProductAdd tooltip={!open} title="Comprar ticket" product={productCart} />
+        <ProductAdd tooltip={!open} title="Comprar token" product={productCart} />
       </Stack>
     </CardStyle>
   );
