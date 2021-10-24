@@ -37,7 +37,7 @@ export default function Searchbar() {
   const dispatch = useDispatch();
   const { checkout } = useSelector((state) => state.product);
   const { cart } = checkout;
-  const totalItems = cart.length;
+  const totalItems = cart.reduce((before, current) => before + current.quantity, 0);
 
   const handleOpenCart = () => {
     dispatch(setOpenCart(true));
@@ -49,7 +49,8 @@ export default function Searchbar() {
       sx={{
         padding: 0,
         width: 44,
-        height: 44
+        height: 44,
+        mr: totalItems > 0 ? { xs: 3, md: 2 } : 0
       }}
     >
       <StyledBadge badgeContent={totalItems} color="primary" max={99}>
