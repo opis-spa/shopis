@@ -66,6 +66,9 @@ export default function MainNavbar() {
             justifyContent: 'space-between'
           }}
         >
+          <MHidden width="mdUp">
+            <MenuMobile isOffset={false} isHome navConfig={navConfig} />
+          </MHidden>
           <RouterLink to={PATH_RIFOPIS.root}>
             <LogoRifopis diapo={!isOffset} />
           </RouterLink>
@@ -108,10 +111,6 @@ export default function MainNavbar() {
             </MHidden>
             <CartPopover />
           </Stack>
-
-          <MHidden width="mdUp">
-            <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
-          </MHidden>
         </Container>
       </ToolbarStyle>
     </RootStyle>

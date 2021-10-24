@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
-import jammenu from '@iconify/icons-jam/menu';
+import jammenu from '@iconify/icons-eva/menu-2-fill';
 import { NavLink as RouterLink, useLocation } from 'react-router-dom';
 import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
@@ -9,7 +9,7 @@ import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 import { alpha, styled } from '@mui/material/styles';
 import { Box, List, Drawer, Link, Collapse, ListItemText, ListItemIcon, ListItemButton } from '@mui/material';
 // components
-import LogoShopis from '../../components/LogoShopis';
+import LogoRifopis from '../../components/LogoRifopis';
 import NavSection from '../../components/NavSection';
 import Scrollbar from '../../components/Scrollbar';
 import { MIconButton } from '../../components/@material-extend';
@@ -180,8 +180,7 @@ export default function MenuMobile({ isOffset }) {
         onClick={handleDrawerOpen}
         sx={{
           ml: 1,
-          ...(!isOffset && { color: 'common.white' }),
-          ...(isOffset && { color: 'secondary.main' })
+          color: 'primary.lighter'
         }}
       >
         <Icon hFlip icon={jammenu} style={{ fontSize: 30 }} />
@@ -195,7 +194,7 @@ export default function MenuMobile({ isOffset }) {
       >
         <Scrollbar>
           <Link component={RouterLink} to="/" sx={{ display: 'inline-flex' }}>
-            <LogoShopis sx={{ mx: PADDING, my: 3 }} />
+            <LogoRifopis sx={{ mx: PADDING, my: 3 }} />
           </Link>
 
           <List disablePadding>

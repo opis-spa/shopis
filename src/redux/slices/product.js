@@ -20,6 +20,7 @@ const initialState = {
     rating: ''
   },
   checkout: {
+    isLoading: false,
     open: false,
     data: {},
     activeStep: 1,
@@ -30,7 +31,8 @@ const initialState = {
     shipping: 0,
     delivery: null,
     billing: null,
-    isDelivery: false
+    isDelivery: false,
+    error: false
   },
   checkoutResult: {}
 };
@@ -44,10 +46,19 @@ const slice = createSlice({
       state.isLoading = true;
     },
 
+    startLoadingCheckout(state) {
+      state.checkout.isLoading = true;
+    },
+
     // HAS ERROR
     hasError(state, action) {
       state.isLoading = false;
       state.error = action.payload;
+    },
+
+    hasErrorCheckout(state, action) {
+      state.checkout.isLoading = false;
+      state.checkout.error = action.payload;
     },
 
     addCart(state, action) {
@@ -318,7 +329,7 @@ export const createProduct = (body) => async (dispatch) => {
 // ----------------------------------------------------------------------
 
 export const proccessCheckout = (payload) => async (dispatch) => {
-  dispatch(slice.actions.startLoading());
+  dispatch(slice.actions.startLoadingCheckout());
   try {
     const response = await axios.post('/api/v1/sales/order', payload);
     const { success, message, order } = response.data;

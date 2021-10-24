@@ -41,7 +41,7 @@ const ProductItemSummary = ({ product }) => {
     if (cartNew) {
       return cartNew;
     }
-    return { ...product };
+    return { ...product, quantity: 0 };
   }, [cart, product]);
 
   if (productCart.quantity === 0) {
