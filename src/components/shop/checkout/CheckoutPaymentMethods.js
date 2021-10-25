@@ -32,7 +32,7 @@ const OptionStyle = styled('div')(({ theme }) => ({
   justifyContent: 'space-between',
   borderRadius: theme.shape.borderRadius,
   transition: theme.transitions.create('all'),
-  border: `solid 1px ${theme.palette.grey[500_32]}`
+  border: `solid 1px ${theme.palette.grey['500_32']}`
 }));
 
 // ----------------------------------------------------------------------

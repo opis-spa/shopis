@@ -9,6 +9,7 @@ import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 import { Grid, Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // hooks
+import useAuth from '../../../hooks/useAuth';
 import usePartnership from '../../../hooks/usePartnership';
 // redux
 import { useDispatch, useSelector } from '../../../redux/store';
@@ -26,6 +27,7 @@ export default function CheckoutPayment() {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const { partnership } = usePartnership();
   const { data: payments } = useSelector((state) => state.payment);
   const { checkout, checkoutResult, isLoading, error } = useSelector((state) => state.product);
@@ -33,8 +35,10 @@ export default function CheckoutPayment() {
 
   const PAYMENT_OPTIONS = useMemo(() => {
     const { paymentMethods } = partnership;
-    return payments.filter((item) => paymentMethods.indexOf(item.id) >= 0);
-  }, [partnership, payments]);
+    return payments.filter((item) =>
+      paymentMethods.indexOf(item.id) >= 0 && isAuthenticated ? true : item.type !== 'opis'
+    );
+  }, [partnership, payments, isAuthenticated]);
 
   const handleBackStep = () => {
     dispatch(onBackStep());
