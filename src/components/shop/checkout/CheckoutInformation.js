@@ -254,7 +254,12 @@ const CheckoutInformation = () => {
         </FormikProvider>
       </Box>
 
-      <Divider orientation="vertical" flexItem variant="middle" sx={{ py: 20, borderColor: 'secondary.light' }} />
+      <Divider
+        orientation={{ xs: 'horizontal', md: 'vertical' }}
+        flexItem
+        variant="middle"
+        sx={{ py: { xs: 2, md: 20 }, borderColor: 'secondary.light' }}
+      />
 
       <Box sx={{ flex: 1 }}>
         <Typography sx={{ mb: 2, fontWeight: 900 }}>O inicia sesión si ya estás registrado</Typography>
