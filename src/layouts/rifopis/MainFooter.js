@@ -1,12 +1,12 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
 import instagramFill from '@iconify/icons-jam/instagram';
-import telegramFill from '@iconify/icons-jam/telegram';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import emailOutline from '@iconify/icons-eva/email-outline';
 import whatsappFill from '@iconify/icons-ic/outline-whatsapp';
 import { Link as ScrollLink } from 'react-scroll';
+import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import {
@@ -16,15 +16,13 @@ import {
   Grid,
   IconButton,
   Link,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Icon as IconMaterial,
   Stack,
   Typography
 } from '@mui/material';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
+// router
+import { PATH_RIFOPIS } from '../../routes/paths';
 //
 import LogoRifopis from '../../components/LogoRifopis';
 import PowerBy from '../../components/PowerBy';
@@ -80,7 +78,7 @@ export default function MainFooter() {
                 <IconMaterialStyle>
                   <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
                 </IconMaterialStyle>
-                <Typography sx={{ fontWeight: 900 }}>Política de privacidad</Typography>
+                <Typography sx={{ fontWeight: 900 }}>Términos y condiciones</Typography>
               </Stack>
             </Stack>
           </MHidden>
@@ -126,12 +124,18 @@ export default function MainFooter() {
                   <Typography>Bases del sorteo</Typography>
                 </Stack>
 
-                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-                  <IconMaterialStyle>
-                    <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
-                  </IconMaterialStyle>
-                  <Typography>Política de privacidad</Typography>
-                </Stack>
+                <Link
+                  component={RouterLink}
+                  to={PATH_RIFOPIS.terms}
+                  sx={{ color: 'common.white', textDecoration: 'none' }}
+                >
+                  <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+                    <IconMaterialStyle>
+                      <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
+                    </IconMaterialStyle>
+                    <Typography>Política de privacidad</Typography>
+                  </Stack>
+                </Link>
               </Stack>
             </Grid>
           </MHidden>

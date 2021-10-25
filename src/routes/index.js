@@ -95,7 +95,8 @@ export default function Router() {
           { path: '', element: <RifopisHome /> },
           { path: 'cart', element: <RifopisCart /> },
           { path: 'store', element: <RifopisStore /> },
-          { path: 'product/:name', element: <RifopisProduct /> }
+          { path: 'product/:name', element: <RifopisProduct /> },
+          { path: 'terms', element: <RifopisTerms /> }
         ]
       },
       {
@@ -269,6 +270,7 @@ const RifopisStore = Loadable(lazy(() => import('../pages/rifopis/Store')));
 const RifopisCheckout = Loadable(lazy(() => import('../pages/rifopis/Checkout')));
 const RifopisPaymentResult = Loadable(lazy(() => import('../pages/rifopis/PaymentResult')));
 const RifopisProfile = Loadable(lazy(() => import('../pages/rifopis/Profile')));
+const RifopisTerms = Loadable(lazy(() => import('../pages/rifopis/Terms')));
 // Main
 const LandingPage = Loadable(lazy(() => import('../pages/landing/Home')));
 const ComingSoon = Loadable(lazy(() => import('../pages/ComingSoon')));

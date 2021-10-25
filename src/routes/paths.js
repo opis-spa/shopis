@@ -57,5 +57,7 @@ export const PATH_RIFOPIS = {
   checkout: path(ROOT_RIFOPIS, '/checkout'),
   product: path(ROOT_RIFOPIS, '/product'),
   payment: path(ROOT_RIFOPIS, '/payment'),
-  result: path(ROOT_RIFOPIS, '/payment/result')
+  result: path(ROOT_RIFOPIS, '/payment/result'),
+  terms: path(ROOT_RIFOPIS, '/terms'),
+  legalBase: path(ROOT_RIFOPIS, '/legal-base')
 };
