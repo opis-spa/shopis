@@ -10,30 +10,32 @@ import { Link as ScrollLink } from 'react-scroll';
 // material
 import { styled } from '@mui/material/styles';
 import {
-  Grid,
-  Divider,
-  Container,
   Box,
+  Container,
+  Divider,
+  Grid,
   IconButton,
-  Stack,
+  Link,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Icon as IconMaterial
+  Icon as IconMaterial,
+  Stack,
+  Typography
 } from '@mui/material';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 //
 import LogoRifopis from '../../components/LogoRifopis';
 import PowerBy from '../../components/PowerBy';
+import { MHidden } from '../../components/@material-extend';
 
 // ----------------------------------------------------------------------
 
 const SOCIALS = [
-  { name: 'FaceBook', icon: facebookFill },
-  { name: 'Linkedin', icon: linkedinFill },
-  { name: 'Instagram', icon: instagramFill },
-  { name: 'Telegram', icon: telegramFill }
+  { name: 'FaceBook', icon: facebookFill, uri: 'https://www.facebook.com/rifopis' },
+  { name: 'Linkedin', icon: linkedinFill, uri: 'https://www.linkedin.com/company/rifopis' },
+  { name: 'Instagram', icon: instagramFill, uri: 'https://www.instagram.com/rifopis' }
 ];
 
 const RootStyle = styled('div')(() => ({
@@ -65,53 +67,76 @@ export default function MainFooter() {
             </ScrollLink>
           </Grid>
 
-          <Grid item xs={12} md={3}>
-            <List>
-              <ListItem disablePadding>
-                <ListItemIcon>
-                  <Icon icon={emailOutline} width={20} height={20} />
-                </ListItemIcon>
-                <ListItemText primary="hola@shopis.cl" sx={{ fontWeight: 900 }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemIcon>
-                  <Icon icon={whatsappFill} width={20} height={20} />
-                </ListItemIcon>
-                <ListItemText primary="+56 9 7977 7557" sx={{ fontWeight: 900 }} />
-              </ListItem>
-            </List>
+          <MHidden width="mdUp">
+            <Stack spacing={2} sx={{ mt: 1 }} alignItems={{ xs: 'center', md: 'flex-start' }}>
+              <Stack direction="row" spacing={2}>
+                <IconMaterialStyle>
+                  <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
+                </IconMaterialStyle>
+                <Typography>Bases del sorteo</Typography>
+              </Stack>
+
+              <Stack direction="row" spacing={2}>
+                <IconMaterialStyle>
+                  <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
+                </IconMaterialStyle>
+                <Typography sx={{ fontWeight: 900 }}>Política de privacidad</Typography>
+              </Stack>
+            </Stack>
+          </MHidden>
+
+          <Grid item xs={12} sx={{ my: 3, display: 'flex', justifyContent: 'center', py: { xs: 3, md: 1 } }}>
+            <Typography variant="h3" sx={{ textTransform: 'uppercase', borderBottom: '1px solid white' }}>
+              Contáctanos
+            </Typography>
           </Grid>
-          <Grid item xs={12} md={6}>
+
+          <Grid item xs={12} md={3} display="flex" justifyContent={{ xs: 'center', md: 'flex-start' }}>
+            <Stack spacing={2} alignItems={{ xs: 'center', md: 'flex-start' }}>
+              <Stack direction="row" spacing={2}>
+                <Icon icon={emailOutline} width={20} height={20} />
+                <Typography sx={{ fontWeight: 900 }}>hola@shopis.cl</Typography>
+              </Stack>
+
+              <Stack direction="row" spacing={2}>
+                <Icon icon={whatsappFill} width={20} height={20} />
+                <Typography sx={{ fontWeight: 900 }}>+56 9 7977 7557</Typography>
+              </Stack>
+            </Stack>
+          </Grid>
+          <Grid item xs={12} md={6} sx={{ mt: { xs: 2, md: 0 } }}>
             <Stack spacing={1.5} direction="row" justifyContent="center">
               {SOCIALS.map((social) => (
-                <IconButton key={social.name} sx={{ p: 1, color: 'text.primary' }}>
-                  <Icon icon={social.icon} width={40} height={40} />
-                </IconButton>
+                <Link key={social.name} href={social.uri} target="_blank">
+                  <IconButton key={social.name} sx={{ p: 1, color: 'text.primary' }}>
+                    <Icon icon={social.icon} width={40} height={40} />
+                  </IconButton>
+                </Link>
               ))}
             </Stack>
           </Grid>
-          <Grid item xs={12} md={3}>
-            <List>
-              <ListItem disablePadding>
-                <ListItemIcon>
+
+          <MHidden width="mdDown">
+            <Grid item xs={12} md={3}>
+              <Stack alignItems={{ xs: 'center', md: 'flex-start' }}>
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                   <IconMaterialStyle>
                     <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
                   </IconMaterialStyle>
-                </ListItemIcon>
-                <ListItemText primary="Bases del sorteo" sx={{ fontWeight: 900 }} />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemIcon>
+                  <Typography>Bases del sorteo</Typography>
+                </Stack>
+
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                   <IconMaterialStyle>
                     <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
                   </IconMaterialStyle>
-                </ListItemIcon>
-                <ListItemText primary="Politica de privacidad" sx={{ fontWeight: 900 }} />
-              </ListItem>
-            </List>
-          </Grid>
+                  <Typography>Política de privacidad</Typography>
+                </Stack>
+              </Stack>
+            </Grid>
+          </MHidden>
         </Grid>
-        <Box sx={{ textAlign: 'center', mx: 'auto', py: 5 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center', mx: 'auto', py: 5 }}>
           <PowerBy />
         </Box>
       </Container>
