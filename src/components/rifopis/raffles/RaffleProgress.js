@@ -23,9 +23,9 @@ const propTypes = {
   quantity: PropTypes.number
 };
 
-function RaffleProgress({ stock, quantity }) {
+function RaffleProgress({ stock, quantity, ...other }) {
   return (
-    <Stack spacing={2}>
+    <Stack spacing={1} {...other}>
       <Typography
         variant="caption"
         sx={{ fontWeight: 900, textTransform: 'uppercase', color: 'primary.light', textAlign: 'right' }}

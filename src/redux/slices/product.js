@@ -133,6 +133,8 @@ const slice = createSlice({
     getProduct(state, action) {
       const { name } = action.payload;
       state.product = state.products.find((product) => paramCase(product.name) === name);
+      console.log(' load state.product ');
+      console.log(state.product);
     },
 
     clearFilterProducts(state) {

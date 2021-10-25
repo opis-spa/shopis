@@ -1,17 +1,11 @@
 import React, { useState, useRef, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { paramCase } from 'change-case';
-import { Link as RouteLink } from 'react-router-dom';
 import Slider from 'react-slick';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 // material
 import { useTheme, styled } from '@mui/material/styles';
 import { Box, Card, Container, Grid, Typography } from '@mui/material';
-// hooks
-import usePartnership from '../../hooks/usePartnership';
-// routes
-import { PATH_SHOP } from '../../routes/paths';
 //
 import { varFadeInRight, varZoomIn, MotionContainer } from '../animate';
 import { CarouselControlsArrowsBasic2 } from './controls';
@@ -26,17 +20,23 @@ const CardStyle = styled(Card)({
 
 // ----------------------------------------------------------------------
 
-CarouselItem.propTypes = {
+const propTypes = {
   item: PropTypes.object,
   index: PropTypes.number,
-  isActive: PropTypes.bool
+  isActive: PropTypes.bool,
+  onSelectProduct: PropTypes.func
 };
 
-function CarouselItem({ item, isActive, index }) {
-  const { partnership } = usePartnership();
-  const { nickname } = partnership;
+const defaultProps = {
+  onSelectProduct: () => {}
+};
+
+function CarouselItem({ item, isActive, index, onSelectProduct }) {
   const { photo, photos, name } = item;
 
+  const handleSelectProduct = () => {
+    onSelectProduct(item);
+  };
   const rotateDeg = useMemo(() => {
     switch (index) {
       case 0:
@@ -92,8 +92,7 @@ function CarouselItem({ item, isActive, index }) {
               <motion.div variants={varFadeInRight}>
                 <ButtonTicket
                   fullWidth
-                  component={RouteLink}
-                  to={`${PATH_SHOP.root}/${nickname}/product/${paramCase(item.name)}`}
+                  onClick={handleSelectProduct}
                   variant="contained"
                   title="Participar"
                   sx={{ mt: 3, zIndex: 100 }}
@@ -123,7 +122,17 @@ function CarouselItem({ item, isActive, index }) {
   );
 }
 
-export default function CarouselAnimation() {
+CarouselItem.propTypes = propTypes;
+CarouselItem.defaultProps = defaultProps;
+
+const propsCarouselRifopis = {
+  onSelectProduct: PropTypes.func
+};
+const defaultsCarouselRifopis = {
+  onSelectProduct: () => {}
+};
+
+function CarouselRifopis({ onSelectProduct }) {
   const theme = useTheme();
   const carouselRef = useRef();
   const { products } = useSelector((state) => state.product);
@@ -156,7 +165,13 @@ export default function CarouselAnimation() {
     <CardStyle>
       <Slider adaptiveHeight ref={carouselRef} {...settings}>
         {productsList.map((item, index) => (
-          <CarouselItem key={item.name} item={item} index={index} isActive={index === currentIndex} />
+          <CarouselItem
+            onSelectProduct={onSelectProduct}
+            key={item.name}
+            item={item}
+            index={index}
+            isActive={index === currentIndex}
+          />
         ))}
       </Slider>
 
@@ -164,3 +179,8 @@ export default function CarouselAnimation() {
     </CardStyle>
   );
 }
+
+CarouselRifopis.propTypes = propsCarouselRifopis;
+CarouselRifopis.propTypes = defaultsCarouselRifopis;
+
+export default CarouselRifopis;

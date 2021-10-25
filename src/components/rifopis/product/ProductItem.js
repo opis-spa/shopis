@@ -1,9 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { paramCase } from 'change-case';
 // material
-import { styled, alpha } from '@mui/material/styles';
-import { Box, Card, Stack, Typography, Divider } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Box, Button, Card, Stack, Typography, Divider, DialogContent } from '@mui/material';
 
 // redux
 import { useSelector } from '../../../redux/store';
@@ -11,10 +10,10 @@ import { useSelector } from '../../../redux/store';
 import Label from '../../Label';
 import RaffleProgress from '../raffles/RaffleProgress';
 import RafflePrizes from '../raffles/RafflePrizes';
+import RafflePrice from '../raffles/RafflePrice';
 import ProductAdd from './ProductAdd';
-import LinkPartnership from '../../LinkPartnership';
-// utils
-import { fCurrency } from '../../../utils/formatNumber';
+import { DialogAnimate } from '../../animate';
+import ProductDetail from './ProductDetail';
 
 // ----------------------------------------------------------------------
 
@@ -33,26 +32,22 @@ const ProductImgStyle = styled('img')({
   objectFit: 'cover'
 });
 
-const StackStyles = styled(Stack)(({ theme }) => ({
-  border: `1px solid ${theme.palette.common.white}`,
-  borderRadius: 6,
-  backgroundColor: alpha(theme.palette.common.white, 0.09),
-  marginTop: theme.spacing(2),
-  marginBottom: theme.spacing(2),
-  paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2)
-}));
-
 // ----------------------------------------------------------------------
 
 ProductItem.propTypes = {
   product: PropTypes.object,
-  className: PropTypes.string
+  className: PropTypes.string,
+  onSelectProduct: PropTypes.func
 };
 
-function ProductItem({ product, ...other }) {
+function ProductItem({ product, onSelectProduct, ...other }) {
   const { name, photo, photos, amount, discountPartnership: discount, stock } = product;
   const { cart, open } = useSelector((state) => state.product.checkout);
+  const [detailOpen, setDetailOpen] = useState(false);
+
+  const handleProductDetail = () => {
+    onSelectProduct(product);
+  };
 
   const image = useMemo(() => {
     if (photos) {
@@ -69,25 +64,28 @@ function ProductItem({ product, ...other }) {
     return product;
   }, [cart, product]);
 
-  const linkTo = `/product/${paramCase(name)}`;
-
   return (
     <CardStyle {...other}>
+      <DialogAnimate fullWidth open={detailOpen} maxWidth="md" scroll="paper" onClose={() => setDetailOpen(false)}>
+        <DialogContent>
+          <ProductDetail product={product} productCart={productCart} />
+        </DialogContent>
+      </DialogAnimate>
+
       <Box sx={{ p: 2 }}>
-        <LinkPartnership to={linkTo} color="inherit">
-          <Label
-            variant="filled"
-            sx={{
-              top: 30,
-              right: 30,
-              position: 'absolute',
-              textTransform: 'uppercase',
-              zIndex: 100
-            }}
-          >
+        <Button
+          sx={{
+            top: 30,
+            right: 30,
+            position: 'absolute',
+            zIndex: 100
+          }}
+          onClick={handleProductDetail}
+        >
+          <Label variant="filled" sx={{ textTransform: 'uppercase' }}>
             Detalle del sorteo
           </Label>
-        </LinkPartnership>
+        </Button>
 
         <ProductImgStyle alt={name} src={image[1]} />
       </Box>
@@ -127,12 +125,7 @@ function ProductItem({ product, ...other }) {
           position="Tercer"
         />
 
-        <StackStyles justifyContent="center" alignItems="center">
-          <Typography>
-            1 token x <Typography component="span">{fCurrency(amount - (discount || 0))}</Typography>
-          </Typography>
-        </StackStyles>
-
+        <RafflePrice price={amount - (discount || 0)} />
         <RaffleProgress stock={stock} quantity={1333} />
 
         <ProductAdd tooltip={!open} title="Comprar token" product={productCart} />

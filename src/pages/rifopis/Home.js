@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
+import { paramCase } from 'change-case';
 // material
 import { CircularProgress, Grid, Typography, Container, Box } from '@mui/material';
 // hooks
 import usePartnership from '../../hooks/usePartnership';
 // redux
 import { useDispatch } from '../../redux/store';
-import { getProductStore } from '../../redux/slices/product';
+import { getProductStore, getProduct } from '../../redux/slices/product';
 import { getCategories } from '../../redux/slices/category';
 import { getPayments } from '../../redux/slices/payment';
 import { getDeliveries } from '../../redux/slices/delivery';
@@ -16,10 +17,17 @@ import CarouselRifopis from '../../components/carousel/CarouselRifopis';
 import ProductList from '../../components/rifopis/product/ProductList';
 import { MotionInView, varFadeInUp } from '../../components/animate';
 import { RifopisHowWork, RifopisWinners, RifopisCart } from '../../components/rifopis';
+import ProductDetail from '../../components/rifopis/product/ProductDetail';
 
 const Home = () => {
   const { partnership, isLoading } = usePartnership();
   const dispatch = useDispatch();
+
+  const handleSelect = (product) => {
+    const { name } = product;
+    dispatch(getProduct({ name: paramCase(name) }));
+  };
+
   // effects
   useEffect(() => {
     if (partnership) {
@@ -38,7 +46,8 @@ const Home = () => {
 
   return (
     <Page title={partnership.name}>
-      <CarouselRifopis />
+      <ProductDetail />
+      <CarouselRifopis onSelectProduct={handleSelect} />
       <RifopisCart />
       <Container maxWidth="lg">
         <Grid container spacing={2} sx={{ mb: 10 }}>
@@ -59,7 +68,7 @@ const Home = () => {
               </Grid>
               <Grid item xs={12}>
                 <Scrollbar style={{ maxWidth: '100%' }}>
-                  <ProductList view="module" max={4} isLoad={false} />
+                  <ProductList view="module" max={4} isLoad={false} onSelectProduct={handleSelect} />
                 </Scrollbar>
               </Grid>
             </Box>
