@@ -14,10 +14,14 @@ import RafflePrice from '../raffles/RafflePrice';
 import ProductAdd from './ProductAdd';
 import { DialogAnimate } from '../../animate';
 import ProductDetail from './ProductDetail';
+// utils
+import { positionString } from '../../../utils/positionString';
 
 // ----------------------------------------------------------------------
 
 const CardStyle = styled(Card)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
   border: `1px solid ${theme.palette.secondary.light}`,
   minWidth: '40%',
   [theme.breakpoints.down('md')]: {
@@ -41,7 +45,7 @@ ProductItem.propTypes = {
 };
 
 function ProductItem({ product, onSelectProduct, ...other }) {
-  const { name, photo, photos, amount, discountPartnership: discount, stock } = product;
+  const { name, photo, photos, amount, discountPartnership: discount, stock, prizes } = product;
   const { cart, open } = useSelector((state) => state.product.checkout);
   const [detailOpen, setDetailOpen] = useState(false);
 
@@ -90,7 +94,7 @@ function ProductItem({ product, onSelectProduct, ...other }) {
         <ProductImgStyle alt={name} src={image[1]} />
       </Box>
 
-      <Stack sx={{ p: 3 }} spacing={2}>
+      <Stack sx={{ p: 3, flex: 1 }} spacing={2}>
         <Stack spacing={1}>
           <Typography variant="subtitle1" noWrap color="primary" sx={{ textTransform: 'uppercase' }}>
             Primer Lugar
@@ -107,23 +111,21 @@ function ProductItem({ product, onSelectProduct, ...other }) {
           </Typography>
         </Stack>
 
-        <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
+        {prizes ? (
+          prizes.map((prize, index) => {
+            const { photos, name, cant } = prize;
+            return (
+              <>
+                <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
+                <RafflePrizes photo={photos[0]} quantity={cant} prize={name} position={positionString(index + 1)} />
+              </>
+            );
+          })
+        ) : (
+          <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
+        )}
 
-        <RafflePrizes
-          photo="/static/icons/ic-bitcoin.png"
-          quantity={2}
-          prize="$50.000 pesos en Bitcoin"
-          position="Segundo"
-        />
-
-        <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
-
-        <RafflePrizes
-          photo="/static/icons/ic-stellar.png"
-          quantity={10}
-          prize="$25.000 pesos en Stellar"
-          position="Tercer"
-        />
+        <Box sx={{ display: 'flex', flexGrow: 1 }} />
 
         <RafflePrice price={amount - (discount || 0)} />
         <RaffleProgress stock={stock} quantity={1333} />

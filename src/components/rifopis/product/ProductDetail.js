@@ -16,6 +16,7 @@ import ProductAdd from './ProductAdd';
 import Scrollbar from '../../Scrollbar';
 import RifopisPolaroid from '../RifopisPolaroid';
 import { DialogAnimate } from '../../animate';
+import { positionString } from '../../../utils/positionString';
 
 const StyledAccordion = styled((props) => <Accordion disableGutters elevation={0} square {...props} />)(
   ({ theme }) => ({
@@ -65,12 +66,18 @@ const propTypes = {
     description: PropTypes.string,
     amount: PropTypes.number,
     stock: PropTypes.number,
-    discountPartnership: PropTypes.number
+    discountPartnership: PropTypes.number,
+    prizes: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        photos: PropTypes.arrayOf(PropTypes.string)
+      })
+    )
   })
 };
 
 function ProductDetail({ product }) {
-  const { name, description, photos, amount, discountPartnership: discount, stock } = product;
+  const { name, description, photos, amount, discountPartnership: discount, stock, prizes } = product;
 
   const ITINERARY = [
     {
@@ -108,10 +115,21 @@ function ProductDetail({ product }) {
             ))}
           </Stack>
 
-          <Stack spacing={2}>
-            <Prize name={name} prize="Segundo Lugar" photo={photos[1]} description={description} />
-            <Prize name={name} prize="Tercer Lugar" photo={photos[1]} description={description} />
-          </Stack>
+          {prizes &&
+            prizes.map((prize, index) => {
+              const { photos, name, description, cant } = prize;
+              return (
+                <>
+                  <Prize
+                    name={name}
+                    cant={cant}
+                    prize={`${positionString(index + 1)} Lugar`}
+                    photo={photos[1]}
+                    description={description}
+                  />
+                </>
+              );
+            })}
 
           <Stack spacing={1} sx={{ py: 5 }}>
             <Typography variant="h5" sx={{ textTransform: 'uppercase', fontWeight: 900 }}>

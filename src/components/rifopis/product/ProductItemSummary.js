@@ -56,7 +56,7 @@ const ProductItemSummary = ({ product }) => {
         <Stack sx={{ flex: 1 }}>
           <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
             <Typography sx={{ fontWeight: 700, maxWidth: 180, flex: 1 }}>{name}</Typography>
-            <Typography sx={{ fontWeight: 900 }}>{fCurrency(amount - (discount || 0))}</Typography>
+            <Typography sx={{ fontWeight: 900 }}>{fCurrency(productCart.subtotal)}</Typography>
           </Stack>
 
           <Typography>{`${productCart.quantity} tokens`}</Typography>
