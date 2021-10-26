@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 // material
+import { styled } from '@mui/material/styles';
 import {
   Box,
   Card,
@@ -26,6 +27,13 @@ import { fCurrency } from '../../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
+const CardStyle = styled(Card)(() => ({
+  boxShadow: '-2px -2px 14px rgba(255, 194, 36, 0.2)',
+  border: '1px solid #936DB9',
+  boxSizing: 'border-box',
+  textAlign: 'left'
+}));
+
 CheckoutSummary.propTypes = {
   total: PropTypes.number,
   discount: PropTypes.number,
@@ -45,7 +53,8 @@ export default function CheckoutSummary({
   shipping = null,
   onApplyDiscount,
   enableDiscount = false,
-  preview = false
+  preview = false,
+  ...other
 }) {
   const dispatch = useDispatch();
   const isMountedRef = useIsMountedRef();
@@ -68,7 +77,7 @@ export default function CheckoutSummary({
   }, [dispatch, isMountedRef, cart]);
 
   return (
-    <Card sx={{ my: 3 }}>
+    <CardStyle sx={{ my: 3 }} {...other}>
       <CardHeader title="Resumen de tu pedido" />
 
       <CardContent>
@@ -140,6 +149,6 @@ export default function CheckoutSummary({
           )}
         </Stack>
       </CardContent>
-    </Card>
+    </CardStyle>
   );
 }

@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { Icon } from '@iconify/react';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
+import logOutFill from '@iconify/icons-ic/sharp-log-out';
 // material
 import { Grid, Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -13,7 +14,7 @@ import useAuth from '../../../hooks/useAuth';
 import usePartnership from '../../../hooks/usePartnership';
 // redux
 import { useDispatch, useSelector } from '../../../redux/store';
-import { onBackStep, onNextStep, proccessCheckout, clearCart } from '../../../redux/slices/product';
+import { onBackStep, onNextStep, proccessCheckout, clearCart, setOpenCart } from '../../../redux/slices/product';
 // route
 import { PATH_RIFOPIS } from '../../../routes/paths';
 // components
@@ -27,7 +28,7 @@ export default function CheckoutPayment() {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const { partnership } = usePartnership();
   const { data: payments } = useSelector((state) => state.payment);
   const { checkout, checkoutResult, isLoading, error } = useSelector((state) => state.product);
@@ -41,6 +42,20 @@ export default function CheckoutPayment() {
   }, [partnership, payments, isAuthenticated]);
 
   const handleBackStep = () => {
+    if (!isAuthenticated) {
+      dispatch(onBackStep());
+    } else {
+      dispatch(setOpenCart(true));
+      if (partnership.nickname === 'rifopis') {
+        navigate(PATH_RIFOPIS.root);
+      } else {
+        navigate(`/shop/${partnership.nickname}/cart`);
+      }
+    }
+  };
+
+  const handleLogOff = async () => {
+    logout();
     dispatch(onBackStep());
   };
 
@@ -97,8 +112,8 @@ export default function CheckoutPayment() {
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button
               type="button"
               size="small"
@@ -108,12 +123,28 @@ export default function CheckoutPayment() {
             >
               Volver
             </Button>
-            <CheckoutPaymentMethods formik={formik} paymentOptions={PAYMENT_OPTIONS} />
+
+            {isAuthenticated && (
+              <Button
+                type="button"
+                size="small"
+                color="inherit"
+                onClick={handleLogOff}
+                endIcon={<Icon icon={logOutFill} />}
+                sx={{ textTransform: 'uppercase' }}
+              >
+                Cerrar sesión
+              </Button>
+            )}
           </Grid>
 
           <Grid item xs={12} md={6}>
-            {isDelivery && <CheckoutBillingInfo onBackStep={handleBackStep} />}
-            <CheckoutSummary total={total} subtotal={subtotal} discount={discount} shipping={shipping} />
+            <CheckoutPaymentMethods formik={formik} paymentOptions={PAYMENT_OPTIONS} sx={{ my: 1 }} />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <CheckoutBillingInfo onBackStep={handleBackStep} sx={{ my: 1 }} />
+            <CheckoutSummary total={total} subtotal={subtotal} discount={discount} shipping={shipping} sx={{ my: 1 }} />
             <LoadingButton
               fullWidth
               disabled={values.payment === 'paypal'}

@@ -35,6 +35,14 @@ const OptionStyle = styled('div')(({ theme }) => ({
   border: `solid 1px ${theme.palette.grey['500_32']}`
 }));
 
+const CardStyle = styled(Card)(() => ({
+  boxShadow: '-2px -2px 14px rgba(255, 194, 36, 0.2)',
+  border: '1px solid #936DB9',
+  boxSizing: 'border-box',
+  alignItems: 'center',
+  textAlign: 'left'
+}));
+
 // ----------------------------------------------------------------------
 
 CheckoutPaymentMethods.propTypes = {
@@ -42,12 +50,12 @@ CheckoutPaymentMethods.propTypes = {
   paymentOptions: PropTypes.array
 };
 
-export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
+export default function CheckoutPaymentMethods({ paymentOptions, formik, ...other }) {
   const { total } = useSelector((state) => state.product.checkout);
   const { errors, touched, values, getFieldProps } = formik;
 
   return (
-    <Card sx={{ my: 3 }}>
+    <CardStyle sx={{ my: 3 }} {...other}>
       <CardHeader title="Selecciona un medio de pago" />
       <CardContent>
         <RadioGroup row {...getFieldProps('payment')}>
@@ -116,6 +124,6 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
           </FormHelperText>
         )}
       </CardContent>
-    </Card>
+    </CardStyle>
   );
 }
