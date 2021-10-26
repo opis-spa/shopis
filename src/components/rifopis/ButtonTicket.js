@@ -20,15 +20,17 @@ const ButtonStyle = styled(ButtonBase)(() => ({
 }));
 
 const propTypes = {
-  title: PropTypes.string
+  title: PropTypes.string,
+  fontSize: PropTypes.number
 };
 
-function ButtonTicket({ ...props }) {
-  const { title } = props;
+function ButtonTicket({ title, fontSize, ...props }) {
   return (
     <ButtonStyle {...props}>
       <BackgroundTicket sx={{ position: 'absolute', top: 0, right: 0, left: 0, bottom: 0 }} />
-      <Typography sx={{ color: 'common.white', fontWeight: 900, zIndex: 10 }}>{title}</Typography>
+      <Typography sx={{ fontSize: fontSize || 18, color: 'common.white', fontWeight: 900, zIndex: 10 }}>
+        {title}
+      </Typography>
     </ButtonStyle>
   );
 }

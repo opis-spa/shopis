@@ -85,7 +85,7 @@ function CarouselItem({ item, isActive, index, onSelectProduct }) {
                 </Typography>
               </motion.div>
               <motion.div variants={varFadeInRight}>
-                <Typography variant="h1" noWrap gutterBottom sx={{ textTransform: 'uppercase' }}>
+                <Typography variant="h1" noWrap gutterBottom sx={{ fontWeight: 900, textTransform: 'uppercase' }}>
                   Vuelve <br /> a viajar
                 </Typography>
               </motion.div>
@@ -95,6 +95,7 @@ function CarouselItem({ item, isActive, index, onSelectProduct }) {
                   onClick={handleSelectProduct}
                   variant="contained"
                   title="Participar"
+                  fontSize={28}
                   sx={{ mt: 3, zIndex: 100 }}
                 >
                   Participar

@@ -47,10 +47,11 @@ function RifopisPolaroid({ photo, title, subtitle, small, sx }) {
         sx={{
           marginTop: -1,
           width: '100%',
-          height: 85,
+          minHeight: 85,
           backgroundColor: '#fff',
           borderBottomRightRadius: 3,
           borderBottomLeftRadius: 3,
+          pb: (theme) => theme.spacing(1),
           px: (theme) => theme.spacing(2)
         }}
       >
@@ -58,7 +59,9 @@ function RifopisPolaroid({ photo, title, subtitle, small, sx }) {
           <Typography color="primary" sx={{ textTransform: 'uppercase', fontWeight: 900 }}>
             {title}
           </Typography>
-          <Typography sx={{ textTransform: 'uppercase', color: 'black', fontFamily: 'Permanent Marker' }}>
+          <Typography
+            sx={{ fontSize: '1.5rem', textTransform: 'uppercase', color: 'black', fontFamily: 'Permanent Marker' }}
+          >
             {subtitle}
           </Typography>
         </Stack>
