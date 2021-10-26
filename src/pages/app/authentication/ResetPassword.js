@@ -41,7 +41,7 @@ export default function ResetPassword() {
                 ¿Olvidaste tu contraseña?
               </Typography>
               <Typography sx={{ color: 'text.secondary', mb: 5 }}>
-                Danos tu email y te ayudaremos a restaurarla. (La contraseña, por tu memoria si que no podemos hacer
+                Danos tu email y te ayudaremos a recuperarla. (La contraseña, por tu memoria si que no podemos hacer
                 nada!{' '}
                 <span role="img" aria-label="face">
                   😋
@@ -60,17 +60,17 @@ export default function ResetPassword() {
               <SentIcon sx={{ mb: 5, mx: 'auto', height: 160 }} />
 
               <Typography variant="h3" gutterBottom>
-                Request sent successfully
+                Recuperación de contraseña satisfactoria
               </Typography>
               <Typography>
-                We have sent a confirmation email to &nbsp;
+                Nosotros enviamos una correo de confirmación a &nbsp;
                 <strong>{email}</strong>
                 <br />
-                Please check your email.
+                Revisa tu correo electrónico.
               </Typography>
 
               <Button size="large" variant="contained" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 5 }}>
-                Back
+                Volver
               </Button>
             </Box>
           )}
