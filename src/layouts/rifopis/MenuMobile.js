@@ -135,13 +135,20 @@ function MenuMobileItem({ item, isOpen, isActive, onOpen }) {
       sx={{
         ...(isActive && {
           color: 'primary.main',
-          fontWeight: 'fontWeightMedium',
+          fontWeight: 900,
+          textTransform: 'uppercase',
           bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity)
         })
       }}
     >
-      <ListItemIcon>{icon}</ListItemIcon>
-      <ListItemText disableTypography primary={title} />
+      <ListItemText
+        disableTypography
+        primary={title}
+        primaryTypographyProps={{
+          fontWeight: 900,
+          textTransform: 'uppercase'
+        }}
+      />
     </ListItemStyle>
   );
 }

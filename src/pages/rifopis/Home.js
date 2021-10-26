@@ -60,7 +60,7 @@ const Home = () => {
               <Grid item xs={12}>
                 <Box>
                   <MotionInView variants={varFadeInUp}>
-                    <Typography variant="h3" sx={{ mb: 2, color: 'text.primary', textTransform: 'uppercase' }}>
+                    <Typography variant="h2" sx={{ my: 2, color: 'text.primary', textTransform: 'uppercase' }}>
                       Sorteos Vigentes
                     </Typography>
                   </MotionInView>

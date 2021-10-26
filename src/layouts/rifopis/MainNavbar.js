@@ -84,7 +84,6 @@ export default function MainNavbar() {
                 <Button
                   component={RouterLink}
                   variant="text"
-                  target="_blank"
                   to={PATH_APP.user.profile}
                   sx={{
                     fontWeight: 900,
