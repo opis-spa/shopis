@@ -26,7 +26,7 @@ const propTypes = {
 };
 
 const ProductItemSummary = ({ product }) => {
-  const { name, photo, photos, amount, discountPartnership: discount } = product;
+  const { name, photo, photos } = product;
   const { cart } = useSelector((state) => state.product.checkout);
 
   const image = useMemo(() => {

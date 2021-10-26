@@ -32,7 +32,7 @@ const propTypes = {
 };
 
 const ProductItemSimple = ({ product }) => {
-  const { id, name, photo, photos, amount, discountPartnership: discount } = product;
+  const { id, name, photo, photos } = product;
   const dispatch = useDispatch();
   const { cart, open } = useSelector((state) => state.product.checkout);
 
