@@ -38,7 +38,8 @@ function RifopisPolaroid({ photo, title, subtitle, small, sx }) {
           borderTopRightRadius: 3,
           borderTopLeftRadius: 3,
           overflow: 'hidden',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          backdropFilter: 'blur(5px)'
         }}
       >
         <Box component="img" src={photo} sx={{ height: small ? 215 : 350 }} />
@@ -56,7 +57,7 @@ function RifopisPolaroid({ photo, title, subtitle, small, sx }) {
         }}
       >
         <Stack spacing={1}>
-          <Typography color="primary" sx={{ textTransform: 'uppercase', fontWeight: 900 }}>
+          <Typography color="primary" sx={{ textTransform: 'uppercase', fontWeight: 900, lineHeight: 1.9 }}>
             {title}
           </Typography>
           <Typography

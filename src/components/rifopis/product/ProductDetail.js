@@ -42,15 +42,15 @@ Prize.propTypes = {
   photo: PropTypes.arrayOf(PropTypes.string)
 };
 
-function Prize({ name, prize, description, photo }) {
+function Prize({ name, prize, description, photo, ...other }) {
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={5} sx={{ maxWidth: 350 }}>
+    <Grid container spacing={2} {...other}>
+      <Grid item xs={12} md={6} sx={{ maxWidth: 350 }}>
         <RifopisPolaroid small title={prize} subtitle={name} photo={photo} sx={{ transform: `rotate(-1.5deg)` }} />
       </Grid>
-      <Grid item sx={12} md={7}>
+      <Grid item sx={12} md={6}>
         <Stack spacing={2}>
-          <Typography variant="h4">Descripción</Typography>
+          <Typography variant="h4">{prize}</Typography>
           <Typography>{description}</Typography>
         </Stack>
       </Grid>
@@ -123,9 +123,10 @@ function ProductDetail({ product }) {
                   <Prize
                     name={name}
                     cant={cant}
-                    prize={`${positionString(index + 1)} Lugar`}
+                    prize={`${positionString(index + 2)} Lugar`}
                     photo={photos[1]}
                     description={description}
+                    sx={{ mb: 2 }}
                   />
                 </>
               );

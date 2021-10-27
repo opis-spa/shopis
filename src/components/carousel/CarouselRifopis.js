@@ -56,7 +56,8 @@ function CarouselItem({ item, isActive, index, onSelectProduct }) {
     <Box
       sx={{
         width: '100%',
-        background: `url(${photo || photos[0]})`
+        background: `url(${photo || photos[0]})`,
+        backgroundPosition: 'center'
       }}
     >
       <Container

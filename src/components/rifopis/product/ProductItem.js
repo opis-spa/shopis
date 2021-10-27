@@ -45,7 +45,7 @@ ProductItem.propTypes = {
 };
 
 function ProductItem({ product, onSelectProduct, ...other }) {
-  const { name, photo, photos, amount, discountPartnership: discount, stock, prizes } = product;
+  const { name, promo, photo, photos, amount, discountPartnership: discount, stock, prizes } = product;
   const { cart, open } = useSelector((state) => state.product.checkout);
   const [detailOpen, setDetailOpen] = useState(false);
 
@@ -94,7 +94,12 @@ function ProductItem({ product, onSelectProduct, ...other }) {
         <ProductImgStyle alt={name} src={image[1]} />
       </Box>
 
-      <Stack sx={{ p: 3, flex: 1 }} spacing={2}>
+      <Stack sx={{ p: 1, px: 3, flex: 1 }} spacing={2}>
+        <RaffleProgress stock={stock} quantity={1333} />
+        <RafflePrice isPromo={promo === '3x2'} price={amount - (discount || 0)} />
+
+        <ProductAdd tooltip={!open} title="Comprar token" product={productCart} sx={{ mb: 1 }} />
+
         <Stack spacing={1}>
           <Typography variant="subtitle1" noWrap color="primary" sx={{ textTransform: 'uppercase' }}>
             Primer Lugar
@@ -117,7 +122,7 @@ function ProductItem({ product, onSelectProduct, ...other }) {
             return (
               <>
                 <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
-                <RafflePrizes photo={photos[0]} quantity={cant} prize={name} position={positionString(index + 1)} />
+                <RafflePrizes photo={photos[0]} quantity={cant} prize={name} position={positionString(index + 2)} />
               </>
             );
           })
@@ -126,11 +131,6 @@ function ProductItem({ product, onSelectProduct, ...other }) {
         )}
 
         <Box sx={{ display: 'flex', flexGrow: 1 }} />
-
-        <RafflePrice price={amount - (discount || 0)} />
-        <RaffleProgress stock={stock} quantity={1333} />
-
-        <ProductAdd tooltip={!open} title="Comprar token" product={productCart} />
       </Stack>
     </CardStyle>
   );

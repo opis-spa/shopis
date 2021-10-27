@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { paramCase } from 'change-case';
+import { Element } from 'react-scroll';
 // material
 import { CircularProgress, Grid, Typography, Container, Box } from '@mui/material';
 // hooks
@@ -47,43 +48,45 @@ const Home = () => {
   return (
     <Page title={partnership.name}>
       <ProductDetail />
-      <CarouselRifopis onSelectProduct={handleSelect} />
       <RifopisCart />
+      <CarouselRifopis onSelectProduct={handleSelect} />
       <Container maxWidth="lg">
-        <Grid container spacing={2} sx={{ mb: 10 }}>
-          {isLoading ? (
-            <Grid item xs={12} style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>
-              <CircularProgress />
+        <Element name="sorteos">
+          <Grid container spacing={2} sx={{ mb: 10 }}>
+            {isLoading ? (
+              <Grid item xs={12} style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>
+                <CircularProgress />
+              </Grid>
+            ) : (
+              <Box sx={{ position: 'relative', mt: -15, width: '100%' }}>
+                <Grid item xs={12}>
+                  <Box>
+                    <MotionInView variants={varFadeInUp}>
+                      <Typography variant="h2" sx={{ my: 2, color: 'text.primary', textTransform: 'uppercase' }}>
+                        Sorteos Vigentes
+                      </Typography>
+                    </MotionInView>
+                  </Box>
+                </Grid>
+                <Grid item xs={12}>
+                  <Scrollbar style={{ maxWidth: '100%' }}>
+                    <ProductList view="module" max={4} isLoad={false} onSelectProduct={handleSelect} />
+                  </Scrollbar>
+                </Grid>
+              </Box>
+            )}
+            <Grid item xs={12}>
+              <MotionInView variants={varFadeInUp}>
+                <RifopisHowWork />
+              </MotionInView>
             </Grid>
-          ) : (
-            <Box sx={{ position: 'relative', mt: -15, width: '100%' }}>
-              <Grid item xs={12}>
-                <Box>
-                  <MotionInView variants={varFadeInUp}>
-                    <Typography variant="h2" sx={{ my: 2, color: 'text.primary', textTransform: 'uppercase' }}>
-                      Sorteos Vigentes
-                    </Typography>
-                  </MotionInView>
-                </Box>
-              </Grid>
-              <Grid item xs={12}>
-                <Scrollbar style={{ maxWidth: '100%' }}>
-                  <ProductList view="module" max={4} isLoad={false} onSelectProduct={handleSelect} />
-                </Scrollbar>
-              </Grid>
-            </Box>
-          )}
-          <Grid item xs={12}>
-            <MotionInView variants={varFadeInUp}>
-              <RifopisHowWork />
-            </MotionInView>
+            <Grid item xs={12}>
+              <MotionInView variants={varFadeInUp}>
+                <RifopisWinners />
+              </MotionInView>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <MotionInView variants={varFadeInUp}>
-              <RifopisWinners />
-            </MotionInView>
-          </Grid>
-        </Grid>
+        </Element>
       </Container>
     </Page>
   );
