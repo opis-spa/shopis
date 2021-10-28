@@ -42,7 +42,7 @@ const LINKS = [
   {
     headline: 'Contacto',
     children: [
-      { name: 'hola@shopis.cl', href: '#' },
+      { name: 'hola@rifopis.cl', href: '#' },
       { name: '+56 9 7977 7557', href: '#' }
     ]
   }
