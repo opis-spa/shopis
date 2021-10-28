@@ -21,6 +21,7 @@ import {
 import { useSelector } from '../../../redux/store';
 // components
 import PayPal from './payment/methods/PayPal';
+import OpisWallet from './payment/methods/OpisWallet';
 import { MHidden } from '../../@material-extend';
 
 // ----------------------------------------------------------------------
@@ -62,7 +63,8 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik, ...othe
           <Grid container spacing={2}>
             {paymentOptions.map((method) => {
               const { type, name, icons, description } = method;
-              const hasChildren = type === 'paypal';
+              const isPaypal = type === 'paypal';
+              const isOpis = type === 'opis';
 
               return (
                 <Grid key={name} item xs={12}>
@@ -71,7 +73,7 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik, ...othe
                       ...(values.payment === type && {
                         boxShadow: (theme) => theme.customShadows.z8
                       }),
-                      ...(hasChildren && { flexWrap: 'wrap' })
+                      ...((isPaypal || isOpis) && { flexWrap: 'wrap' })
                     }}
                   >
                     <FormControlLabel
@@ -104,9 +106,15 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik, ...othe
                       </Box>
                     </MHidden>
 
-                    {hasChildren && (
+                    {isPaypal && (
                       <Collapse in={values.payment === 'paypal'} sx={{ width: '100%' }}>
                         {values.payment === 'paypal' && <PayPal amount={parseFloat((total / 730).toFixed(2))} />}
+                      </Collapse>
+                    )}
+
+                    {isOpis && (
+                      <Collapse in={values.payment === 'opis'} sx={{ width: '100%' }}>
+                        {values.payment === 'opis' && <OpisWallet amount={total} />}
                       </Collapse>
                     )}
                   </OptionStyle>

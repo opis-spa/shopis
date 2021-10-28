@@ -14,6 +14,7 @@ import useAuth from '../../../hooks/useAuth';
 import usePartnership from '../../../hooks/usePartnership';
 // redux
 import { useDispatch, useSelector } from '../../../redux/store';
+import { getBalances } from '../../../redux/slices/wallet';
 import { onBackStep, onNextStep, proccessCheckout, clearCart, setOpenCart } from '../../../redux/slices/product';
 // route
 import { PATH_RIFOPIS } from '../../../routes/paths';
@@ -31,7 +32,7 @@ export default function CheckoutPayment() {
   const { isAuthenticated, logout } = useAuth();
   const { partnership } = usePartnership();
   const { data: payments } = useSelector((state) => state.payment);
-  const { checkout, checkoutResult, isLoading, error } = useSelector((state) => state.product);
+  const { checkout, checkoutResult } = useSelector((state) => state.product);
   const { cart, total, discount, subtotal, shipping, isDelivery, data: customer, delivery } = checkout;
 
   const PAYMENT_OPTIONS = useMemo(() => {
@@ -104,10 +105,10 @@ export default function CheckoutPayment() {
   }, [dispatch, navigate, checkoutResult, values.payment, setSubmitting, partnership.nickname]);
 
   useMemo(() => {
-    if (!isLoading && error) {
-      console.log('error');
+    if (isAuthenticated) {
+      dispatch(getBalances());
     }
-  }, [isLoading, error]);
+  }, [dispatch, isAuthenticated]);
 
   return (
     <FormikProvider value={formik}>
