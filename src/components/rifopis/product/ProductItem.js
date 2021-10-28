@@ -7,7 +7,6 @@ import { Box, Button, Card, Stack, Typography, Divider, DialogContent } from '@m
 // redux
 import { useSelector } from '../../../redux/store';
 // components
-import Label from '../../Label';
 import RaffleProgress from '../raffles/RaffleProgress';
 import RafflePrizes from '../raffles/RafflePrizes';
 import RafflePrice from '../raffles/RafflePrice';
@@ -26,13 +25,18 @@ const CardStyle = styled(Card)(({ theme }) => ({
   minWidth: '40%',
   [theme.breakpoints.down('md')]: {
     minWidth: '80%!important'
-  }
+  },
+  paddingBottom: theme.spacing(2),
+  boxSizing: 'border-box',
+  boxShadow: '-2px -2px 14px rgba(255, 194, 36, 0.2)',
+  overflow: 'visible'
 }));
 
 const ProductImgStyle = styled('img')({
   width: '100%',
   height: 288,
-  borderRadius: 6,
+  borderTopLeftRadius: 6,
+  borderTopRightRadius: 6,
   objectFit: 'cover'
 });
 
@@ -48,6 +52,7 @@ function ProductItem({ product, onSelectProduct, ...other }) {
   const { name, promo, photo, photos, amount, discountPartnership: discount, stock, prizes } = product;
   const { cart, open } = useSelector((state) => state.product.checkout);
   const [detailOpen, setDetailOpen] = useState(false);
+  const isPromo = promo === '3x2';
 
   const handleProductDetail = () => {
     onSelectProduct(product);
@@ -69,70 +74,76 @@ function ProductItem({ product, onSelectProduct, ...other }) {
   }, [cart, product]);
 
   return (
-    <CardStyle {...other}>
-      <DialogAnimate fullWidth open={detailOpen} maxWidth="md" scroll="paper" onClose={() => setDetailOpen(false)}>
-        <DialogContent>
-          <ProductDetail product={product} productCart={productCart} />
-        </DialogContent>
-      </DialogAnimate>
-
-      <Box sx={{ p: 2 }}>
-        <Button
-          sx={{
-            top: 30,
-            right: 30,
-            position: 'absolute',
-            zIndex: 100
-          }}
-          onClick={handleProductDetail}
-        >
-          <Label variant="filled" sx={{ textTransform: 'uppercase' }}>
-            Detalle del sorteo
-          </Label>
-        </Button>
-
-        <ProductImgStyle alt={name} src={image[1]} />
-      </Box>
-
-      <Stack sx={{ p: 1, px: 3, flex: 1 }} spacing={2}>
-        <RaffleProgress stock={stock} quantity={1333} />
-        <RafflePrice isPromo={promo === '3x2'} price={amount - (discount || 0)} />
-
-        <ProductAdd tooltip={!open} title="Comprar token" product={productCart} sx={{ mb: 1 }} />
-
-        <Stack spacing={1}>
-          <Typography variant="subtitle1" noWrap color="primary" sx={{ textTransform: 'uppercase' }}>
-            Primer Lugar
-            <Typography
-              component="span"
-              variant="caption"
-              sx={{ color: 'secondary.light', textTransform: 'uppercase' }}
-            >
-              &nbsp;- 1 premio
-            </Typography>
-          </Typography>
-          <Typography variant="subtitle1" noWrap sx={{ textTransform: 'uppercase', color: 'text.primary' }}>
-            {name}
-          </Typography>
-        </Stack>
-
-        {prizes ? (
-          prizes.map((prize, index) => {
-            const { photos, name, cant } = prize;
-            return (
-              <>
-                <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
-                <RafflePrizes photo={photos[0]} quantity={cant} prize={name} position={positionString(index + 2)} />
-              </>
-            );
-          })
-        ) : (
-          <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
+    <>
+      <CardStyle {...other}>
+        <DialogAnimate fullWidth open={detailOpen} maxWidth="md" scroll="paper" onClose={() => setDetailOpen(false)}>
+          <DialogContent>
+            <ProductDetail product={product} productCart={productCart} />
+          </DialogContent>
+        </DialogAnimate>
+        {isPromo && (
+          <Box
+            component="img"
+            src="/static/icons/ic_promo_rifopis.svg"
+            alt="Promo 3x2"
+            sx={{ position: 'absolute', width: 100, height: 100, right: -5, top: -5, zIndex: 1000 }}
+          />
         )}
+        <Box sx={{ p: 2 }}>
+          <ProductImgStyle alt={name} src={image[1]} />
+          <RafflePrice isPromo={promo === '3x2'} price={amount - (discount || 0)} />
+          <ProductAdd tooltip={!open} title="Comprar tokens" product={productCart} sx={{ mt: 1 }} />
+        </Box>
 
-        <Box sx={{ display: 'flex', flexGrow: 1 }} />
-      </Stack>
-    </CardStyle>
+        <Stack sx={{ px: 3, flex: 1 }} spacing={2}>
+          <RaffleProgress stock={stock} quantity={1333} reverse />
+          <Stack>
+            <Typography variant="subtitle1" noWrap color="primary" sx={{ textTransform: 'uppercase' }}>
+              Primer Lugar
+              <Typography
+                component="span"
+                variant="caption"
+                sx={{ color: 'secondary.light', textTransform: 'uppercase' }}
+              >
+                &nbsp;- 1 premio
+              </Typography>
+            </Typography>
+            <Typography variant="subtitle1" noWrap sx={{ textTransform: 'uppercase', color: 'text.primary' }}>
+              {name}
+            </Typography>
+          </Stack>
+
+          {prizes ? (
+            prizes.map((prize, index) => {
+              const { photos, name, cant } = prize;
+              return (
+                <>
+                  <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
+                  <RafflePrizes photo={photos[0]} quantity={cant} prize={name} position={positionString(index + 2)} />
+                </>
+              );
+            })
+          ) : (
+            <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
+          )}
+
+          <Box sx={{ display: 'flex', flexGrow: 1 }} />
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              color="inherit"
+              sx={{
+                textTransform: 'uppercase',
+                fontWeight: 900,
+                backgroundColor: 'secondary.light'
+              }}
+              onClick={handleProductDetail}
+            >
+              Detalle del sorteo
+            </Button>
+          </Box>
+        </Stack>
+      </CardStyle>
+    </>
   );
 }
 

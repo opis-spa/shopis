@@ -26,7 +26,10 @@ export default function CheckoutBillingInfo({ ...other }) {
 
   const customer = useMemo(() => {
     if (isAuthenticated) {
-      return user;
+      return {
+        ...user,
+        name: user.displayName
+      };
     }
     return billing;
   }, [isAuthenticated, user, billing]);

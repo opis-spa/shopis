@@ -1,10 +1,21 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
+import closeFill from '@iconify/icons-eva/close-fill';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 // materils
 import { styled, alpha } from '@mui/material/styles';
-import { AccordionSummary, AccordionDetails, Box, Button, DialogContent, Grid, Stack, Typography } from '@mui/material';
+import {
+  AccordionSummary,
+  AccordionDetails,
+  Box,
+  Button,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Stack,
+  Typography
+} from '@mui/material';
 import Accordion, { accordionClasses } from '@mui/material/Accordion';
 // redux
 import { useSelector, useDispatch } from '../../../redux/store';
@@ -13,10 +24,10 @@ import { getProduct } from '../../../redux/slices/product';
 import RaffleProgress from '../raffles/RaffleProgress';
 import RafflePrice from '../raffles/RafflePrice';
 import ProductAdd from './ProductAdd';
-import Scrollbar from '../../Scrollbar';
 import RifopisPolaroid from '../RifopisPolaroid';
 import { DialogAnimate } from '../../animate';
 import { positionString } from '../../../utils/positionString';
+import { MIconButton } from '../../@material-extend';
 
 const StyledAccordion = styled((props) => <Accordion disableGutters elevation={0} square {...props} />)(
   ({ theme }) => ({
@@ -60,6 +71,7 @@ function Prize({ name, prize, description, photo, ...other }) {
 
 const propTypes = {
   product: PropTypes.shape({
+    id: PropTypes.arrayOf(PropTypes.string),
     photo: PropTypes.arrayOf(PropTypes.string),
     photos: PropTypes.arrayOf(PropTypes.string),
     name: PropTypes.string,
@@ -78,6 +90,15 @@ const propTypes = {
 
 function ProductDetail({ product }) {
   const { name, description, photos, amount, discountPartnership: discount, stock, prizes } = product;
+  const { cart } = useSelector((state) => state.product.checkout);
+
+  const productCart = useMemo(() => {
+    const cartNew = cart.find((item) => item.id === product.id);
+    if (cartNew) {
+      return cartNew;
+    }
+    return product;
+  }, [cart, product]);
 
   const ITINERARY = [
     {
@@ -93,9 +114,9 @@ function ProductDetail({ product }) {
   ];
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={{ mt: 0 }}>
       <Grid item xs={12} md={8}>
-        <Scrollbar>
+        <Box sx={{ overflow: 'scroll' }}>
           <Prize name={name} prize="Primer Lugar" photo={photos[1]} description={description} />
 
           <Typography variant="h4" sx={{ mt: 3, textTransform: 'uppercase' }}>
@@ -138,16 +159,16 @@ function ProductDetail({ product }) {
             </Typography>
             <Typography>Consideraciones generales sobre el sorteo</Typography>
           </Stack>
-        </Scrollbar>
+        </Box>
       </Grid>
 
       <Grid item xs={12} md={4}>
         <RafflePrice price={amount - (discount || 0)} />
         <RaffleProgress stock={stock} quantity={1333} sx={{ my: 2 }} />
-        <ProductAdd tooltip title="Comprar token" product={product} />
+        <ProductAdd tooltip title="Comprar tokens" product={productCart} />
 
         <Box sx={{ textAlign: 'center' }}>
-          <Button color="inherit" variant="outlined" sx={{ mt: 2, textTransform: 'uppercase' }}>
+          <Button color="inherit" sx={{ mt: 2, textTransform: 'uppercase', backgroundColor: 'secondary.light' }}>
             Ver bases del sorteo
           </Button>
         </Box>
@@ -175,6 +196,11 @@ function DialogoProduct() {
 
   return (
     <DialogAnimate fullWidth open={open} maxWidth="lg" scroll="paper" onClose={handleClose}>
+      <DialogTitle sx={{ textAlign: 'right', m: 0, p: 2 }}>
+        <MIconButton onClick={handleClose}>
+          <Icon icon={closeFill} width={20} height={20} />
+        </MIconButton>
+      </DialogTitle>
       <DialogContent>{product && <ProductDetail product={product} />}</DialogContent>
     </DialogAnimate>
   );

@@ -56,8 +56,10 @@ const defaultProps = {
   onSelectProduct: () => {}
 };
 
-const StackStyle = styled(Stack)(() => ({
-  justifyContent: 'flex-start'
+const StackStyle = styled(Stack)(({ theme }) => ({
+  justifyContent: 'flex-start',
+  paddingTop: theme.spacing(1),
+  paddingBottom: theme.spacing(1)
 }));
 
 function ProductList({ max = 0, view, direction, onSelectProduct }) {

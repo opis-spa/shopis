@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { paramCase } from 'change-case';
 import { Element } from 'react-scroll';
 // material
+import { styled } from '@mui/material/styles';
 import { CircularProgress, Grid, Typography, Container, Box } from '@mui/material';
 // hooks
 import usePartnership from '../../hooks/usePartnership';
@@ -19,6 +20,10 @@ import ProductList from '../../components/rifopis/product/ProductList';
 import { MotionInView, varFadeInUp } from '../../components/animate';
 import { RifopisHowWork, RifopisWinners, RifopisCart } from '../../components/rifopis';
 import ProductDetail from '../../components/rifopis/product/ProductDetail';
+
+const RootStyle = styled(Page)({
+  height: '100%'
+});
 
 const Home = () => {
   const { partnership, isLoading } = usePartnership();
@@ -46,7 +51,7 @@ const Home = () => {
   }, [dispatch]);
 
   return (
-    <Page title={partnership.name}>
+    <RootStyle title={partnership.name}>
       <ProductDetail />
       <RifopisCart />
       <CarouselRifopis onSelectProduct={handleSelect} />
@@ -88,7 +93,7 @@ const Home = () => {
           </Grid>
         </Element>
       </Container>
-    </Page>
+    </RootStyle>
   );
 };
 

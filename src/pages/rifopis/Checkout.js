@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getCart, createBilling, onGotoStep, getProductStore } from '../../redux/slices/product';
+import { getCart, createBilling, onGotoStep, getProductStore, createInformation } from '../../redux/slices/product';
 import { getDeliveries } from '../../redux/slices/delivery';
 import { getPayments } from '../../redux/slices/payment';
 // hooks
@@ -100,7 +100,7 @@ const MainStyle = styled(Page)(({ theme }) => ({
 export default function EcommerceCheckout() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { partnership } = usePartnership();
   const { nickname } = partnership;
   const isMountedRef = useIsMountedRef();
@@ -115,9 +115,10 @@ export default function EcommerceCheckout() {
 
   useEffect(() => {
     if (isAuthenticated) {
+      dispatch(createInformation(user));
       dispatch(onGotoStep(2));
     }
-  }, [dispatch, isAuthenticated]);
+  }, [dispatch, isAuthenticated, user]);
 
   useEffect(() => {
     if (isMountedRef.current) {

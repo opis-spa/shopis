@@ -58,7 +58,11 @@ const Increment = forwardRef((props, ref) => {
         <Icon icon={minusFill} width={20} height={20} color="#fff" />
       </ButtonStyle>
       <Typography component="span" sx={{ textTransform: 'uppercase', fontWeight: 900, color: 'primary.light' }}>
-        {simple ? <>{`${quantity}`}</> : <>{`${quantity} tokens = ${fCurrency(amount)}`}</>}
+        {simple ? (
+          <>{`${quantity}`}</>
+        ) : (
+          <>{`${quantity} ${quantity > 1 ? 'tokens' : 'token'} = ${fCurrency(amount)}`}</>
+        )}
       </Typography>
       <ButtonStyle
         disabled={quantity >= available && available >= 0}

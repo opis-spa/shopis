@@ -11,5 +11,6 @@ export const firebaseConfig = {
 
 export const isProduction = process.env.REACT_APP_PROD || false;
 export const googleAnalyticsConfig = process.env.REACT_APP_GA_MEASUREMENT_ID;
+export const facebookPixelConfig = process.env.REACT_APP_FACEBOOK_PIXEL;
 export const hotjarConfig = process.env.REACT_APP_HOTJAR;
 export const paypalConfig = process.env.REACT_APP_PAYPAL_ID;

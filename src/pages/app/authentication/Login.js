@@ -69,7 +69,7 @@ export default function Login() {
               mt: { md: -2 }
             }}
           >
-            Aún no tienes cuenta&nbsp;
+            Aún no tienes cuenta?&nbsp;
             <Link underline="none" variant="subtitle2" component={RouterLink} to={PATH_AUTH.register}>
               Registrate
             </Link>

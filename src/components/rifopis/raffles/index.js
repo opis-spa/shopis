@@ -35,14 +35,14 @@ const propTypes = {
     photo: PropTypes.string,
     photos: PropTypes.arrayOf(PropTypes.string),
     stock: PropTypes.string,
-    quantity: PropTypes.number,
+    tickets: PropTypes.arrayOf(PropTypes.shape({})),
     name: PropTypes.string
   }).isRequired
 };
 
 function Raffles(props) {
   const { raffle } = props;
-  const { stock, quantity, name, photos } = raffle;
+  const { stock, tickets, name, photos } = raffle;
 
   return (
     <Stack direction={{ xs: 'column', md: 'row' }}>
@@ -97,13 +97,13 @@ function Raffles(props) {
             </Typography>
             <Scrollbar sx={{ maxHeight: 100, my: 1 }}>
               <Stack>
-                {[...Array(quantity)].map((tickets, index) => (
+                {tickets.map((tickets, index) => (
                   <Typography
                     key={index}
                     variant="title"
                     sx={{ textAlign: 'left', color: 'primary.light', fontWeight: 400, textTransform: 'uppercase' }}
                   >
-                    {`Nº 00000${index + 1}`}
+                    {`#${tickets}`}
                   </Typography>
                 ))}
               </Stack>

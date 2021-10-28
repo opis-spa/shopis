@@ -24,7 +24,7 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().min(2, 'Demasiado corto!').max(50, 'Demasiado largo!').required('El nombre es requerido'),
+    name: Yup.string().min(2, 'Demasiado corto!').max(50, 'Demasiado largo!').required('El nombre es requerido'),
     lastName: Yup.string().min(2, 'Demasiado corto!').max(50, 'Demasiado largo!').required('El apellido es requerido'),
     email: Yup.string()
       .email('El formato del correo electrónico no es correcto')

@@ -60,6 +60,9 @@ export default function RifopisCart() {
     } else {
       document.body.style.overflow = 'unset';
     }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, [open]);
 
   useEffect(() => {
@@ -122,7 +125,6 @@ export default function RifopisCart() {
             borderRadius: '0px',
             overflow: 'hidden',
             boxShadow: (theme) => theme.customShadows.z24,
-            transition: (theme) => theme.transitions.create('width'),
             ...(open && { width: fullScreen ? '100%' : DRAWER_WIDTH })
           }}
         >
@@ -174,8 +176,8 @@ export default function RifopisCart() {
                   variant="contained"
                   disabled={checkout.subtotal === 0 || checkout.subtotal < partnership.deliveryAmountMin}
                 >
-                  <ButtonTicket title="Comprar token" fullWidth>
-                    Comprar token
+                  <ButtonTicket title="Comprar tokens" fullWidth>
+                    Comprar tokens
                   </ButtonTicket>
                 </LinkPartnership>
               </Box>

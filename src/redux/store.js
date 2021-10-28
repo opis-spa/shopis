@@ -13,7 +13,7 @@ const store = configureStore({
     serializableCheck: false,
     immutableCheck: false
   }),
-  devTools: !isProduction
+  devTools: !(isProduction === true)
 });
 
 const persistor = persistStore(store);

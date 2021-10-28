@@ -34,7 +34,7 @@ const SECONDARY_COLOR = [
   // PURPLE
   {
     lighter: '#CCDFFF',
-    light: '#936DB9',
+    light: '#573A75',
     main: '#290E43',
     dark: '#1A0033',
     darker: '#00137A',

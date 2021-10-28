@@ -69,9 +69,17 @@ const Profile = () => {
         const { details } = sale;
         if (details) {
           details.forEach((raffle) => {
-            const { product } = raffle;
-            const { quantity } = raffles.get(product._id) || { quantity: 0 };
-            raffles.set(product._id, { ...product, quantity: raffle.quantity + quantity });
+            const { _id: ticket, product } = raffle;
+            // fixes bug in token no process
+            const { _id } = product || { _id: '' };
+            if (_id) {
+              const { quantity, tickets } = raffles.get(_id) || { quantity: 0, tickets: [] };
+              raffles.set(_id, {
+                ...product,
+                quantity: raffle.quantity + quantity,
+                tickets: [...tickets, ticket]
+              });
+            }
           });
         }
       });

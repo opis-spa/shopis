@@ -2,41 +2,44 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // materials
 import { styled, alpha } from '@mui/material/styles';
-import { Box, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
 
 const StackStyles = styled(Stack)(({ theme }) => ({
-  border: `1px solid ${theme.palette.common.white}`,
   borderRadius: 6,
-  backgroundColor: alpha(theme.palette.common.white, 0.09),
-  paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2)
+  backgroundColor: alpha(theme.palette.common.white, 0.09)
 }));
 
 const propTypes = {
   price: PropTypes.number,
-  isPromo: PropTypes.bool
+  isPromo: PropTypes.bool,
+  sx: PropTypes.object
 };
 
-function RafflePrice({ isPromo, price, ...other }) {
+const defaultProps = {
+  sx: {}
+};
+
+function RafflePrice({ price, sx, ...other }) {
   return (
-    <StackStyles justifyContent="center" {...other}>
-      <Typography sx={{ ml: 3, textAlign: 'left' }}>
-        1 token x <Typography component="span">{fCurrency(price)}</Typography>
+    <StackStyles
+      spacing={1}
+      direction="row"
+      sx={{ justifyContent: 'center', alignItems: 'center', height: 80, marginTop: -1, ...sx }}
+      {...other}
+    >
+      <Typography variant="h4" sx={{ fontWeight: 800, textTransform: 'uppercase' }}>
+        1 token x
       </Typography>
-      {isPromo && (
-        <Box
-          component="img"
-          src="/static/icons/ic_promo_rifopis.svg"
-          alt="Promo 3x2"
-          sx={{ position: 'absolute', width: 100, height: 100, right: 20, zIndex: 1000 }}
-        />
-      )}
+      <Typography variant="h4" sx={{ fontWeight: 800 }}>
+        {`${fCurrency(price)} CLP`}
+      </Typography>
     </StackStyles>
   );
 }
 
 RafflePrice.propTypes = propTypes;
+RafflePrice.defaultProps = defaultProps;
 
 export default RafflePrice;
