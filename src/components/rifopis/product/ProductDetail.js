@@ -19,7 +19,7 @@ import {
 import Accordion, { accordionClasses } from '@mui/material/Accordion';
 // redux
 import { useSelector, useDispatch } from '../../../redux/store';
-import { getProduct } from '../../../redux/slices/product';
+import { getProduct, setOpenCart } from '../../../redux/slices/product';
 // components
 import RaffleProgress from '../raffles/RaffleProgress';
 import RafflePrice from '../raffles/RafflePrice';
@@ -28,6 +28,7 @@ import RifopisPolaroid from '../RifopisPolaroid';
 import { DialogAnimate } from '../../animate';
 import { positionString } from '../../../utils/positionString';
 import { MIconButton } from '../../@material-extend';
+import ButtonTicket from '../ButtonTicket';
 
 const StyledAccordion = styled((props) => <Accordion disableGutters elevation={0} square {...props} />)(
   ({ theme }) => ({
@@ -70,6 +71,7 @@ function Prize({ name, prize, description, photo, ...other }) {
 }
 
 const propTypes = {
+  onBuy: PropTypes.func,
   product: PropTypes.shape({
     id: PropTypes.arrayOf(PropTypes.string),
     photo: PropTypes.arrayOf(PropTypes.string),
@@ -88,7 +90,7 @@ const propTypes = {
   })
 };
 
-function ProductDetail({ product }) {
+function ProductDetail({ onBuy, product }) {
   const { name, description, photos, amount, discountPartnership: discount, stock, prizes } = product;
   const { cart } = useSelector((state) => state.product.checkout);
 
@@ -165,9 +167,10 @@ function ProductDetail({ product }) {
       <Grid item xs={12} md={4}>
         <RafflePrice price={amount - (discount || 0)} />
         <RaffleProgress stock={stock} quantity={1333} sx={{ my: 2 }} />
-        <ProductAdd tooltip title="Comprar tokens" product={productCart} />
+        <ProductAdd tooltip title="Participar" product={productCart} />
 
-        <Box sx={{ textAlign: 'center' }}>
+        <Box sx={{ mt: 2, textAlign: 'center' }}>
+          {productCart && productCart?.quantity > 0 && <ButtonTicket title="Comprar tokens" onClick={onBuy} />}
           <Button color="inherit" sx={{ mt: 2, textTransform: 'uppercase', backgroundColor: 'secondary.light' }}>
             Ver bases del sorteo
           </Button>
@@ -187,6 +190,11 @@ function DialogoProduct() {
     dispatch(getProduct({ name: '' }));
   };
 
+  const handleBuy = async () => {
+    dispatch(setOpenCart(true));
+    handleClose();
+  };
+
   const open = useMemo(() => {
     if (product) {
       return true;
@@ -201,7 +209,7 @@ function DialogoProduct() {
           <Icon icon={closeFill} width={20} height={20} />
         </MIconButton>
       </DialogTitle>
-      <DialogContent>{product && <ProductDetail product={product} />}</DialogContent>
+      <DialogContent>{product && <ProductDetail product={product} onBuy={handleBuy} />}</DialogContent>
     </DialogAnimate>
   );
 }

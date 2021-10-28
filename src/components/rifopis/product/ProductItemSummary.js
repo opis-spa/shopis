@@ -22,11 +22,16 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
 }));
 
 const propTypes = {
-  product: PropTypes.object.isRequired
+  product: PropTypes.object.isRequired,
+  filter: PropTypes.bool
 };
 
-const ProductItemSummary = ({ product }) => {
-  const { name, photo, photos } = product;
+const defaultProps = {
+  filter: true
+};
+
+const ProductItemSummary = ({ filter, product }) => {
+  const { name, photo, photos, quantity } = product;
   const { cart } = useSelector((state) => state.product.checkout);
 
   const image = useMemo(() => {
@@ -41,10 +46,10 @@ const ProductItemSummary = ({ product }) => {
     if (cartNew) {
       return cartNew;
     }
-    return { ...product, quantity: 0 };
-  }, [cart, product]);
+    return { ...product, quantity: quantity || 0 };
+  }, [cart, product, quantity]);
 
-  if (productCart.quantity === 0) {
+  if (filter && productCart.quantity === 0) {
     return <></>;
   }
 
@@ -68,5 +73,6 @@ const ProductItemSummary = ({ product }) => {
 };
 
 ProductItemSummary.propTypes = propTypes;
+ProductItemSummary.defaultProps = defaultProps;
 
 export default ProductItemSummary;
