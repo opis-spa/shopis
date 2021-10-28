@@ -30,8 +30,12 @@ const Quotation = (props) => {
 
   if (loading) {
     return (
-      <Box sx={{ textAlign: 'right', py: 1, height: '100%' }}>
-        <Skeleton component={Box} variant="rectangular" sx={{ width: '100%', borderRadius: 2 }} />
+      <Box sx={{ display: 'flex', flex: 1, py: 1, justifyContent: 'flex-end', height: '100%' }}>
+        <Skeleton
+          component={Box}
+          variant="rectangular"
+          sx={{ width: '100%', height: '100%', borderRadius: 2, mx: 2 }}
+        />
       </Box>
     );
   }
@@ -41,7 +45,7 @@ const Quotation = (props) => {
   }
 
   return (
-    <Box sx={{ py: 1 }}>
+    <Box sx={{ display: 'flex', flex: 1, py: 1, justifyContent: 'flex-end' }}>
       <Stack direction="column" alignItems="flex-end">
         <Stack direction="row" spacing={1}>
           <Typography>{fShortenNumber(quoteAmount[0])}</Typography>
