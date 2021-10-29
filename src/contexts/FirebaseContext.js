@@ -99,6 +99,8 @@ function AuthProvider({ children }) {
 
     if (success === true) {
       const user = await signInWithCustomToken(auth, token);
+      console.log(' === uussseeerr === ');
+      console.log(user);
       return user;
     }
 

@@ -70,7 +70,8 @@ export default function CheckoutPayment() {
       customer,
       products: cart.map((item) => ({ id: item.id, quantity: item.quantity })),
       ...(isDelivery && { delivery }),
-      payment: ''
+      payment: '',
+      token: null
     },
     validationSchema: PaymentSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {

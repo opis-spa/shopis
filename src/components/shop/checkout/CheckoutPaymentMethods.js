@@ -15,7 +15,8 @@ import {
   CardHeader,
   CardContent,
   FormHelperText,
-  FormControlLabel
+  FormControlLabel,
+  Stack
 } from '@mui/material';
 // redux
 import { useSelector } from '../../../redux/store';
@@ -26,7 +27,7 @@ import { MHidden } from '../../@material-extend';
 
 // ----------------------------------------------------------------------
 
-const OptionStyle = styled('div')(({ theme }) => ({
+const OptionStyle = styled(Stack)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 2.5),
@@ -53,7 +54,7 @@ CheckoutPaymentMethods.propTypes = {
 
 export default function CheckoutPaymentMethods({ paymentOptions, formik, ...other }) {
   const { total } = useSelector((state) => state.product.checkout);
-  const { errors, touched, values, getFieldProps } = formik;
+  const { errors, touched, values, getFieldProps, setFieldValue } = formik;
 
   return (
     <CardStyle sx={{ my: 3 }} {...other}>
@@ -69,52 +70,61 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik, ...othe
               return (
                 <Grid key={name} item xs={12}>
                   <OptionStyle
+                    direction="column"
                     sx={{
                       ...(values.payment === type && {
                         boxShadow: (theme) => theme.customShadows.z8
-                      }),
-                      ...((isPaypal || isOpis) && { flexWrap: 'wrap' })
+                      })
                     }}
                   >
-                    <FormControlLabel
-                      value={type}
-                      control={<Radio checkedIcon={<Icon icon={checkmarkCircle2Fill} />} />}
-                      label={
-                        <Box sx={{ ml: 1 }}>
-                          <Typography variant="subtitle2">{name}</Typography>
-                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                            {description}
-                          </Typography>
+                    <Stack direction="row">
+                      <FormControlLabel
+                        value={type}
+                        control={<Radio checkedIcon={<Icon icon={checkmarkCircle2Fill} />} />}
+                        label={
+                          <Box sx={{ ml: 1 }}>
+                            <Typography variant="subtitle2">{name}</Typography>
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              {description}
+                            </Typography>
+                          </Box>
+                        }
+                        sx={{ flexGrow: 1, py: 3 }}
+                      />
+                      <MHidden width="smDown">
+                        <Box sx={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+                          {icons.map((icon, index) => (
+                            <Box
+                              key={icon}
+                              component="img"
+                              alt="logo card"
+                              src={icon}
+                              sx={{
+                                ...(index === 0 && { mr: 1 }),
+                                maxWidth: { xs: 30, md: 50 }
+                              }}
+                            />
+                          ))}
                         </Box>
-                      }
-                      sx={{ flexGrow: 1, py: 3 }}
-                    />
-                    <MHidden width="smDown">
-                      <Box sx={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
-                        {icons.map((icon, index) => (
-                          <Box
-                            key={icon}
-                            component="img"
-                            alt="logo card"
-                            src={icon}
-                            sx={{
-                              ...(index === 0 && { mr: 1 }),
-                              maxWidth: { xs: 30, md: 50 }
-                            }}
-                          />
-                        ))}
-                      </Box>
-                    </MHidden>
+                      </MHidden>
+                    </Stack>
 
                     {isPaypal && (
                       <Collapse in={values.payment === 'paypal'} sx={{ width: '100%' }}>
-                        {values.payment === 'paypal' && <PayPal amount={parseFloat((total / 730).toFixed(2))} />}
+                        {values.payment === 'paypal' && <PayPal amount={total} />}
                       </Collapse>
                     )}
 
                     {isOpis && (
                       <Collapse in={values.payment === 'opis'} sx={{ width: '100%' }}>
-                        {values.payment === 'opis' && <OpisWallet amount={total} />}
+                        {values.payment === 'opis' && (
+                          <OpisWallet
+                            amount={total}
+                            onSelectToken={(token) => {
+                              setFieldValue('token', token);
+                            }}
+                          />
+                        )}
                       </Collapse>
                     )}
                   </OptionStyle>

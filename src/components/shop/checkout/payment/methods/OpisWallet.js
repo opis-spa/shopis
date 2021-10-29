@@ -73,10 +73,11 @@ const Quotation = (props) => {
 Quotation.propTypes = QuotationPropTypes;
 
 const propTypes = {
-  amount: PropTypes.number.isRequired
+  amount: PropTypes.number.isRequired,
+  onSelectToken: PropTypes.func
 };
 
-function OpisWallet({ amount }) {
+function OpisWallet({ amount, onSelectToken }) {
   const dispatch = useDispatch();
   const { balances, quotation } = useSelector((state) => state.wallet);
 
@@ -92,6 +93,7 @@ function OpisWallet({ amount }) {
       setSubmitting(true);
       if (values.originCurrency !== values.destinationCurrency) {
         await dispatch(getQuotation(values));
+        onSelectToken(values.originCurrency);
       }
       setSubmitting(false);
     }
