@@ -48,7 +48,8 @@ export const PATH_APP = {
 };
 
 export const PATH_SHOP = {
-  root: ROOT_SHOP
+  root: ROOT_SHOP,
+  result: path('', '/payment/result') // this paths is absolute
 };
 
 export const PATH_RIFOPIS = {

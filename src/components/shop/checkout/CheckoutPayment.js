@@ -15,9 +15,9 @@ import usePartnership from '../../../hooks/usePartnership';
 // redux
 import { useDispatch, useSelector } from '../../../redux/store';
 import { getBalances } from '../../../redux/slices/wallet';
-import { onBackStep, onNextStep, proccessCheckout, clearCart, setOpenCart } from '../../../redux/slices/product';
+import { onBackStep, proccessCheckout, clearCart, setOpenCart } from '../../../redux/slices/product';
 // route
-import { PATH_RIFOPIS } from '../../../routes/paths';
+import { PATH_RIFOPIS, PATH_SHOP } from '../../../routes/paths';
 // components
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
@@ -77,7 +77,6 @@ export default function CheckoutPayment() {
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
         await dispatch(proccessCheckout(values));
-        dispatch(clearCart());
       } catch (error) {
         setSubmitting(false);
         setErrors(error.message);
@@ -91,12 +90,16 @@ export default function CheckoutPayment() {
   const { values, isSubmitting, handleSubmit, setSubmitting } = formik;
 
   useMemo(() => {
-    const { success } = checkoutResult;
-    console.log(' error ? ');
+    const { success, _id, status } = checkoutResult;
+    console.log(' result checkout ');
+    console.log(success);
     if (success) {
+      console.log(' payment ');
+      console.log(values.payment);
       if (values.payment !== 'webpay') {
         setSubmitting(false);
-        dispatch(onNextStep());
+        dispatch(clearCart());
+        navigate(`${PATH_SHOP.result}?order=${_id}&status=${status}`);
       } else if (partnership.nickname === 'rifopis') {
         navigate(PATH_RIFOPIS.payment);
       } else {

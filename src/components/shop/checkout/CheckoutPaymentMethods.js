@@ -29,7 +29,7 @@ import { MHidden } from '../../@material-extend';
 
 const OptionStyle = styled(Stack)(({ theme }) => ({
   display: 'flex',
-  alignItems: 'center',
+  alignItems: 'stretch',
   padding: theme.spacing(0, 2.5),
   justifyContent: 'space-between',
   borderRadius: theme.shape.borderRadius,

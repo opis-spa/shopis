@@ -102,8 +102,8 @@ const SuccessResult = ({ products }) => (
       <StackStyle spacing={3} direction="column">
         {products.map((item) => {
           console.log(' por aqui vamos bien ');
-          const { _id, product, quantity } = item;
-          return <ProductItemSummary key={_id} product={{ ...product, quantity }} filter={false} />;
+          const { _id, product, quantity, subtotal } = item;
+          return <ProductItemSummary key={_id} product={{ ...product, quantity, subtotal }} filter={false} />;
         })}
       </StackStyle>
     </ContentStyle>

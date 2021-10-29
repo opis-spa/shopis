@@ -56,7 +56,11 @@ function SetColor(themeColor) {
     primary: PRIMARY_COLOR[1],
     secondary: SECONDARY_COLOR[1],
     text: { primary: '#fff', secondary: '#fff', disabled: SECONDARY_COLOR[1].lighter },
-    background: { paper: SECONDARY_COLOR[1].main, default: SECONDARY_COLOR[1].main, neutral: SECONDARY_COLOR[1].main }
+    background: {
+      paper: '#290E43',
+      default: '#200140',
+      neutral: SECONDARY_COLOR[1].main
+    }
   };
 
   switch (themeColor) {
