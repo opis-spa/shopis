@@ -86,12 +86,26 @@ const propTypes = {
         name: PropTypes.string,
         photos: PropTypes.arrayOf(PropTypes.string)
       })
-    )
+    ),
+    expireAt: PropTypes.string,
+    extra: PropTypes.arrayOf(PropTypes.shape({})),
+    goal: PropTypes.number
   })
 };
 
 function ProductDetail({ onBuy, product }) {
-  const { name, description, photos, amount, discountPartnership: discount, stock, prizes } = product;
+  const {
+    extra,
+    expireAt,
+    goal,
+    name,
+    description,
+    photos,
+    amount,
+    discountPartnership: discount,
+    stock,
+    prizes
+  } = product;
   const { cart } = useSelector((state) => state.product.checkout);
 
   const productCart = useMemo(() => {
@@ -102,41 +116,32 @@ function ProductDetail({ onBuy, product }) {
     return product;
   }, [cart, product]);
 
-  const ITINERARY = [
-    {
-      value: 'itinerary-1',
-      heading: 'Día 1',
-      image: '',
-      detail:
-        'Será agregados a una cuenta creada en Opis, Explicación, condiciones y otras cosas que escriban en este lugar'
-    },
-    { value: 'itinerary-2', heading: 'Día 2', image: '', detail: '' },
-    { value: 'itinerary-3', heading: 'Día 3', image: '', detail: '' },
-    { value: 'itinerary-4', heading: 'Día 4', image: '', detail: '' }
-  ];
-
   return (
     <Grid container spacing={2} sx={{ mt: 0 }}>
       <Grid item xs={12} md={8}>
         <Box sx={{ overflow: 'scroll' }}>
           <Prize name={name} prize="Primer Lugar" photo={photos[1]} description={description} />
 
-          <Typography variant="h4" sx={{ mt: 3, textTransform: 'uppercase' }}>
-            Itinerario
-          </Typography>
+          {extra && (
+            <>
+              <Typography variant="h4" sx={{ mt: 3, textTransform: 'uppercase' }}>
+                Itinerario
+              </Typography>
 
-          <Stack spacing={1} sx={{ mt: 2, mb: 5 }}>
-            {ITINERARY.map((accordion) => (
-              <StyledAccordion key={accordion.value}>
-                <AccordionSummary expandIcon={<Icon icon={arrowIosDownwardFill} width={20} height={20} />}>
-                  <Typography variant="subtitle1">{accordion.heading}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>{accordion.detail}</Typography>
-                </AccordionDetails>
-              </StyledAccordion>
-            ))}
-          </Stack>
+              <Stack spacing={1} sx={{ mt: 2, mb: 5 }}>
+                {extra.map((accordion) => (
+                  <StyledAccordion key={accordion.value}>
+                    <AccordionSummary expandIcon={<Icon icon={arrowIosDownwardFill} width={20} height={20} />}>
+                      <Typography variant="subtitle1">{accordion.heading}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography>{accordion.detail}</Typography>
+                    </AccordionDetails>
+                  </StyledAccordion>
+                ))}
+              </Stack>
+            </>
+          )}
 
           {prizes &&
             prizes.map((prize, index) => {
@@ -165,8 +170,8 @@ function ProductDetail({ onBuy, product }) {
       </Grid>
 
       <Grid item xs={12} md={4}>
-        <RafflePrice price={amount - (discount || 0)} />
-        <RaffleProgress stock={stock} quantity={1333} sx={{ my: 2 }} />
+        <RafflePrice price={amount - (discount || 0)} expireAt={expireAt} />
+        <RaffleProgress stock={stock} quantity={goal} sx={{ my: 2 }} />
         <ProductAdd tooltip title="Participar" product={productCart} />
 
         <Box sx={{ mt: 2, textAlign: 'center' }}>

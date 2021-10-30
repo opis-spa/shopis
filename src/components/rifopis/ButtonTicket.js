@@ -5,19 +5,7 @@ import { styled } from '@mui/material/styles';
 import { ButtonBase, Typography } from '@mui/material';
 // asset
 import { BackgroundTicket } from '../../assets';
-
-const ButtonStyle = styled(ButtonBase)(() => ({
-  boxShadow: 'none',
-  textTransform: 'uppercase',
-  fontSize: 16,
-  overflow: 'hidden',
-  width: '100%',
-  height: 75,
-  lineHeight: 1.5,
-  maxWidth: 300,
-  fontFamily: 'Nunito',
-  background: 'none'
-}));
+import ButtonSvg from './ButtonSvg';
 
 const propTypes = {
   title: PropTypes.string,
@@ -26,12 +14,11 @@ const propTypes = {
 
 function ButtonTicket({ title, fontSize, ...props }) {
   return (
-    <ButtonStyle {...props}>
-      <BackgroundTicket sx={{ position: 'absolute', top: 0, right: 0, left: 0, bottom: 0 }} />
-      <Typography sx={{ fontSize: fontSize || 18, color: 'common.white', fontWeight: 900, zIndex: 10 }}>
+    <ButtonSvg height={70} {...props} sx={{ zIndex: 1000 }}>
+      <Typography variant="span" sx={{ fontSize: fontSize || 18, color: 'common.white', fontWeight: 900, zIndex: 10 }}>
         {title}
       </Typography>
-    </ButtonStyle>
+    </ButtonSvg>
   );
 }
 

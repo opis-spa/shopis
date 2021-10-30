@@ -60,7 +60,7 @@ function MenuMobileItem({ item, isHome }) {
     return (
       <LinkStyle
         component={RouterLink}
-        to={`/${PATH_RIFOPIS.home}`}
+        to={`${PATH_RIFOPIS.home}${path}`}
         sx={{
           fontWeight: 900,
           color: 'text.primary'
@@ -85,9 +85,11 @@ function MenuMobileItem({ item, isHome }) {
   );
 }
 
-MenuMobile.propTypes = {};
+MenuMobile.propTypes = {
+  isHome: PropTypes.bool
+};
 
-export default function MenuMobile() {
+export default function MenuMobile({ isHome }) {
   const { isAuthenticated } = useAuth();
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
@@ -143,6 +145,7 @@ export default function MenuMobile() {
                 isOpen={open}
                 onOpen={handleOpen}
                 isActive={pathname === link.path}
+                isHome={isHome}
               />
             ))}
             <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>

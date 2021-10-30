@@ -78,7 +78,16 @@ export default function MainFooter() {
                 <IconMaterialStyle>
                   <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
                 </IconMaterialStyle>
-                <Typography sx={{ fontWeight: 900 }}>Términos y condiciones</Typography>
+                <Link
+                  component={RouterLink}
+                  to={`${PATH_RIFOPIS.terms}`}
+                  sx={{
+                    fontWeight: 900,
+                    color: 'text.primary'
+                  }}
+                >
+                  <Typography sx={{ fontWeight: 900 }}>Términos y condiciones</Typography>
+                </Link>
               </Stack>
             </Stack>
           </MHidden>

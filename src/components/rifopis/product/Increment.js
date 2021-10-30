@@ -69,7 +69,13 @@ const Increment = forwardRef((props, ref) => {
         {simple ? (
           <>{`${quantity}`}</>
         ) : (
-          <>{`${quantity} ${quantity > 1 ? 'tokens' : 'token'} = ${fCurrency(amount)}`}</>
+          <>
+            {isMobile ? (
+              <>{`${quantity}x = ${fCurrency(amount)}`}</>
+            ) : (
+              <>{`${quantity} ${quantity > 1 ? 'tokens' : 'token'} = ${fCurrency(amount)}`}</>
+            )}
+          </>
         )}
       </Typography>
       <ButtonStyle

@@ -21,7 +21,6 @@ import {
 // redux
 import { useSelector } from '../../../redux/store';
 // components
-import PayPal from './payment/methods/PayPal';
 import OpisWallet from './payment/methods/OpisWallet';
 import { MHidden } from '../../@material-extend';
 
@@ -64,7 +63,6 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik, ...othe
           <Grid container spacing={2}>
             {paymentOptions.map((method) => {
               const { type, name, icons, description } = method;
-              const isPaypal = type === 'paypal';
               const isOpis = type === 'opis';
 
               return (
@@ -108,12 +106,6 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik, ...othe
                         </Box>
                       </MHidden>
                     </Stack>
-
-                    {isPaypal && (
-                      <Collapse in={values.payment === 'paypal'} sx={{ width: '100%' }}>
-                        {values.payment === 'paypal' && <PayPal amount={total} />}
-                      </Collapse>
-                    )}
 
                     {isOpis && (
                       <Collapse in={values.payment === 'opis'} sx={{ width: '100%' }}>

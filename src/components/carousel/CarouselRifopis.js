@@ -78,7 +78,7 @@ function CarouselItem({ item, isActive, index, onSelectProduct }) {
             alignItems: 'center'
           }}
         >
-          <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
+          <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'center', md: 'left' }, zIndex: 100 }}>
             <MotionContainer open={isActive}>
               <motion.div variants={varFadeInRight}>
                 <Typography variant="h3" gutterBottom sx={{ textTransform: 'uppercase' }}>
@@ -105,7 +105,7 @@ function CarouselItem({ item, isActive, index, onSelectProduct }) {
             </MotionContainer>
           </Grid>
           <Grid item xs={12} md={6} display="flex" justifyContent="center" alignItems="center">
-            <Box sx={{ transform: `rotate(${rotateDeg}deg)` }}>
+            <Box sx={{ transform: `rotate(${rotateDeg}deg)`, zIndex: 1 }}>
               <MotionContainer open={isActive}>
                 <motion.div variants={varZoomIn}>
                   <RifopisPolaroid

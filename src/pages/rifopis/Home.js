@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { paramCase } from 'change-case';
-import { Element } from 'react-scroll';
+import { Element, scroller } from 'react-scroll';
+import { useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { CircularProgress, Grid, Typography, Container, Box } from '@mui/material';
 // hooks
+import useIsMountedRef from '../../hooks/useIsMountedRef';
 import usePartnership from '../../hooks/usePartnership';
 // redux
 import { useDispatch } from '../../redux/store';
@@ -27,6 +29,8 @@ const RootStyle = styled(Page)({
 
 const Home = () => {
   const { partnership, isLoading } = usePartnership();
+  const isMountedRef = useIsMountedRef();
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const handleSelect = (product) => {
@@ -49,6 +53,22 @@ const Home = () => {
     dispatch(getPayments());
     dispatch(getDeliveries());
   }, [dispatch]);
+
+  useEffect(() => {
+    const { hash } = location;
+    if (isMountedRef.current === true) {
+      if (hash) {
+        // Somewhere else, even another file
+        scroller.scrollTo(hash.replace('#', ''), {
+          duration: 1500,
+          delay: 100,
+          smooth: true,
+          offset: 50 // Scrolls to element + 50 pixels down the page
+        });
+      }
+    }
+    console.log('change route');
+  }, [isMountedRef, location]);
 
   return (
     <RootStyle title={partnership.name}>

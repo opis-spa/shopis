@@ -32,7 +32,8 @@ const initialState = {
     delivery: null,
     billing: null,
     isDelivery: false,
-    error: false
+    error: false,
+    payment: null
   },
   checkoutResult: {}
 };
@@ -96,6 +97,10 @@ const slice = createSlice({
 
     setOpenCart(state, action) {
       state.checkout.open = action.payload;
+    },
+
+    setPayment(state, action) {
+      state.checkout.payment = action.payload;
     },
 
     clearCart(state) {
@@ -277,6 +282,7 @@ export const {
   clearCart,
   getCart,
   addCart,
+  setPayment,
   getProduct,
   filterProducts,
   clearFilterProducts,

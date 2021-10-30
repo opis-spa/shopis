@@ -49,7 +49,7 @@ ProductItem.propTypes = {
 };
 
 function ProductItem({ product, onSelectProduct, ...other }) {
-  const { name, promo, photo, photos, amount, discountPartnership: discount, stock, prizes } = product;
+  const { goal, name, promo, photo, photos, amount, discountPartnership: discount, stock, prizes, expireAt } = product;
   const { cart, open } = useSelector((state) => state.product.checkout);
   const [detailOpen, setDetailOpen] = useState(false);
   const isPromo = promo === '3x2';
@@ -91,12 +91,11 @@ function ProductItem({ product, onSelectProduct, ...other }) {
         )}
         <Box sx={{ p: 2 }}>
           <ProductImgStyle alt={name} src={image[1]} />
-          <RafflePrice isPromo={promo === '3x2'} price={amount - (discount || 0)} />
           <ProductAdd tooltip={!open} title="Comprar tokens" product={productCart} sx={{ mt: 1 }} />
         </Box>
 
         <Stack sx={{ px: 3, flex: 1 }} spacing={2}>
-          <RaffleProgress stock={stock} quantity={1333} reverse />
+          <RaffleProgress stock={stock} quantity={goal} reverse />
           <Stack>
             <Typography variant="subtitle1" noWrap color="primary" sx={{ textTransform: 'uppercase' }}>
               Primer Lugar
@@ -128,6 +127,7 @@ function ProductItem({ product, onSelectProduct, ...other }) {
           )}
 
           <Box sx={{ display: 'flex', flexGrow: 1 }} />
+          <RafflePrice isPromo={promo === '3x2'} price={amount - (discount || 0)} expireAt={expireAt} />
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               color="inherit"

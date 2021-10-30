@@ -36,13 +36,14 @@ const propTypes = {
     photos: PropTypes.arrayOf(PropTypes.string),
     stock: PropTypes.string,
     tickets: PropTypes.arrayOf(PropTypes.shape({})),
-    name: PropTypes.string
+    name: PropTypes.string,
+    goal: PropTypes.number
   }).isRequired
 };
 
 function Raffles(props) {
   const { raffle } = props;
-  const { stock, tickets, name, photos } = raffle;
+  const { stock, tickets, name, photos, goal } = raffle;
 
   return (
     <Stack direction={{ xs: 'column', md: 'row' }}>
@@ -119,9 +120,11 @@ function Raffles(props) {
           sx={{ mt: (theme) => theme.spacing(2) }}
         >
           <Box sx={{ flex: 1, width: '100%', ml: (theme) => theme.spacing(4), mr: (theme) => theme.spacing(2) }}>
-            <RaffleProgress stock={stock} quantity={1333} />
+            <RaffleProgress stock={stock} quantity={goal} />
           </Box>
-          <ButtonTicket title="Comprar más Tokens" sx={{ width: 250 }} />
+          <Box sx={{ flex: 1, maxWidth: 250 }}>
+            <ButtonTicket title="Comprar más" sx={{ width: 250 }} />
+          </Box>
         </Stack>
       </StyledCard>
     </Stack>

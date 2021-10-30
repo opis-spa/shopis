@@ -10,12 +10,13 @@ import logOutFill from '@iconify/icons-ic/sharp-log-out';
 import { Grid, Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // hooks
+import useIsMountedRef from '../../../hooks/useIsMountedRef';
 import useAuth from '../../../hooks/useAuth';
 import usePartnership from '../../../hooks/usePartnership';
 // redux
 import { useDispatch, useSelector } from '../../../redux/store';
 import { getBalances } from '../../../redux/slices/wallet';
-import { onBackStep, proccessCheckout, clearCart, setOpenCart } from '../../../redux/slices/product';
+import { onBackStep, proccessCheckout, setOpenCart, setPayment } from '../../../redux/slices/product';
 // route
 import { PATH_RIFOPIS, PATH_SHOP } from '../../../routes/paths';
 // components
@@ -27,6 +28,7 @@ import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 
 export default function CheckoutPayment() {
   const { enqueueSnackbar } = useSnackbar();
+  const isMountedRef = useIsMountedRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
@@ -90,23 +92,29 @@ export default function CheckoutPayment() {
   const { values, isSubmitting, handleSubmit, setSubmitting } = formik;
 
   useMemo(() => {
-    const { success, _id, status } = checkoutResult;
-    console.log(' result checkout ');
-    console.log(success);
-    if (success) {
-      console.log(' payment ');
-      console.log(values.payment);
-      if (values.payment !== 'webpay') {
-        setSubmitting(false);
-        dispatch(clearCart());
-        navigate(`${PATH_SHOP.result}?order=${_id}&status=${status}`);
-      } else if (partnership.nickname === 'rifopis') {
-        navigate(PATH_RIFOPIS.payment);
-      } else {
-        navigate(`/shop/${partnership.nickname}/checkout/payment`);
+    if (isMountedRef.current) {
+      console.log('checkoutResult');
+      console.log(checkoutResult);
+      const { success, _id, status } = checkoutResult;
+      if (success) {
+        if (values.payment === 'webpay' || values.payment === 'paypal') {
+          if (partnership.nickname === 'rifopis') {
+            navigate(PATH_RIFOPIS.payment);
+          } else {
+            navigate(`/shop/${partnership.nickname}/checkout/payment`);
+          }
+        } else {
+          setSubmitting(false);
+          navigate(`${PATH_SHOP.result}?order=${_id}&status=${status}`);
+        }
       }
     }
-  }, [dispatch, navigate, checkoutResult, values.payment, setSubmitting, partnership.nickname]);
+  }, [isMountedRef, checkoutResult, values.payment, partnership.nickname, navigate, setSubmitting]);
+
+  // sync form with store
+  useMemo(() => {
+    dispatch(setPayment(values.payment));
+  }, [dispatch, values.payment]);
 
   useMemo(() => {
     if (isAuthenticated) {
@@ -150,14 +158,7 @@ export default function CheckoutPayment() {
           <Grid item xs={12} md={6}>
             <CheckoutBillingInfo onBackStep={handleBackStep} sx={{ my: 1 }} />
             <CheckoutSummary total={total} subtotal={subtotal} discount={discount} shipping={shipping} sx={{ my: 1 }} />
-            <LoadingButton
-              fullWidth
-              disabled={values.payment === 'paypal'}
-              size="large"
-              type="submit"
-              variant="contained"
-              loading={isSubmitting}
-            >
+            <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
               Completar orden
             </LoadingButton>
           </Grid>
