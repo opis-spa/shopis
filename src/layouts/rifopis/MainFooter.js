@@ -102,7 +102,7 @@ export default function MainFooter() {
             <Stack spacing={2} alignItems={{ xs: 'center', md: 'flex-start' }}>
               <Stack direction="row" spacing={2}>
                 <Icon icon={emailOutline} width={20} height={20} />
-                <Typography sx={{ fontWeight: 900 }}>hola@shopis.cl</Typography>
+                <Typography sx={{ fontWeight: 900 }}>hola@rifopis.cl</Typography>
               </Stack>
 
               <Stack direction="row" spacing={2}>

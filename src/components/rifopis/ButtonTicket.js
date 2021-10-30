@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // material
-import { styled } from '@mui/material/styles';
-import { ButtonBase, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 // asset
-import { BackgroundTicket } from '../../assets';
 import ButtonSvg from './ButtonSvg';
 
 const propTypes = {

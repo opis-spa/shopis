@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
 // materials
 import { styled } from '@mui/material/styles';
 import { Card, Container } from '@mui/material';
-// hooks
-import useIsMountedRef from '../../hooks/useIsMountedRef';
 // redux
 import { useSelector } from '../../redux/store';
 // router
@@ -31,21 +29,39 @@ const CardStyle = styled(Card)(() => ({
 }));
 
 const Payment = () => {
-  const isMountedRef = useIsMountedRef();
   const { checkoutResult } = useSelector((state) => state.product);
-  const [load, setLoad] = useState(false);
 
   const { url: uri, token, payment } = checkoutResult;
 
-  return (
-    <RootStyle title="Procesando pago con PayPal">
-      <Container maxWidth="sm">
-        <CardStyle>
-          <PayPal />
-        </CardStyle>
-      </Container>
-    </RootStyle>
-  );
+  if (!token) {
+    return <Navigate replace={PATH_PAGE.page500} />;
+  }
+
+  if (payment === 'webpay') {
+    return (
+      <RootStyle title="Procesando pago con Webpay">
+        <Container maxWidth="sm">
+          <CardStyle>
+            <Webpay token={token} uri={uri} />
+          </CardStyle>
+        </Container>
+      </RootStyle>
+    );
+  }
+
+  if (payment === 'webpay') {
+    return (
+      <RootStyle title="Procesando pago con PayPal">
+        <Container maxWidth="sm">
+          <CardStyle>
+            <PayPal token={token} />
+          </CardStyle>
+        </Container>
+      </RootStyle>
+    );
+  }
+
+  return <Navigate replace={PATH_PAGE.page500} />;
 };
 
 export default Payment;

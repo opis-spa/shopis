@@ -60,7 +60,7 @@ ButtonRoot.propTypes = {
 };
 
 const CustomButtonRoot = styled(ButtonRoot)(
-  ({ theme }) => `
+  () => `
   cursor: pointer;
   width: 100%;
   heigth: 43px;

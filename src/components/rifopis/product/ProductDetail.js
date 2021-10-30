@@ -14,7 +14,8 @@ import {
   DialogTitle,
   Grid,
   Stack,
-  Typography
+  Typography,
+  Divider
 } from '@mui/material';
 import Accordion, { accordionClasses } from '@mui/material/Accordion';
 // redux
@@ -51,18 +52,27 @@ Prize.propTypes = {
   name: PropTypes.string,
   prize: PropTypes.string,
   description: PropTypes.string,
-  photo: PropTypes.arrayOf(PropTypes.string)
+  photo: PropTypes.arrayOf(PropTypes.string),
+  cant: PropTypes.number
 };
 
-function Prize({ name, prize, description, photo, ...other }) {
+function Prize({ name, prize, description, photo, cant, ...other }) {
   return (
     <Grid container spacing={2} {...other}>
       <Grid item xs={12} md={6} sx={{ maxWidth: 350 }}>
-        <RifopisPolaroid small title={prize} subtitle={name} photo={photo} sx={{ transform: `rotate(-1.5deg)` }} />
+        <Box component="img" src={photo} sx={{ height: 215 }} />
       </Grid>
       <Grid item sx={12} md={6}>
-        <Stack spacing={2}>
-          <Typography variant="h4">{prize}</Typography>
+        <Stack>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography color="primary" variant="h5" sx={{ color: 'primary.light' }}>
+              {prize}
+            </Typography>
+            <Typography variant="caption" sx={{ color: 'primary.light' }}>{`- ${cant} premios`}</Typography>
+          </Stack>
+          <Typography variant="h4" sx={{ color: 'primary.light', mb: 1 }}>
+            {name}
+          </Typography>
           <Typography>{description}</Typography>
         </Stack>
       </Grid>
@@ -120,7 +130,23 @@ function ProductDetail({ onBuy, product }) {
     <Grid container spacing={2} sx={{ mt: 0 }}>
       <Grid item xs={12} md={8}>
         <Box sx={{ overflow: 'scroll' }}>
-          <Prize name={name} prize="Primer Lugar" photo={photos[1]} description={description} />
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6} sx={{ maxWidth: 350 }}>
+              <RifopisPolaroid
+                small
+                title="Primer Lugar"
+                subtitle={name}
+                photo={photos[1]}
+                sx={{ transform: `rotate(-1.5deg)` }}
+              />
+            </Grid>
+            <Grid item sx={12} md={6}>
+              <Stack spacing={2}>
+                <Typography variant="h4">Primer Lugar</Typography>
+                <Typography>{description}</Typography>
+              </Stack>
+            </Grid>
+          </Grid>
 
           {extra && (
             <>
@@ -148,13 +174,14 @@ function ProductDetail({ onBuy, product }) {
               const { photos, name, description, cant } = prize;
               return (
                 <>
+                  <Divider />
                   <Prize
                     name={name}
                     cant={cant}
                     prize={`${positionString(index + 2)} Lugar`}
                     photo={photos[1]}
                     description={description}
-                    sx={{ mb: 2 }}
+                    sx={{ my: 2 }}
                   />
                 </>
               );
