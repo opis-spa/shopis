@@ -59,3 +59,38 @@ export const getStore = () => async (dispatch) => {
     dispatch(slice.actions.hasError(error));
   }
 };
+
+export const setSocialNetwork = (socialNetworks) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const { facebookLink, instagramLink, webpageLink, whatsappLink } = socialNetworks;
+    const data = [
+      { name: 'facebook', uri: facebookLink, detail: '' },
+      { name: 'instagram', uri: instagramLink, detail: '' },
+      { name: 'webpage', uri: webpageLink, detail: '' },
+      {
+        name: 'whatsapp',
+        uri: whatsappLink ? `https://wa.me/${whatsappLink.replace('+', '')}` : '',
+        detail: whatsappLink
+      }
+    ];
+    const response = await axios.post('/api/v1/partnerships/socialNetworks', {
+      socialNetworks: data
+    });
+    dispatch(slice.actions.getStoreSuccess(response.data.partnership));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
+};
+
+export const setPaymentMethods = (paymentMethods) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.post('/api/v1/partnerships/paymentMethod', {
+      paymentMethods
+    });
+    dispatch(slice.actions.getStoreSuccess(response.data.partnership));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
+};

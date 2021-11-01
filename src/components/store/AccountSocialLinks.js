@@ -9,7 +9,8 @@ import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
 import { Stack, Card, TextField, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // redux
-import { useSelector } from '../../redux/store';
+import { useSelector, useDispatch } from '../../redux/store';
+import { setSocialNetwork } from '../../redux/slices/store';
 
 // ----------------------------------------------------------------------
 
@@ -35,6 +36,7 @@ const SOCIAL_LINKS_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountSocialLinks() {
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { data: client } = useSelector((state) => state.store);
 
@@ -43,8 +45,6 @@ export default function AccountSocialLinks() {
     const profile = {
       facebook: '',
       instagram: '',
-      linkedin: '',
-      twitter: '',
       whatsapp: '',
       webpage: ''
     };
@@ -62,13 +62,12 @@ export default function AccountSocialLinks() {
     initialValues: {
       facebookLink: profile.facebook,
       instagramLink: profile.instagram,
-      linkedinLink: profile.linkedin,
-      twitterLink: profile.twitter,
+      webpageLink: profile.webpage,
       whatsappLink: profile.whatsapp
     },
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(false);
-      alert(JSON.stringify(values, null, 2));
+      dispatch(setSocialNetwork(values));
       enqueueSnackbar('Save success', { variant: 'success' });
     }
   });
@@ -92,7 +91,7 @@ export default function AccountSocialLinks() {
             ))}
 
             <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-              Save Changes
+              Guardar
             </LoadingButton>
           </Stack>
         </Form>
