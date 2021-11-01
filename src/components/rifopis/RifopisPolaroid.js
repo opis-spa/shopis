@@ -39,10 +39,10 @@ function RifopisPolaroid({ photo, title, subtitle, small, sx }) {
           borderTopLeftRadius: 3,
           overflow: 'hidden',
           justifyContent: 'center',
-          backdropFilter: 'blur(5px)'
+          backdropFilter: 'blur(3px)'
         }}
       >
-        <Box component="img" src={photo} sx={{ height: small ? 215 : 350 }} />
+        <Box component="img" src={photo} sx={{ height: small ? 215 : 350, objectFit: 'cover' }} />
       </Box>
       <Box
         sx={{

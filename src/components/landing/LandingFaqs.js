@@ -2,7 +2,8 @@ import React from 'react';
 import { Element } from 'react-scroll';
 // material
 import { styled, useTheme } from '@mui/material/styles';
-import { Box, Grid, Container, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { Box, Grid, Container, Typography, Accordion, AccordionDetails } from '@mui/material';
+import AccordionSummary, { accordionSummaryClasses } from '@mui/material/AccordionSummary';
 //
 import { varFadeIn, MotionInView, varFadeInDown } from '../animate';
 
@@ -29,6 +30,15 @@ const FAQS = [
   }
 ];
 
+const AccordionSummaryStyled = styled(AccordionSummary)(() => ({
+  [`& .${accordionSummaryClasses.content}`]: {
+    boxShadow: 'none'
+  },
+  [`& .${accordionSummaryClasses.expandIconWrapper}`]: {
+    color: 'text.primary'
+  }
+}));
+
 // ----------------------------------------------------------------------
 
 function FaqsList() {
@@ -43,17 +53,17 @@ function FaqsList() {
             }}
           >
             <Accordion
-              expanded
+              defaultExpanded
               sx={{
                 padding: (theme) => theme.spacing(2),
                 height: '100%'
               }}
             >
-              <AccordionSummary>
+              <AccordionSummaryStyled>
                 <Typography variant="subtitle1" sx={{ color: '#3C568E', fontWeight: 900, fontSize: 18 }}>
                   {accordion.heading}
                 </Typography>
-              </AccordionSummary>
+              </AccordionSummaryStyled>
               <AccordionDetails>
                 <Typography sx={{ color: '#3C568E', fontSize: 16 }}>{accordion.detail}</Typography>
               </AccordionDetails>

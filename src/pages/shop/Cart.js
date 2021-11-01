@@ -51,8 +51,6 @@ export default function EcommerceCheckout() {
   };
 
   const handleIncrementCart = (id) => {
-    console.log('produt');
-    console.log(id);
     dispatch(increaseQuantity(id));
   };
 

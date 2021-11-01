@@ -116,7 +116,6 @@ function PartnershipProvider({ children }) {
     try {
       const response = await axios.get(`/api/v1/partnerships/nickname/${uri}`);
       const { partnership, success } = response.data;
-      console.log('por aqui');
       if (success && partnership) {
         const { nickname } = partnership;
         window.localStorage.setItem('nickname', nickname);

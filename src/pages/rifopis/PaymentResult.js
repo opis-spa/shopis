@@ -3,13 +3,14 @@ import { Link as RouteLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // materials
 import { styled } from '@mui/material/styles';
-import { Box, Card, Container, Divider, Typography, Stack } from '@mui/material';
+import { Box, Card, Container, Divider, Link, Typography, Stack } from '@mui/material';
 // hooks
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import useQuery from '../../hooks/useQuery';
 // redux
 import { useSelector, useDispatch } from '../../redux/store';
 import { getSale } from '../../redux/slices/sales';
+import { clearCart } from '../../redux/slices/product';
 // routes
 import { PATH_RIFOPIS } from '../../routes/paths';
 // components
@@ -101,7 +102,6 @@ const SuccessResult = ({ products }) => (
 
       <StackStyle spacing={3} direction="column">
         {products.map((item) => {
-          console.log(' por aqui vamos bien ');
           const { _id, product, quantity, subtotal } = item;
           return <ProductItemSummary key={_id} product={{ ...product, quantity, subtotal }} filter={false} />;
         })}
@@ -126,11 +126,12 @@ const Payment = () => {
 
   const products = useMemo(() => {
     if (sale && isMountedRef.current === true) {
+      dispatch(clearCart());
       const { details } = sale;
       return details;
     }
     return [];
-  }, [sale, isMountedRef]);
+  }, [dispatch, sale, isMountedRef]);
 
   return (
     <RootStyle title="Orden procesada" sx={{ backgroundColor: '#1A0033' }}>
@@ -147,13 +148,9 @@ const Payment = () => {
             {status === 'COMPLETED' ? <SuccessResult products={products} /> : <ErrorResult />}
 
             <Box sx={{ textAlign: 'center' }}>
-              <ButtonTicket
-                title="Ver más sorteos"
-                component={RouteLink}
-                to={PATH_RIFOPIS.root}
-                fullWidth
-                sx={{ mb: 5 }}
-              />
+              <Link to={PATH_RIFOPIS.home} variant="contained" component={RouteLink}>
+                <ButtonTicket title="Ver más sorteos" fullWidth sx={{ mb: 5 }} />
+              </Link>
             </Box>
           </Stack>
         </CardStyle>

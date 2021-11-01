@@ -46,7 +46,6 @@ export default function MainNavbar() {
   const isOffset = useOffSetTop(100);
   const { isAuthenticated } = useAuth();
   const { pathname } = useLocation();
-  console.log(pathname, PATH_RIFOPIS.root);
   const isHome = pathname === PATH_RIFOPIS.root;
 
   return (

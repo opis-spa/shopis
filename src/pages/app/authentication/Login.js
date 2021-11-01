@@ -55,7 +55,6 @@ export default function Login() {
   const [error, setError] = useState();
 
   const handleError = (error) => {
-    console.log(' está llegando ');
     setError(error);
   };
 

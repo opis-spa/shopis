@@ -78,7 +78,7 @@ export default function VerifyCodeForm() {
         </FormHelperText>
 
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting} sx={{ mt: 3 }}>
-          Verify
+          Verificar
         </LoadingButton>
       </Form>
     </FormikProvider>

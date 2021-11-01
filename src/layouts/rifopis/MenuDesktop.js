@@ -56,8 +56,7 @@ MenuDesktopItem.propTypes = {
 
 function MenuDesktopItem({ isHome, item }) {
   const { title, path } = item;
-  console.log('isHome');
-  console.log(isHome);
+
   const handleScroller = () => {
     // Somewhere else, even another file
     scroller.scrollTo(path.replace('#', ''), {
@@ -72,7 +71,7 @@ function MenuDesktopItem({ isHome, item }) {
     return (
       <LinkStyle
         component={RouterLink}
-        to={`/${PATH_RIFOPIS.home}`}
+        to={`${PATH_RIFOPIS.home}${path}`}
         sx={{
           fontWeight: 900,
           color: 'text.primary'
@@ -106,9 +105,6 @@ MenuDesktop.propTypes = {
 export default function MenuDesktop({ isOffset, isHome, navConfig }) {
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
-
-  console.log('isHome2');
-  console.log(isHome);
 
   useEffect(() => {
     if (open) {

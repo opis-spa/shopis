@@ -9,8 +9,8 @@ import { CircularProgress, Grid, Typography, Container, Box } from '@mui/materia
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import usePartnership from '../../hooks/usePartnership';
 // redux
-import { useDispatch } from '../../redux/store';
-import { getProductStore, getProduct } from '../../redux/slices/product';
+import { useDispatch, useSelector } from '../../redux/store';
+import { getProductStore, getProduct, addCart } from '../../redux/slices/product';
 import { getCategories } from '../../redux/slices/category';
 import { getPayments } from '../../redux/slices/payment';
 import { getDeliveries } from '../../redux/slices/delivery';
@@ -32,9 +32,16 @@ const Home = () => {
   const isMountedRef = useIsMountedRef();
   const location = useLocation();
   const dispatch = useDispatch();
+  const { cart } = useSelector((state) => state.product.checkout);
 
   const handleSelect = (product) => {
-    const { name } = product;
+    const { id, name, promo } = product;
+    const isExists = cart.find((item) => item.id === id);
+    const isTreeXTwo = promo === '3x2';
+    const addQuantity = isTreeXTwo ? 3 : 1;
+    if (!isExists) {
+      dispatch(addCart({ ...product, quantity: addQuantity }));
+    }
     dispatch(getProduct({ name: paramCase(name) }));
   };
 
@@ -67,7 +74,6 @@ const Home = () => {
         });
       }
     }
-    console.log('change route');
   }, [isMountedRef, location]);
 
   return (

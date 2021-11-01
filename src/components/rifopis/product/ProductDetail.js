@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
+import { useNavigate } from 'react-router';
 // materils
 import { styled, alpha } from '@mui/material/styles';
 import {
@@ -20,7 +21,9 @@ import {
 import Accordion, { accordionClasses } from '@mui/material/Accordion';
 // redux
 import { useSelector, useDispatch } from '../../../redux/store';
-import { getProduct, setOpenCart } from '../../../redux/slices/product';
+import { getProduct } from '../../../redux/slices/product';
+// routes
+import { PATH_RIFOPIS } from '../../../routes/paths';
 // components
 import RaffleProgress from '../raffles/RaffleProgress';
 import RafflePrice from '../raffles/RafflePrice';
@@ -216,6 +219,7 @@ ProductDetail.propTypes = propTypes;
 
 function DialogoProduct() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { product } = useSelector((state) => state.product);
 
   const handleClose = () => {
@@ -223,8 +227,8 @@ function DialogoProduct() {
   };
 
   const handleBuy = async () => {
-    dispatch(setOpenCart(true));
     handleClose();
+    navigate(PATH_RIFOPIS.checkout);
   };
 
   const open = useMemo(() => {

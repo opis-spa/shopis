@@ -86,8 +86,6 @@ const Profile = () => {
     }
     const RafflesMap = [];
     raffles.forEach((item) => {
-      console.log(' product ');
-      console.log(item);
       RafflesMap.push(item);
     });
     return RafflesMap;

@@ -115,7 +115,6 @@ const CheckoutInformation = () => {
   };
 
   const handleError = (error) => {
-    console.log(' está llegando ');
     setErrors({ errorWithSocial: error });
   };
 

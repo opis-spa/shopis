@@ -7,6 +7,7 @@ function path(root, sublink) {
 const ROOTS_AUTH = '/auth';
 const ROOTS_APP = '/app';
 const ROOT_SHOP = '/shop';
+const ROOT_SHOPIS = '/website';
 const ROOT_RIFOPIS = '/website';
 
 export const PATH_AUTH = {
@@ -49,6 +50,9 @@ export const PATH_APP = {
 
 export const PATH_SHOP = {
   root: ROOT_SHOP,
+  home: path(ROOT_SHOPIS, ''), // this paths is absolute
+  terms: path(ROOT_SHOPIS, '/terms'),
+  privacity: path(ROOT_SHOPIS, '/privacity'),
   result: path('', '/payment/result') // this paths is absolute
 };
 

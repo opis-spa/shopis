@@ -64,9 +64,6 @@ function AuthProvider({ children }) {
             const { success, user: userData } = response.data;
             if (success) {
               setProfile(userData);
-
-              console.log('init');
-              console.log({ payload: { isAuthenticated: true, user: userData } });
               dispatch({
                 type: 'INITIALISE',
                 payload: { isAuthenticated: true, user: userData }
@@ -79,7 +76,6 @@ function AuthProvider({ children }) {
             signOut(auth);
           }
         }
-        console.log(' por aquí no ');
         dispatch({
           type: 'INITIALISE',
           payload: { isAuthenticated: false, user: null }
@@ -99,8 +95,6 @@ function AuthProvider({ children }) {
 
     if (success === true) {
       const user = await signInWithCustomToken(auth, token);
-      console.log(' === uussseeerr === ');
-      console.log(user);
       return user;
     }
 
@@ -110,9 +104,6 @@ function AuthProvider({ children }) {
   const loginWithGoogle = async (signIn = true) => {
     const provider = new GoogleAuthProvider();
     const user = await signInWithPopup(auth, provider);
-
-    console.log(' == aqui == ');
-    console.log(user);
 
     const { role } = user.user;
     if (!role) {
@@ -181,7 +172,6 @@ function AuthProvider({ children }) {
 
       throw new Error(message);
     } catch (error) {
-      console.log(' aqui ');
       const { message } = error;
       if (message === 'User already exist') {
         throw new Error('El correo electrónico ya se encuentra registrado');

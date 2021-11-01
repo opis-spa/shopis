@@ -36,8 +36,6 @@ const IllustrationRocket = styled(Box)(({ theme }) => ({
 export default function EcommerceWelcome() {
   const { user } = useAuth();
 
-  console.log('user', user);
-
   return (
     <RootStyle>
       <CardContent

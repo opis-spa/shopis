@@ -93,8 +93,6 @@ export default function CheckoutPayment() {
 
   useMemo(() => {
     if (isMountedRef.current) {
-      console.log('checkoutResult');
-      console.log(checkoutResult);
       const { success, _id, status } = checkoutResult;
       if (success) {
         if (values.payment === 'webpay' || values.payment === 'paypal') {

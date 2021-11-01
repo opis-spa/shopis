@@ -9,6 +9,8 @@ import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled, useTheme } from '@mui/material/styles';
 import { Grid, Box, Link, Container, Typography, IconButton, Stack } from '@mui/material';
+// routers
+import { PATH_SHOP } from '../../routes/paths';
 //
 import LogoShopis from '../../components/LogoShopis';
 import PowerBy from '../../components/PowerBy';
@@ -26,23 +28,23 @@ const LINKS = [
   {
     headline: 'Acceso directo',
     children: [
-      { name: '¿Qué te ofrecemos?', href: '/' },
-      { name: 'Precios', href: '/' },
+      { name: '¿Qué te ofrecemos?', href: '#que-ofrecemos' },
+      { name: 'Precios', href: '#precios' },
       { name: 'Preguntas frecuentes', href: '#faqs' },
-      { name: 'Contacto', href: '/' }
+      { name: 'Contacto', href: '#contacto' }
     ]
   },
   {
     headline: 'Legal',
     children: [
-      { name: 'Terms and Condition', href: '#' },
-      { name: 'Privacy Policy', href: '#' }
+      { name: 'Terminos y condiciones', href: PATH_SHOP.terms },
+      { name: 'Politicas de privacidad', href: PATH_SHOP.privacity }
     ]
   },
   {
     headline: 'Contacto',
     children: [
-      { name: 'hola@rifopis.cl', href: '#' },
+      { name: 'hola@shopis.cl', href: '#' },
       { name: '+56 9 7977 7557', href: '#' }
     ]
   }

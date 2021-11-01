@@ -29,7 +29,8 @@ const CardStyle = styled(Card)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
   boxSizing: 'border-box',
   boxShadow: '-2px -2px 14px rgba(255, 194, 36, 0.2)',
-  overflow: 'visible'
+  overflow: 'visible',
+  marginLeft: 10
 }));
 
 const ProductImgStyle = styled('img')({
@@ -86,7 +87,7 @@ function ProductItem({ product, onSelectProduct, ...other }) {
             component="img"
             src="/static/icons/ic_promo_rifopis.svg"
             alt="Promo 3x2"
-            sx={{ position: 'absolute', width: 100, height: 100, right: -5, top: -5, zIndex: 1000 }}
+            sx={{ position: 'absolute', width: 100, height: 100, left: -5, top: -5, zIndex: 1000 }}
           />
         )}
         <Box sx={{ p: 2 }}>
