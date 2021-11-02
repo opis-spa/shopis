@@ -181,7 +181,7 @@ export default function Order() {
                 />
                 <TableBody>
                   {filteredProducts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, photo, amount, createdAt, stock } = row;
+                    const { id, name, photo, amountTotal, createdAt, stock } = row;
 
                     const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -220,7 +220,7 @@ export default function Order() {
                             {sentenceCase('stock')}
                           </Label>
                         </TableCell>
-                        <TableCell align="right">{fCurrency(amount)}</TableCell>
+                        <TableCell align="right">{fCurrency(amountTotal)}</TableCell>
                         <TableCell align="right">
                           <ProductMoreMenu onDelete={() => handleDeleteProduct(id)} productName={name} />
                         </TableCell>

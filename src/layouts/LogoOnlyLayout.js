@@ -2,6 +2,7 @@ import React from 'react';
 import { Link as RouterLink, Outlet } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
+import Link from '@mui/material/Link';
 // components
 import LogoShopis from '../components/LogoShopis';
 
@@ -21,13 +22,21 @@ const HeaderStyle = styled('header')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
+const LinkStyle = styled(Link)(() => ({
+  '&:hover': {
+    textDecoration: 'none'
+  }
+}));
+
+// ----------------------------------------------------------------------
+
 export default function LogoOnlyLayout() {
   return (
     <>
       <HeaderStyle>
-        <RouterLink to="/">
+        <LinkStyle component={RouterLink} to="/">
           <LogoShopis />
-        </RouterLink>
+        </LinkStyle>
       </HeaderStyle>
       <Outlet />
     </>

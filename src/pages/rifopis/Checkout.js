@@ -4,15 +4,17 @@ import { Icon } from '@iconify/react';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector } from '@mui/material';
+import { Box, Grid, Step, Stepper, Container, StepLabel } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getCart, createBilling, onGotoStep } from '../../redux/slices/product';
+import { getCart, createBilling, onGotoStep, getProductStore, createInformation } from '../../redux/slices/product';
 import { getDeliveries } from '../../redux/slices/delivery';
 import { getPayments } from '../../redux/slices/payment';
 // hooks
+import useAuth from '../../hooks/useAuth';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import useSettings from '../../hooks/useSettings';
+import usePartnership from '../../hooks/usePartnership';
 // components
 import Page from '../../components/Page';
 import {
@@ -21,23 +23,6 @@ import {
   CheckoutPayment,
   CheckoutOrderComplete
 } from '../../components/shop/checkout';
-
-// ----------------------------------------------------------------------
-
-const QontoConnector = styled(StepConnector)(({ theme }) => ({
-  top: 10,
-  left: 'calc(-50% + 20px)',
-  right: 'calc(50% + 20px)',
-  '& .MuiStepConnector-line': {
-    borderTopWidth: 2,
-    borderColor: theme.palette.divider
-  },
-  '&.Mui-active, &.Mui-completed': {
-    '& .MuiStepConnector-line': {
-      borderColor: theme.palette.primary.main
-    }
-  }
-}));
 
 QontoStepIcon.propTypes = {
   active: PropTypes.bool,
@@ -54,7 +39,7 @@ function QontoStepIcon({ active, completed }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: active ? 'primary.main' : 'divider',
+        color: active ? 'secondary.main' : 'divider',
         bgcolor: 'background.default'
       }}
     >
@@ -66,7 +51,7 @@ function QontoStepIcon({ active, completed }) {
             zIndex: 1,
             width: 20,
             height: 20,
-            color: 'primary.main'
+            color: 'primary.light'
           }}
         />
       ) : (
@@ -98,6 +83,9 @@ const MainStyle = styled(Page)(({ theme }) => ({
 export default function EcommerceCheckout() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
+  const { isAuthenticated, user } = useAuth();
+  const { partnership } = usePartnership();
+  const { nickname } = partnership;
   const isMountedRef = useIsMountedRef();
   const { checkout } = useSelector((state) => state.product);
   const { cart, activeStep, isDelivery } = checkout;
@@ -109,13 +97,20 @@ export default function EcommerceCheckout() {
   const isComplete = activeStep === STEPS.length;
 
   useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(createInformation(user));
+      dispatch(onGotoStep(2));
+    }
+  }, [dispatch, isAuthenticated, user]);
+
+  useEffect(() => {
     if (isMountedRef.current) {
+      dispatch(getProductStore(nickname));
       dispatch(getCart(cart));
       dispatch(getDeliveries());
       dispatch(getPayments());
-      dispatch(onGotoStep(1));
     }
-  }, [dispatch, isMountedRef, cart]);
+  }, [dispatch, isMountedRef, cart, nickname]);
 
   useEffect(() => {
     if (activeStep === 1) {
@@ -128,20 +123,10 @@ export default function EcommerceCheckout() {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <Grid container justifyContent="center">
           <Grid item xs={12} md={8} sx={{ mb: 5, justifyContent: 'center' }}>
-            <Stepper activeStep={activeStep} connector={<QontoConnector />}>
+            <Stepper activeStep={activeStep} alternativeLabel>
               {STEPS.map((label) => (
-                <Step key={label}>
-                  <StepLabel
-                    StepIconComponent={QontoStepIcon}
-                    sx={{
-                      '& .MuiStepLabel-label': {
-                        typography: 'subtitle2',
-                        color: 'text.disabled'
-                      }
-                    }}
-                  >
-                    {label}
-                  </StepLabel>
+                <Step key={label} sx={{ '& .MuiSvgIcon-root': { color: 'secondary.light' } }}>
+                  <StepLabel>{label}</StepLabel>
                 </Step>
               ))}
             </Stepper>
@@ -152,7 +137,7 @@ export default function EcommerceCheckout() {
           <>
             {activeStep === 1 && <CheckoutInformation />}
             {isDelivery && activeStep === 2 && <CheckoutDelivery />}
-            {activeStep === 3 - (isDelivery ? 1 : 0) && <CheckoutPayment />}
+            {activeStep === 2 + (isDelivery ? 1 : 0) && <CheckoutPayment />}
           </>
         ) : (
           <CheckoutOrderComplete open={isComplete} />

@@ -15,84 +15,57 @@ const PRIMARY_COLOR = [
   },
   // PURPLE
   {
-    name: 'purple',
-    lighter: '#EBD6FD',
-    light: '#B985F4',
-    main: '#7635dc',
-    dark: '#431A9E',
-    darker: '#200A69',
+    name: 'rifopis',
+    lighter: '#FFEF85',
+    light: '#FFE431',
+    main: '#FF8800',
+    dark: '#FF6A00',
+    darker: '#FF6A00',
     contrastText: '#fff'
-  },
-  // CYAN
+  }
+];
+
+const SECONDARY_COLOR = [
+  // DEFAULT
   {
-    name: 'cyan',
-    lighter: '#D1FFFC',
-    light: '#76F2FF',
-    main: '#1CCAFF',
-    dark: '#0E77B7',
-    darker: '#053D7A',
-    contrastText: palette.light.grey[800]
+    name: 'default',
+    ...palette.light.secondary
   },
-  // BLUE
+  // PURPLE
   {
-    name: 'blue',
     lighter: '#CCDFFF',
-    light: '#6697FF',
-    main: '#0045FF',
-    dark: '#0027B7',
+    light: '#573A75',
+    main: '#290E43',
+    dark: '#1A0033',
     darker: '#00137A',
-    contrastText: '#fff'
-  },
-  // ORANGE
-  {
-    name: 'orange',
-    lighter: '#FEF4D4',
-    light: '#FED680',
-    main: '#fda92d',
-    dark: '#B66816',
-    darker: '#793908',
-    contrastText: palette.light.grey[800]
-  },
-  // RED
-  {
-    name: 'red',
-    lighter: '#FFE3D5',
-    light: '#FFC1AC',
-    main: '#FF3030',
-    dark: '#B71833',
-    darker: '#7A0930',
     contrastText: '#fff'
   }
 ];
 
 SetColor.propTypes = {
-  themeColor: PropTypes.oneOf(['default', 'purple', 'cyan', 'blue', 'orange', 'red'])
+  themeColor: PropTypes.oneOf(['default', 'rifopis'])
 };
 
 function SetColor(themeColor) {
   let color;
-  const DEFAULT = PRIMARY_COLOR[0];
-  const PURPLE = PRIMARY_COLOR[1];
-  const CYAN = PRIMARY_COLOR[2];
-  const BLUE = PRIMARY_COLOR[3];
-  const ORANGE = PRIMARY_COLOR[4];
-  const RED = PRIMARY_COLOR[5];
+  const DEFAULT = {
+    primary: PRIMARY_COLOR[0],
+    secondary: SECONDARY_COLOR[0]
+  };
+  const RIFOPIS = {
+    primary: PRIMARY_COLOR[1],
+    secondary: SECONDARY_COLOR[1],
+    text: { primary: '#fff', secondary: '#fff', disabled: SECONDARY_COLOR[1].lighter },
+    background: {
+      paper: '#290E43',
+      default: '#200140',
+      neutral: SECONDARY_COLOR[1].main
+    }
+  };
 
   switch (themeColor) {
-    case 'purple':
-      color = PURPLE;
-      break;
-    case 'cyan':
-      color = CYAN;
-      break;
     case 'rifopis':
-      color = BLUE;
-      break;
-    case 'orange':
-      color = ORANGE;
-      break;
-    case 'red':
-      color = RED;
+      color = RIFOPIS;
       break;
     default:
       color = DEFAULT;
@@ -109,7 +82,7 @@ const initialState = {
   onChangeDirection: () => {},
   onChangeColor: () => {},
   onToggleStretch: () => {},
-  setColor: PRIMARY_COLOR[0],
+  setColors: { primary: PRIMARY_COLOR[0], secondary: SECONDARY_COLOR[0] },
   colorOption: []
 };
 
@@ -165,11 +138,7 @@ function SettingsProvider({ children }) {
         onChangeDirection,
         // Color
         onChangeColor,
-        setColor: SetColor(settings.themeColor),
-        colorOption: PRIMARY_COLOR.map((color) => ({
-          name: color.name,
-          value: color.main
-        })),
+        setColors: SetColor(settings.themeColor),
         // Stretch
         onToggleStretch
       }}

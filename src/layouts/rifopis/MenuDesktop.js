@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { scroller } from 'react-scroll';
-import { useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Link, Stack } from '@mui/material';
+// route
+import { PATH_RIFOPIS } from '../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -48,10 +50,11 @@ function IconBullet({ type = 'item' }) {
 }
 
 MenuDesktopItem.propTypes = {
+  isHome: PropTypes.bool,
   item: PropTypes.object
 };
 
-function MenuDesktopItem({ item }) {
+function MenuDesktopItem({ isHome, item }) {
   const { title, path } = item;
 
   const handleScroller = () => {
@@ -64,12 +67,27 @@ function MenuDesktopItem({ item }) {
     });
   };
 
+  if (!isHome) {
+    return (
+      <LinkStyle
+        component={RouterLink}
+        to={`${PATH_RIFOPIS.home}${path}`}
+        sx={{
+          fontWeight: 900,
+          color: 'text.primary'
+        }}
+      >
+        {title}
+      </LinkStyle>
+    );
+  }
+
   return (
     <LinkStyle
       to={path}
       onClick={handleScroller}
       sx={{
-        fontWeight: 200,
+        fontWeight: 900,
         color: 'text.primary'
       }}
     >

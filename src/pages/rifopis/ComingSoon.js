@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { Icon } from '@iconify/react';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
-import discordFilled from '@iconify/icons-ic/baseline-discord';
+// import discordFilled from '@iconify/icons-ic/baseline-discord';
 import closeFill from '@iconify/icons-eva/close-fill';
 import { useSnackbar } from 'notistack';
 // material
@@ -32,24 +32,20 @@ import { subscriptionNewsletter } from '../../redux/slices/user';
 // components
 import { MIconButton } from '../../components/@material-extend';
 import Page from '../../components/Page';
+import { ComingSoonIllustrationRifopis } from '../../assets';
 
 // ----------------------------------------------------------------------
 
 const SOCIALS = [
   {
-    uri: 'https://facebook.com/shopiscl',
+    uri: 'https://facebook.com/rifopis',
     name: 'Facebook',
-    icon: <Icon icon={facebookFill} width={24} height={24} color="#1877F2" />
+    icon: <Icon icon={facebookFill} width={24} height={24} color="#ffffff" />
   },
   {
-    uri: 'https://instagram.com/shopiscl',
+    uri: 'https://instagram.com/rifopis',
     name: 'Instagram',
-    icon: <Icon icon={instagramFilled} width={24} height={24} color="#D7336D" />
-  },
-  {
-    uri: 'https://discord.gg/3PAtee5XRx',
-    name: 'Discord',
-    icon: <Icon icon={discordFilled} width={24} height={24} color="#006097" />
+    icon: <Icon icon={instagramFilled} width={24} height={24} color="#ffffff" />
   }
 ];
 
@@ -63,7 +59,8 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 const CountdownStyle = styled('div')({
   display: 'flex',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  mb: 10
 });
 
 const SeparatorStyle = styled(Typography)(({ theme }) => ({
@@ -76,7 +73,7 @@ const SeparatorStyle = styled(Typography)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function ComingSoon() {
-  const countdown = useCountdown(new Date('11/01/2021 00:00'));
+  const countdown = useCountdown(new Date('11/09/2021 00:00'));
   const dispatch = useDispatch();
   const isMountedRef = useIsMountedRef();
   const { newsletter, isLoading } = useSelector((state) => state.user);
@@ -121,16 +118,16 @@ export default function ComingSoon() {
   return (
     <RootStyle title="Falta poco | RIFOPIS">
       <Container>
-        <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
+        <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: { sm: 'left', md: 'center' } }}>
           <Typography variant="h3" paragraph>
-            Ya casi!
+            Falta poco!
           </Typography>
-          <Typography sx={{ color: 'text.secondary', mb: (theme) => theme.spacing(10) }}>
+          <Typography sx={{ mb: (theme) => theme.spacing(5) }}>
             Estamos trabajando fuertemente{' '}
-            <span role="img" aria-label="rocket">
-              🚀
+            <span role="img" aria-label="strong">
+              💪🏻
             </span>{' '}
-            para que prontamente puedas participar en increibles sorteos!
+            para que muy pronto puedas participar por increíbles premios!
           </Typography>
 
           <CountdownStyle>
@@ -162,21 +159,33 @@ export default function ComingSoon() {
           </CountdownStyle>
 
           {isSubscription ? (
-            <Alert severity="success" sx={{ my: 5 }}>
+            <Alert severity="success" sx={{ my: (theme) => theme.spacing(5), justifyContent: 'center' }}>
               Te avisaremos cuando estemos listos!
             </Alert>
           ) : (
             <form onSubmit={handleSubmit} noValidate>
-              <FormControl fullWidth sx={{ my: 5 }}>
+              <Typography sx={{ textAlign: 'left', mt: (theme) => theme.spacing(5) }}>
+                ¡Déjanos tu correo para recibir información!
+              </Typography>
+              <FormControl fullWidth sx={{ mt: (theme) => theme.spacing(2), mb: (theme) => theme.spacing(5) }}>
                 <OutlinedInput
                   fullWidth
+                  color="secondary"
                   disabled={isLoading}
-                  placeholder="Ingresa tu correo electrónico"
+                  placeholder="Correo electrónico"
                   {...getFieldProps('email')}
-                  error={Boolean(touched.email && errors.email)}
                   endAdornment={
                     <InputAdornment position="end">
-                      <Button type="submit" variant="contained" size="large">
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        size="large"
+                        sx={{
+                          '&:hover': {
+                            backgroundColor: (theme) => theme.palette.primary.main
+                          }
+                        }}
+                      >
                         Avisame
                       </Button>
                     </InputAdornment>
@@ -188,8 +197,13 @@ export default function ComingSoon() {
                         easing: theme.transitions.easing.easeInOut,
                         duration: theme.transitions.duration.shorter
                       }),
+                    color: 'common.white',
                     '&.Mui-focused': {
-                      boxShadow: (theme) => theme.customShadows.z8
+                      backgroundColor: (theme) => theme.palette.secondary.dark
+                    },
+                    '&.MuiOutlinedInput-input': {
+                      boxShadow: 'none',
+                      backgroundColor: (theme) => theme.palette.secondary.dark
                     },
                     '& fieldset': {
                       borderWidth: `1px !important`
@@ -205,7 +219,9 @@ export default function ComingSoon() {
             </form>
           )}
 
-          <Box sx={{ textAlign: 'center', '& > *': { mx: 1 } }}>
+          <ComingSoonIllustrationRifopis sx={{ my: (theme) => theme.spacing(2), height: 200 }} />
+
+          <Box sx={{ mt: (theme) => theme.spacing(4), textAlign: 'center', '& > *': { mx: 1 } }}>
             {SOCIALS.map((social) => (
               <Link key={social.name} href={social.uri} target="_blank">
                 <Tooltip title={social.name}>

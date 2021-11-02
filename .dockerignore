@@ -2,9 +2,6 @@
 Dockerfile
 .dockerignore
 
-# production
-/build
-
 # dependencies
 node_modules
 .vscode

@@ -2,6 +2,8 @@ import React from 'react';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Card, CardContent, Typography } from '@mui/material';
+// hooks
+import useAuth from '../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -32,6 +34,8 @@ const IllustrationRocket = styled(Box)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function EcommerceWelcome() {
+  const { user } = useAuth();
+
   return (
     <RootStyle>
       <CardContent
@@ -44,7 +48,7 @@ export default function EcommerceWelcome() {
       >
         <Typography gutterBottom variant="h4">
           Bienvenido,
-          <br /> Diego Díaz!
+          <br /> {user.displayName}
         </Typography>
 
         <Typography variant="body2" sx={{ pb: { xs: 3, xl: 5 }, maxWidth: 480, mx: 'auto' }}>

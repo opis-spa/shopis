@@ -62,7 +62,17 @@ export const getSale = (orderId) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
     const response = await axios.get(`/api/v1/sales/order/${orderId}`);
-    dispatch(slice.actions.getSaleSuccess(response.data.sale));
+    dispatch(slice.actions.getSaleSuccess(response.data.order));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
+};
+
+export const getMySales = () => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.get(`/api/v1/sales/me`);
+    dispatch(slice.actions.getSalesSuccess(response.data.orders));
   } catch (error) {
     dispatch(slice.actions.hasError(error));
   }

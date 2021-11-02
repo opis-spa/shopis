@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 // material
+import { styled } from '@mui/material/styles';
 import {
   Box,
   Card,
@@ -13,10 +14,25 @@ import {
   CardContent,
   InputAdornment
 } from '@mui/material';
+// hooks
+import useIsMountedRef from '../../../hooks/useIsMountedRef';
+// redux
+import { useSelector, useDispatch } from '../../../redux/store';
+import { getCart } from '../../../redux/slices/product';
+// component
+import Scrollbar from '../../Scrollbar';
+import ProductList from '../../rifopis/product/ProductList';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
+
+const CardStyle = styled(Card)(() => ({
+  boxShadow: '-2px -2px 14px rgba(255, 194, 36, 0.2)',
+  border: '1px solid #936DB9',
+  boxSizing: 'border-box',
+  textAlign: 'left'
+}));
 
 CheckoutSummary.propTypes = {
   total: PropTypes.number,
@@ -37,8 +53,13 @@ export default function CheckoutSummary({
   shipping = null,
   onApplyDiscount,
   enableDiscount = false,
-  preview = false
+  preview = false,
+  ...other
 }) {
+  const dispatch = useDispatch();
+  const isMountedRef = useIsMountedRef();
+  const { checkout } = useSelector((state) => state.product);
+  const { cart } = checkout;
   const fnDelivery = (totals) => {
     if (delivery === -1) {
       return 'Envío por pagar';
@@ -49,18 +70,44 @@ export default function CheckoutSummary({
     return fCurrency(totals.delivery);
   };
 
+  useMemo(() => {
+    if (isMountedRef.current) {
+      dispatch(getCart(cart));
+    }
+  }, [dispatch, isMountedRef, cart]);
+
   return (
-    <Card sx={{ my: 3 }}>
-      <CardHeader title="Resumen" />
+    <CardStyle sx={{ my: 3 }} {...other}>
+      <CardHeader title="Resumen de tu pedido" />
 
       <CardContent>
         <Stack spacing={2}>
+          {total !== subtotal && (
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                Subtotal
+              </Typography>
+              <Typography variant="subtitle2">{fCurrency(subtotal)}</Typography>
+            </Stack>
+          )}
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Subtotal
+            <Typography variant="subtitle1" sx={{ color: 'primary.light' }}>
+              Total a pagar
             </Typography>
-            <Typography variant="subtitle2">{fCurrency(subtotal)}</Typography>
+            <Box sx={{ textAlign: 'right' }}>
+              <Typography variant="subtitle1" sx={{ color: 'primary.light' }}>
+                {fCurrency(total)}
+              </Typography>
+              <Typography variant="caption" sx={{ color: 'secondary.light', fontStyle: 'italic' }}>
+                (Todos los impuestos incluidos)
+              </Typography>
+            </Box>
           </Stack>
+          <Box sx={{ minHeight: 200, flex: 1, px: 2 }}>
+            <Scrollbar>
+              <ProductList view="resumen" direction="column" />
+            </Scrollbar>
+          </Box>
 
           {discount > 0 && (
             <Stack direction="row" justifyContent="space-between">
@@ -84,18 +131,6 @@ export default function CheckoutSummary({
             <Divider />
           </Box>
 
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="subtitle1">Total</Typography>
-            <Box sx={{ textAlign: 'right' }}>
-              <Typography variant="subtitle1" sx={{ color: 'error.main' }}>
-                {fCurrency(total)}
-              </Typography>
-              <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
-                (Todos los impuestos incluidos)
-              </Typography>
-            </Box>
-          </Stack>
-
           {enableDiscount && (
             <TextField
               fullWidth
@@ -114,6 +149,6 @@ export default function CheckoutSummary({
           )}
         </Stack>
       </CardContent>
-    </Card>
+    </CardStyle>
   );
 }
