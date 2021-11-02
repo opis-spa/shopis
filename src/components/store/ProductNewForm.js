@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
 import { styled } from '@mui/material/styles';
@@ -64,6 +64,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const [files, setFiles] = useState([]);
 
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required('El nombre es requerido'),
@@ -71,11 +72,10 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     amount: Yup.number().required('El precio es requerido'),
     discountPartnership: Yup.number(),
     stock: Yup.number().required('El stock es requerido'),
-    photo: Yup.string()
+    photos: Yup.array()
   });
 
   const formik = useFormik({
-    enableReinitialize: true,
     initialValues: {
       name: currentProduct?.name || '',
       description: currentProduct?.description || '',
@@ -87,10 +87,9 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       stock: currentProduct?.stock || -1
     },
     validationSchema: NewProductSchema,
-    onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
+    onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
-        resetForm();
-        await dispatch(createProduct(values));
+        await dispatch(createProduct(values, files));
         setSubmitting(false);
         enqueueSnackbar(!isEdit ? 'Producto creado satisfactoriamente' : 'Producto editado satisfactoriamente', {
           variant: 'success'
@@ -108,8 +107,9 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
+      setFiles(acceptedFiles);
       setFieldValue(
-        'images',
+        'photos',
         acceptedFiles.map((file) =>
           Object.assign(file, {
             preview: URL.createObjectURL(file)
@@ -126,12 +126,12 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   };
 
   const handleRemoveAll = () => {
-    setFieldValue('images', []);
+    setFieldValue('photos', []);
   };
 
   const handleRemove = (file) => {
-    const filteredItems = values.images.filter((_file) => _file !== file);
-    setFieldValue('images', filteredItems);
+    const filteredItems = values.photos.filter((_file) => _file !== file);
+    setFieldValue('photos', filteredItems);
   };
 
   return (

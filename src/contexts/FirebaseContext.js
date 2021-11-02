@@ -72,7 +72,6 @@ function AuthProvider({ children }) {
               return true;
             }
           } catch (error) {
-            console.log(' error auth ');
             signOut(auth);
           }
         }

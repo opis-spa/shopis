@@ -38,7 +38,7 @@ const DropZoneStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(5, 1),
   borderRadius: theme.shape.borderRadius,
   backgroundColor: theme.palette.background.neutral,
-  border: `1px dashed ${theme.palette.grey[500_32]}`,
+  border: `1px dashed ${theme.palette.grey['500_32']}`,
   '&:hover': { opacity: 0.72, cursor: 'pointer' },
   [theme.breakpoints.up('md')]: { textAlign: 'left', flexDirection: 'row' }
 }));
@@ -210,9 +210,8 @@ export default function UploadMultiFile({ error, showPreview = false, files, onR
       {hasFile && (
         <Stack direction="row" justifyContent="flex-end">
           <Button onClick={onRemoveAll} sx={{ mr: 1.5 }}>
-            Remove all
+            Remover todas
           </Button>
-          <Button variant="contained">Upload files</Button>
         </Stack>
       )}
     </Box>

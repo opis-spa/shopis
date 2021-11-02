@@ -319,8 +319,6 @@ export function getProductStore(nickname) {
       const response = await axios.get(`/api/v1/partnerships/${nickname}/product`);
       dispatch(slice.actions.getProductsSuccess(response.data.products));
     } catch (error) {
-      console.log('errror');
-      console.log(error);
       dispatch(slice.actions.hasError(error));
     }
   };
@@ -341,14 +339,39 @@ export const aplicateCoupon = (body) => async (dispatch) => {
 
 // ----------------------------------------------------------------------
 
-export const createProduct = (body) => async (dispatch) => {
+export const createProduct = (body, photos) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
-    const response = await axios.post('/api/v1/products/create', body);
+    delete body.photos;
+    const data = new FormData();
+    Object.keys(body).forEach((item) => {
+      if (typeof body[item] === 'object') {
+        const file = body[item];
+        data.append(item, file);
+      } else {
+        const value = body[item] || '';
+        if (value) {
+          data.append(item, value);
+        }
+      }
+    });
+    if (photos) {
+      photos.forEach((image) => {
+        data.append('photos[]', image);
+      });
+    }
+
+    const response = await axios({
+      method: 'post',
+      url: '/api/v1/products/create',
+      data,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
     dispatch(slice.actions.addProduct(response.data.product));
   } catch (error) {
     console.error(error);
     dispatch(slice.actions.hasError(error));
+    throw error;
   }
 };
 
@@ -380,10 +403,8 @@ export const proccessCheckout = (payload) => async (dispatch) => {
     }
     const error = new Error(message);
     error.code = 'order/error';
-    console.log('hola');
     throw error;
   } catch (error) {
-    console.log(error);
     dispatch(slice.actions.hasError(error));
     throw error;
   }

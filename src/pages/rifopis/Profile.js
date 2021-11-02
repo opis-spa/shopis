@@ -64,7 +64,6 @@ const Profile = () => {
     const raffles = new Map();
     if (sales && isMountedRef.current === true) {
       // here proccess the orders
-      console.log(sales);
       sales.forEach((sale) => {
         const { details } = sale;
         if (details) {

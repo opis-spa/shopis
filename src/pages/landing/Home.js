@@ -45,7 +45,6 @@ const Landing = () => {
         });
       }
     }
-    console.log(location);
   }, [isMountedRef, location]);
 
   return (
