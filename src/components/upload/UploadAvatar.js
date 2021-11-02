@@ -17,7 +17,7 @@ const RootStyle = styled('div')(({ theme }) => ({
   margin: 'auto',
   borderRadius: '50%',
   padding: theme.spacing(1),
-  border: `1px dashed ${theme.palette.grey[500_32]}`
+  border: `1px dashed ${theme.palette.grey['500_32']}`
 }));
 
 const DropZoneStyle = styled('div')({

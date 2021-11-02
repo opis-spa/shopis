@@ -1,14 +1,16 @@
 import React, { useMemo } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 // materials
 import { styled } from '@mui/material/styles';
-import { Box, Card, Container, Divider, Typography, Stack } from '@mui/material';
+import { Box, Card, Container, Divider, Link, Typography, Stack } from '@mui/material';
 // hooks
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import useQuery from '../../hooks/useQuery';
 // redux
 import { useSelector, useDispatch } from '../../redux/store';
 import { getSale } from '../../redux/slices/sales';
+import { clearCart } from '../../redux/slices/product';
 // routes
 import { PATH_RIFOPIS } from '../../routes/paths';
 // components
@@ -44,6 +46,72 @@ const ContentStyle = styled(Stack)(({ theme }) => ({
   textAlign: 'left'
 }));
 
+const ErrorResult = () => (
+  <ContentStyle sx={{ pl: (theme) => theme.spacing(5), pr: (theme) => theme.spacing(5) }}>
+    <Stack direction="row" spacing={2}>
+      <Box
+        component="img"
+        alt="Error"
+        src="/static/icons/ic_error_payment_rifopis.svg"
+        sx={{ width: 114, height: 114, margin: 'auto', mt: 2 }}
+      />
+
+      <Box>
+        <Typography variant="h5" sx={{ mt: 4, fontWeight: 900 }}>
+          El pago no se ha podido procesar
+        </Typography>
+        <Typography variant="caption" sx={{ fontWight: 400 }}>
+          Parece que algo ha salido mal al momento de intentar procesar el pago. Te sugerimos probar un medio diferente.
+        </Typography>
+      </Box>
+    </Stack>
+  </ContentStyle>
+);
+
+const SuccessPropTypes = {
+  products: PropTypes.arrayOf(PropTypes.shape({}))
+};
+
+const SuccessResult = ({ products }) => (
+  <>
+    <Stack direction="column" spacing={2}>
+      <Box
+        component="img"
+        alt="Aprobado"
+        src="/static/icons/ic_check_rifopis.png"
+        sx={{ width: 114, height: 114, margin: 'auto', mt: 2 }}
+      />
+
+      <Typography variant="h4" sx={{ color: 'primary.light', mt: 4, fontWeight: 900 }}>
+        Listo! Te damos la bienvenida al sorteo.
+      </Typography>
+      <Typography variant="caption" sx={{ fontWight: 400 }}>
+        Enviaremos el resumen de tu pedido y las instrucciones de los siguientes pasos a tu correo. Te avisaremos el día
+        en que se realice el sorteo.
+      </Typography>
+    </Stack>
+
+    <Box sx={{ px: (theme) => theme.spacing(10) }}>
+      <Divider />
+    </Box>
+
+    <ContentStyle spacing={2}>
+      <Typography variant="h5" sx={{ fontWight: 400 }}>
+        Resumen de tu pedido
+      </Typography>
+
+      <StackStyle spacing={3} direction="column">
+        {products.map((item) => {
+          const { _id, product, quantity, subtotal } = item;
+          return <ProductItemSummary key={_id} product={{ ...product, quantity, subtotal }} filter={false} />;
+        })}
+      </StackStyle>
+    </ContentStyle>
+  </>
+);
+
+SuccessResult.propTypes = SuccessPropTypes;
+
 const Payment = () => {
   const query = useQuery();
   const isMountedRef = useIsMountedRef();
@@ -58,66 +126,31 @@ const Payment = () => {
 
   const products = useMemo(() => {
     if (sale && isMountedRef.current === true) {
+      dispatch(clearCart());
       const { details } = sale;
       return details;
     }
     return [];
-  }, [sale, isMountedRef]);
+  }, [dispatch, sale, isMountedRef]);
 
   return (
     <RootStyle title="Orden procesada" sx={{ backgroundColor: '#1A0033' }}>
-      <Stack direction="row" sx={{ width: '100%', position: 'absolute', zIndex: 0, overflow: 'hidden' }}>
-        <Box component="img" alt={status} src="/static/illustrations/ic_check_rifopis_left.png" sx={{ flex: 1 }} />
-        <Box component="img" alt={status} src="/static/illustrations/ic_check_rifopis_right.png" sx={{ flex: 1 }} />
-      </Stack>
+      {status === 'COMPLETED' && (
+        <Stack direction="row" sx={{ width: '100%', position: 'absolute', zIndex: 0, overflow: 'hidden' }}>
+          <Box component="img" alt={status} src="/static/illustrations/ic_check_rifopis_left.png" sx={{ flex: 1 }} />
+          <Box component="img" alt={status} src="/static/illustrations/ic_check_rifopis_right.png" sx={{ flex: 1 }} />
+        </Stack>
+      )}
 
       <Container maxWidth="sm">
         <CardStyle>
           <Stack direction="column" spacing={3}>
-            <Stack direction="column" spacing={2}>
-              <Box
-                component="img"
-                alt={status}
-                src="/static/icons/ic_check_rifopis.png"
-                sx={{ width: 114, height: 114, margin: 'auto', mt: 2 }}
-              />
-
-              <Typography variant="h4" sx={{ color: 'primary.light', mt: 4, fontWeight: 900 }}>
-                Listo! Te damos la bienvenida al sorteo.
-              </Typography>
-              <Typography variant="caption" sx={{ fontWight: 400 }}>
-                Enviaremos el resumen de tu pedido y las instrucciones de los siguientes pasos a tu correo. Te
-                avisaremos el día en que se realice el sorteo.
-              </Typography>
-            </Stack>
-
-            <Box sx={{ px: (theme) => theme.spacing(10) }}>
-              <Divider />
-            </Box>
-
-            <ContentStyle spacing={2}>
-              <Typography variant="h5" sx={{ fontWight: 400 }}>
-                Resumen de tu pedido
-              </Typography>
-
-              <StackStyle spacing={3} direction="column">
-                {products.map((item) => {
-                  const { _id, product, quantity } = item;
-                  return <ProductItemSummary key={_id} product={{ ...product, quantity }} />;
-                })}
-              </StackStyle>
-            </ContentStyle>
+            {status === 'COMPLETED' ? <SuccessResult products={products} /> : <ErrorResult />}
 
             <Box sx={{ textAlign: 'center' }}>
-              <ButtonTicket
-                title="Explorar otros sorteos"
-                component={RouteLink}
-                to={PATH_RIFOPIS.root}
-                fullWidth
-                sx={{ mb: 5 }}
-              >
-                Explorar otros sorteos
-              </ButtonTicket>
+              <Link to={PATH_RIFOPIS.home} variant="contained" component={RouteLink}>
+                <ButtonTicket title="Ver más sorteos" fullWidth sx={{ mb: 5 }} />
+              </Link>
             </Box>
           </Stack>
         </CardStyle>

@@ -26,7 +26,6 @@ function applyFilter(products, sortBy, filters) {
   if (filters.category.length > 0) {
     products = filter(products, (_product) => filters.category.indexOf(_product.subcategory) >= 0);
   }
-  console.log(products);
   return products;
 }
 
@@ -45,20 +44,24 @@ const SkeletonLoad = (
 const propTypes = {
   view: PropTypes.string,
   max: PropTypes.number,
-  direction: PropTypes.oneOf('row', 'column')
+  direction: PropTypes.oneOf('row', 'column'),
+  onSelectProduct: PropTypes.func
 };
 
 const defaultProps = {
   max: 0,
   view: 'simple',
-  direction: 'row'
+  direction: 'row',
+  onSelectProduct: () => {}
 };
 
-const StackStyle = styled(Stack)(() => ({
-  justifyContent: 'flex-start'
+const StackStyle = styled(Stack)(({ theme }) => ({
+  justifyContent: 'flex-start',
+  paddingTop: theme.spacing(1),
+  paddingBottom: theme.spacing(1)
 }));
 
-function ProductList({ max = 0, view, direction }) {
+function ProductList({ max = 0, view, direction, onSelectProduct }) {
   const { products, sortBy, filters, isLoading } = useSelector((state) => state.product);
   const filteredProducts = applyFilter(products, sortBy, filters);
 
@@ -67,7 +70,7 @@ function ProductList({ max = 0, view, direction }) {
       {filteredProducts.map((product) => {
         const { id } = product;
         if (view === 'module') {
-          return <ProductItem key={id} product={product} />;
+          return <ProductItem onSelectProduct={onSelectProduct} key={id} product={product} />;
         }
         if (view === 'resumen') {
           return <ProductItemSummary key={id} product={product} />;

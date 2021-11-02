@@ -12,6 +12,8 @@ import { Container, Tab, Box, Tabs, Stack } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { getStore } from '../../../redux/slices/store';
 import { getBanks } from '../../../redux/slices/bank';
+import { getDeliveries } from '../../../redux/slices/delivery';
+import { getPayments } from '../../../redux/slices/payment';
 // routes
 import { PATH_APP } from '../../../routes/paths';
 // hooks
@@ -19,7 +21,13 @@ import useSettings from '../../../hooks/useSettings';
 // components
 import Page from '../../../components/Page';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import { AccountGeneral, AccountBilling, AccountSocialLinks } from '../../../components/store';
+import {
+  AccountGeneral,
+  AccountBilling,
+  AccountSocialLinks,
+  AccountPaymentMethod,
+  AccountDeliveryMethod
+} from '../../../components/store';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +39,8 @@ export default function Store() {
   useEffect(() => {
     dispatch(getStore());
     dispatch(getBanks());
+    dispatch(getDeliveries());
+    dispatch(getPayments());
   }, [dispatch]);
 
   const ACCOUNT_TABS = [
@@ -47,12 +57,12 @@ export default function Store() {
     {
       value: 'formas_de_entrega',
       icon: <Icon icon={deliveryParcel} width={20} height={20} />,
-      component: <AccountSocialLinks />
+      component: <AccountDeliveryMethod />
     },
     {
       value: 'metodos_de_pago',
       icon: <Icon icon={outlinePayment} width={20} height={20} />,
-      component: <AccountSocialLinks />
+      component: <AccountPaymentMethod />
     },
     {
       value: 'redes_de_contacto',

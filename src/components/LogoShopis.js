@@ -30,7 +30,7 @@ function LogoShopis({ avatar, diapo, sx }) {
   const factor = mobile ? 0.8 : 1;
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ width: 136, height: 24, ...sx }}>
       <StackStyle direction="row" spacing={2} sx={sx}>
         <Box
           component="img"

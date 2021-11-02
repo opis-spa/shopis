@@ -46,7 +46,7 @@ export default function MainNavbar() {
   const isOffset = useOffSetTop(100);
   const { isAuthenticated } = useAuth();
   const { pathname } = useLocation();
-  const isHome = pathname === '/';
+  const isHome = pathname === PATH_RIFOPIS.root;
 
   return (
     <RootStyle>
@@ -67,7 +67,7 @@ export default function MainNavbar() {
           }}
         >
           <MHidden width="mdUp">
-            <MenuMobile isOffset={false} isHome navConfig={navConfig} />
+            <MenuMobile isOffset={false} isHome={isHome} navConfig={navConfig} />
           </MHidden>
           <RouterLink to={PATH_RIFOPIS.root}>
             <LogoRifopis diapo={!isOffset} />
@@ -84,7 +84,6 @@ export default function MainNavbar() {
                 <Button
                   component={RouterLink}
                   variant="text"
-                  target="_blank"
                   to={PATH_APP.user.profile}
                   sx={{
                     fontWeight: 900,

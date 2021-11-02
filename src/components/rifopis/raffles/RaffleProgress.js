@@ -20,12 +20,17 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 const propTypes = {
   stock: PropTypes.number,
-  quantity: PropTypes.number
+  quantity: PropTypes.number,
+  reverse: PropTypes.number
 };
 
-function RaffleProgress({ stock, quantity }) {
+const defaultProps = {
+  reverse: false
+};
+
+function RaffleProgress({ reverse, stock, quantity, ...other }) {
   return (
-    <Stack spacing={2}>
+    <Stack spacing={1} direction={reverse ? 'column-reverse' : 'column'} {...other}>
       <Typography
         variant="caption"
         sx={{ fontWeight: 900, textTransform: 'uppercase', color: 'primary.light', textAlign: 'right' }}
@@ -38,5 +43,6 @@ function RaffleProgress({ stock, quantity }) {
 }
 
 RaffleProgress.propTypes = propTypes;
+RaffleProgress.defaultProps = defaultProps;
 
 export default RaffleProgress;

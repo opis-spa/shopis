@@ -6,7 +6,8 @@ import trashFill from '@iconify/icons-eva/trash-2-fill';
 import { styled } from '@mui/material/styles';
 import { Typography, Stack, Divider } from '@mui/material';
 // redux
-import { useSelector } from '../../../redux/store';
+import { useSelector, useDispatch } from '../../../redux/store';
+import { deleteCart } from '../../../redux/slices/product';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
 // components
@@ -31,8 +32,13 @@ const propTypes = {
 };
 
 const ProductItemSimple = ({ product }) => {
-  const { name, photo, photos, amount, discountPartnership: discount } = product;
+  const { id, name, photo, photos } = product;
+  const dispatch = useDispatch();
   const { cart, open } = useSelector((state) => state.product.checkout);
+
+  const handleDelete = () => {
+    dispatch(deleteCart(id));
+  };
 
   const image = useMemo(() => {
     if (photos) {
@@ -61,11 +67,11 @@ const ProductItemSimple = ({ product }) => {
         <Stack sx={{ flex: 1 }}>
           <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
             <Typography sx={{ fontWeight: 700, maxWidth: 180, flex: 1 }}>{name}</Typography>
-            <Typography sx={{ fontWeight: 900 }}>{fCurrency(amount - (discount || 0))}</Typography>
+            <Typography sx={{ fontWeight: 900 }}>{fCurrency(productCart.subtotal)}</Typography>
           </Stack>
 
           <Stack direction="row" justifyContent="flex-end">
-            <MIconButton>
+            <MIconButton onClick={handleDelete}>
               <Icon icon={trashFill} width={20} height={20} color="white" />
             </MIconButton>
             <ProductAdd

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Element } from 'react-scroll';
 // material
 import { alpha, styled, useTheme } from '@mui/material/styles';
 import { Typography, Stack, Container, Grid } from '@mui/material';
@@ -7,7 +8,7 @@ import { varFadeInUp, MotionInView } from '../animate';
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled('div')(({ theme }) => ({
+const RootStyle = styled(Element)(({ theme }) => ({
   paddingTop: theme.spacing(15),
   paddingBottom: theme.spacing(10)
 }));
@@ -19,7 +20,7 @@ export default function RifopisWinners() {
   const isLight = theme.palette.mode === 'light';
 
   return (
-    <RootStyle>
+    <RootStyle name="ganadores">
       <Container maxWidth="lg">
         <Grid container spacing={5}>
           <Grid item xs={12}>

@@ -5,16 +5,20 @@ import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { Icon } from '@iconify/react';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
+import logOutFill from '@iconify/icons-ic/sharp-log-out';
 // material
 import { Grid, Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // hooks
+import useIsMountedRef from '../../../hooks/useIsMountedRef';
+import useAuth from '../../../hooks/useAuth';
 import usePartnership from '../../../hooks/usePartnership';
 // redux
 import { useDispatch, useSelector } from '../../../redux/store';
-import { onBackStep, onNextStep, proccessCheckout, clearCart } from '../../../redux/slices/product';
+import { getBalances } from '../../../redux/slices/wallet';
+import { onBackStep, proccessCheckout, setOpenCart, setPayment } from '../../../redux/slices/product';
 // route
-import { PATH_RIFOPIS } from '../../../routes/paths';
+import { PATH_RIFOPIS, PATH_SHOP } from '../../../routes/paths';
 // components
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
@@ -24,19 +28,37 @@ import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 
 export default function CheckoutPayment() {
   const { enqueueSnackbar } = useSnackbar();
+  const isMountedRef = useIsMountedRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
   const { partnership } = usePartnership();
   const { data: payments } = useSelector((state) => state.payment);
-  const { checkout, checkoutResult, isLoading, error } = useSelector((state) => state.product);
+  const { checkout, checkoutResult } = useSelector((state) => state.product);
   const { cart, total, discount, subtotal, shipping, isDelivery, data: customer, delivery } = checkout;
 
   const PAYMENT_OPTIONS = useMemo(() => {
     const { paymentMethods } = partnership;
-    return payments.filter((item) => paymentMethods.indexOf(item.id) >= 0);
-  }, [partnership, payments]);
+    return payments.filter((item) =>
+      paymentMethods.indexOf(item.id) >= 0 && isAuthenticated ? true : item.type !== 'opis'
+    );
+  }, [partnership, payments, isAuthenticated]);
 
   const handleBackStep = () => {
+    if (!isAuthenticated) {
+      dispatch(onBackStep());
+    } else {
+      dispatch(setOpenCart(true));
+      if (partnership.nickname === 'rifopis') {
+        navigate(PATH_RIFOPIS.root);
+      } else {
+        navigate(`/shop/${partnership.nickname}/cart`);
+      }
+    }
+  };
+
+  const handleLogOff = async () => {
+    logout();
     dispatch(onBackStep());
   };
 
@@ -50,13 +72,13 @@ export default function CheckoutPayment() {
       customer,
       products: cart.map((item) => ({ id: item.id, quantity: item.quantity })),
       ...(isDelivery && { delivery }),
-      payment: ''
+      payment: '',
+      token: null
     },
     validationSchema: PaymentSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
         await dispatch(proccessCheckout(values));
-        dispatch(clearCart());
       } catch (error) {
         setSubmitting(false);
         setErrors(error.message);
@@ -70,31 +92,39 @@ export default function CheckoutPayment() {
   const { values, isSubmitting, handleSubmit, setSubmitting } = formik;
 
   useMemo(() => {
-    const { success } = checkoutResult;
-    console.log(' error ? ');
-    if (success) {
-      if (values.payment !== 'webpay') {
-        setSubmitting(false);
-        dispatch(onNextStep());
-      } else if (partnership.nickname === 'rifopis') {
-        navigate(PATH_RIFOPIS.payment);
-      } else {
-        navigate(`/shop/${partnership.nickname}/checkout/payment`);
+    if (isMountedRef.current) {
+      const { success, _id, status } = checkoutResult;
+      if (success) {
+        if (values.payment === 'webpay' || values.payment === 'paypal') {
+          if (partnership.nickname === 'rifopis') {
+            navigate(PATH_RIFOPIS.payment);
+          } else {
+            navigate(`/shop/${partnership.nickname}/checkout/payment`);
+          }
+        } else {
+          setSubmitting(false);
+          navigate(`${PATH_SHOP.result}?order=${_id}&status=${status}`);
+        }
       }
     }
-  }, [dispatch, navigate, checkoutResult, values.payment, setSubmitting, partnership.nickname]);
+  }, [isMountedRef, checkoutResult, values.payment, partnership.nickname, navigate, setSubmitting]);
+
+  // sync form with store
+  useMemo(() => {
+    dispatch(setPayment(values.payment));
+  }, [dispatch, values.payment]);
 
   useMemo(() => {
-    if (!isLoading && error) {
-      console.log('error');
+    if (isAuthenticated) {
+      dispatch(getBalances());
     }
-  }, [isLoading, error]);
+  }, [dispatch, isAuthenticated]);
 
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button
               type="button"
               size="small"
@@ -104,20 +134,29 @@ export default function CheckoutPayment() {
             >
               Volver
             </Button>
-            <CheckoutPaymentMethods formik={formik} paymentOptions={PAYMENT_OPTIONS} />
+
+            {isAuthenticated && (
+              <Button
+                type="button"
+                size="small"
+                color="inherit"
+                onClick={handleLogOff}
+                endIcon={<Icon icon={logOutFill} />}
+                sx={{ textTransform: 'uppercase' }}
+              >
+                Cerrar sesión
+              </Button>
+            )}
           </Grid>
 
           <Grid item xs={12} md={6}>
-            {isDelivery && <CheckoutBillingInfo onBackStep={handleBackStep} />}
-            <CheckoutSummary total={total} subtotal={subtotal} discount={discount} shipping={shipping} />
-            <LoadingButton
-              fullWidth
-              disabled={values.payment === 'paypal'}
-              size="large"
-              type="submit"
-              variant="contained"
-              loading={isSubmitting}
-            >
+            <CheckoutPaymentMethods formik={formik} paymentOptions={PAYMENT_OPTIONS} sx={{ my: 1 }} />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <CheckoutBillingInfo onBackStep={handleBackStep} sx={{ my: 1 }} />
+            <CheckoutSummary total={total} subtotal={subtotal} discount={discount} shipping={shipping} sx={{ my: 1 }} />
+            <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
               Completar orden
             </LoadingButton>
           </Grid>

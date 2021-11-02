@@ -1,11 +1,11 @@
-import React, { forwardRef } from 'react';
+import React, { useMemo, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-ic/baseline-plus';
 import minusFill from '@iconify/icons-eva/minus-fill';
 // material
-import { styled } from '@mui/material/styles';
-import { Stack, Typography } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
+import { Stack, Typography, useMediaQuery } from '@mui/material';
 // components
 import { MIconButton } from '../../@material-extend';
 // utils
@@ -40,6 +40,18 @@ const defaultProps = {
 
 const Increment = forwardRef((props, ref) => {
   const { big = true, simple, available, quantity, onIncrease, onDecrease, amount, ...other } = props;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const size = useMemo(() => {
+    if (big) {
+      if (isMobile) {
+        return 45;
+      }
+      return 73;
+    }
+    return 30;
+  }, [big, isMobile]);
 
   const incrementQuantity = () => {
     onIncrease();
@@ -50,20 +62,26 @@ const Increment = forwardRef((props, ref) => {
 
   return (
     <ContentStyle ref={ref} direction="row" justifyContent="space-between" alignItems="center" {...other}>
-      <ButtonStyle
-        disabled={quantity === 0}
-        onClick={decrementQuantity}
-        sx={{ width: big ? 73 : 30, height: big ? 73 : 30 }}
-      >
+      <ButtonStyle disabled={quantity === 0} onClick={decrementQuantity} sx={{ width: size, height: size }}>
         <Icon icon={minusFill} width={20} height={20} color="#fff" />
       </ButtonStyle>
       <Typography component="span" sx={{ textTransform: 'uppercase', fontWeight: 900, color: 'primary.light' }}>
-        {simple ? <>{`${quantity}`}</> : <>{`${quantity} tokens = ${fCurrency(amount)}`}</>}
+        {simple ? (
+          <>{`${quantity}`}</>
+        ) : (
+          <>
+            {isMobile ? (
+              <>{`${quantity}x = ${fCurrency(amount)}`}</>
+            ) : (
+              <>{`${quantity} ${quantity > 1 ? 'tokens' : 'token'} = ${fCurrency(amount)}`}</>
+            )}
+          </>
+        )}
       </Typography>
       <ButtonStyle
         disabled={quantity >= available && available >= 0}
         onClick={incrementQuantity}
-        sx={{ width: big ? 73 : 30, height: big ? 73 : 30 }}
+        sx={{ width: size, height: size }}
       >
         <Icon icon={plusFill} width={20} height={20} color="#fff" />
       </ButtonStyle>

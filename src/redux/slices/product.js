@@ -32,7 +32,8 @@ const initialState = {
     delivery: null,
     billing: null,
     isDelivery: false,
-    error: false
+    error: false,
+    payment: null
   },
   checkoutResult: {}
 };
@@ -65,15 +66,27 @@ const slice = createSlice({
       const product = action.payload;
       const isEmptyCart = state.checkout.cart.length === 0;
 
+      const { quantity, promo, amount } = product;
+      const isPromo = promo === '3x2';
+      const discount = Math.trunc(quantity / 3);
+      const quantityPromo = isPromo ? quantity - discount : quantity;
+
       if (isEmptyCart) {
-        state.checkout.cart = [...state.checkout.cart, product];
+        state.checkout.cart = [
+          ...state.checkout.cart,
+          {
+            ...product,
+            subtotal: quantityPromo * amount
+          }
+        ];
       } else {
         state.checkout.cart = map(state.checkout.cart, (_product) => {
           const isExisted = _product.id === product.id;
           if (isExisted) {
             return {
               ..._product,
-              quantity: _product.quantity + 1
+              quantity: _product.quantity + 1,
+              subtotal: _product.amount * quantityPromo
             };
           }
           return _product;
@@ -86,6 +99,10 @@ const slice = createSlice({
       state.checkout.open = action.payload;
     },
 
+    setPayment(state, action) {
+      state.checkout.payment = action.payload;
+    },
+
     clearCart(state) {
       state.checkout = initialState.checkout;
     },
@@ -94,9 +111,7 @@ const slice = createSlice({
       const cart = action.payload;
 
       const promoAdd = (quantity) => {
-        const isPrimo = quantity % 3 === 0 ? 1 : 0;
-        console.log(' promo cal ');
-        console.log(quantity - isPrimo);
+        const isPrimo = Math.trunc(quantity / 3);
         return quantity - isPrimo;
       };
 
@@ -182,13 +197,17 @@ const slice = createSlice({
     },
     increaseQuantity(state, action) {
       const productId = action.payload;
-      console.log('product actions payload');
-      console.log(action.payload);
       const updateCart = map(state.checkout.cart, (product) => {
         if (product.id === productId) {
+          const { quantity, promo, amount } = product;
+          const newQuantity = quantity + 1;
+          const isPromo = promo === '3x2';
+          const discount = Math.trunc(newQuantity / 3);
+          const quantityPromo = isPromo ? newQuantity - discount : newQuantity;
           return {
             ...product,
-            quantity: product.quantity + 1
+            quantity: newQuantity,
+            subtotal: amount * quantityPromo
           };
         }
         return product;
@@ -203,9 +222,15 @@ const slice = createSlice({
       let updateCart = map(state.checkout.cart, (product) => {
         if (product.id === productId) {
           isDelete = product.quantity - 1 === 0;
+          const { quantity, promo, amount } = product;
+          const newQuantity = quantity - 1;
+          const isPromo = promo === '3x2';
+          const discount = Math.trunc(newQuantity / 3);
+          const quantityPromo = isPromo ? newQuantity - discount : newQuantity;
           return {
             ...product,
-            quantity: product.quantity - 1
+            quantity: newQuantity,
+            subtotal: amount * quantityPromo
           };
         }
         return product;
@@ -255,6 +280,7 @@ export const {
   clearCart,
   getCart,
   addCart,
+  setPayment,
   getProduct,
   filterProducts,
   clearFilterProducts,
@@ -293,8 +319,6 @@ export function getProductStore(nickname) {
       const response = await axios.get(`/api/v1/partnerships/${nickname}/product`);
       dispatch(slice.actions.getProductsSuccess(response.data.products));
     } catch (error) {
-      console.log('errror');
-      console.log(error);
       dispatch(slice.actions.hasError(error));
     }
   };
@@ -315,14 +339,39 @@ export const aplicateCoupon = (body) => async (dispatch) => {
 
 // ----------------------------------------------------------------------
 
-export const createProduct = (body) => async (dispatch) => {
+export const createProduct = (body, photos) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
-    const response = await axios.post('/api/v1/products/create', body);
+    delete body.photos;
+    const data = new FormData();
+    Object.keys(body).forEach((item) => {
+      if (typeof body[item] === 'object') {
+        const file = body[item];
+        data.append(item, file);
+      } else {
+        const value = body[item] || '';
+        if (value) {
+          data.append(item, value);
+        }
+      }
+    });
+    if (photos) {
+      photos.forEach((image) => {
+        data.append('photos[]', image);
+      });
+    }
+
+    const response = await axios({
+      method: 'post',
+      url: '/api/v1/products/create',
+      data,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
     dispatch(slice.actions.addProduct(response.data.product));
   } catch (error) {
     console.error(error);
     dispatch(slice.actions.hasError(error));
+    throw error;
   }
 };
 
@@ -354,10 +403,8 @@ export const proccessCheckout = (payload) => async (dispatch) => {
     }
     const error = new Error(message);
     error.code = 'order/error';
-    console.log('hola');
     throw error;
   } catch (error) {
-    console.log(error);
     dispatch(slice.actions.hasError(error));
     throw error;
   }

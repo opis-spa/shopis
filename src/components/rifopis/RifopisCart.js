@@ -4,8 +4,8 @@ import closeFill from '@iconify/icons-eva/close-fill';
 import trashFill from '@iconify/icons-eva/trash-2-fill';
 import { useFormik } from 'formik';
 // material
-import { styled } from '@mui/material/styles';
-import { Box, Backdrop, Button, Paper, Divider, Typography, Stack } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
+import { Box, Backdrop, Button, Paper, Divider, Typography, Stack, useMediaQuery } from '@mui/material';
 // hooks
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import usePartnership from '../../hooks/usePartnership';
@@ -46,6 +46,8 @@ const ButtonStyle = styled(Button)(({ theme }) => ({
 const DRAWER_WIDTH = 500;
 
 export default function RifopisCart() {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const partnership = usePartnership();
   const isMountedRef = useIsMountedRef();
   const dispatch = useDispatch();
@@ -58,6 +60,9 @@ export default function RifopisCart() {
     } else {
       document.body.style.overflow = 'unset';
     }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, [open]);
 
   useEffect(() => {
@@ -120,8 +125,7 @@ export default function RifopisCart() {
             borderRadius: '0px',
             overflow: 'hidden',
             boxShadow: (theme) => theme.customShadows.z24,
-            transition: (theme) => theme.transitions.create('width'),
-            ...(open && { width: DRAWER_WIDTH })
+            ...(open && { width: fullScreen ? '100%' : DRAWER_WIDTH })
           }}
         >
           <Stack spacing={2} justifyContent="space-between" sx={{ height: '100%' }}>
@@ -172,8 +176,8 @@ export default function RifopisCart() {
                   variant="contained"
                   disabled={checkout.subtotal === 0 || checkout.subtotal < partnership.deliveryAmountMin}
                 >
-                  <ButtonTicket title="Comprar token" fullWidth>
-                    Comprar token
+                  <ButtonTicket title="Comprar tokens" fullWidth>
+                    Comprar tokens
                   </ButtonTicket>
                 </LinkPartnership>
               </Box>

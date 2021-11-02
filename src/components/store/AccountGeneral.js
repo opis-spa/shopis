@@ -199,14 +199,13 @@ export default function AccountGeneral() {
                     onChange={handleChangeCountry}
                     value={values.location?.country || ''}
                     SelectProps={{ native: true }}
-                    error={Boolean(touched.country && errors.country)}
-                    helperText={touched.country && errors.country}
+                    error={Boolean(touched.location?.country && errors.location?.country)}
+                    helperText={touched.location?.country && errors.location?.country}
                   >
-                    <option value="" />
                     {countries
                       .filter((item) => item.code === 'CL')
                       .map((option) => (
-                        <option key={option.code} value={option.label}>
+                        <option key={option.code} value={option.code}>
                           {option.label}
                         </option>
                       ))}
@@ -245,9 +244,9 @@ export default function AccountGeneral() {
                     helperText={touched.country && errors.country}
                   >
                     <option value="" />
-                    {countries.map((option) => (
-                      <option key={option.code} value={option.label}>
-                        {option.label}
+                    {cities.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
                       </option>
                     ))}
                   </TextField>

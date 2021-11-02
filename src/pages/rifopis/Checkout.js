@@ -4,10 +4,10 @@ import { Icon } from '@iconify/react';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector } from '@mui/material';
+import { Box, Grid, Step, Stepper, Container, StepLabel } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getCart, createBilling, onGotoStep, getProductStore } from '../../redux/slices/product';
+import { getCart, createBilling, onGotoStep, getProductStore, createInformation } from '../../redux/slices/product';
 import { getDeliveries } from '../../redux/slices/delivery';
 import { getPayments } from '../../redux/slices/payment';
 // hooks
@@ -23,23 +23,6 @@ import {
   CheckoutPayment,
   CheckoutOrderComplete
 } from '../../components/shop/checkout';
-
-// ----------------------------------------------------------------------
-
-const QontoConnector = styled(StepConnector)(({ theme }) => ({
-  top: 10,
-  left: 'calc(-50% + 20px)',
-  right: 'calc(50% + 20px)',
-  '& .MuiStepConnector-line': {
-    borderTopWidth: 2,
-    borderColor: theme.palette.divider
-  },
-  '&.Mui-active, &.Mui-completed': {
-    '& .MuiStepConnector-line': {
-      borderColor: theme.palette.primary.light
-    }
-  }
-}));
 
 QontoStepIcon.propTypes = {
   active: PropTypes.bool,
@@ -100,7 +83,7 @@ const MainStyle = styled(Page)(({ theme }) => ({
 export default function EcommerceCheckout() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { partnership } = usePartnership();
   const { nickname } = partnership;
   const isMountedRef = useIsMountedRef();
@@ -115,9 +98,10 @@ export default function EcommerceCheckout() {
 
   useEffect(() => {
     if (isAuthenticated) {
+      dispatch(createInformation(user));
       dispatch(onGotoStep(2));
     }
-  }, [dispatch, isAuthenticated]);
+  }, [dispatch, isAuthenticated, user]);
 
   useEffect(() => {
     if (isMountedRef.current) {
@@ -139,20 +123,10 @@ export default function EcommerceCheckout() {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <Grid container justifyContent="center">
           <Grid item xs={12} md={8} sx={{ mb: 5, justifyContent: 'center' }}>
-            <Stepper activeStep={activeStep} connector={<QontoConnector />}>
+            <Stepper activeStep={activeStep} alternativeLabel>
               {STEPS.map((label) => (
-                <Step key={label}>
-                  <StepLabel
-                    StepIconComponent={QontoStepIcon}
-                    sx={{
-                      '& .MuiStepLabel-label': {
-                        typography: 'subtitle2',
-                        color: 'text.disabled'
-                      }
-                    }}
-                  >
-                    {label}
-                  </StepLabel>
+                <Step key={label} sx={{ '& .MuiSvgIcon-root': { color: 'secondary.light' } }}>
+                  <StepLabel>{label}</StepLabel>
                 </Step>
               ))}
             </Stepper>

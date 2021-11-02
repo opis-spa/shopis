@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import NProgress from 'nprogress';
 import { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
@@ -69,7 +70,11 @@ function ProgressBar() {
   return null;
 }
 
-export default function LoadingScreen({ ...other }) {
+const propTypes = {
+  generic: PropTypes.bool
+};
+
+function LoadingScreen({ ...other }) {
   const DOMAIN_HOST = window.location.host;
   const isRifopis = DOMAIN_HOST.indexOf('rifopis.cl') >= 0;
 
@@ -92,3 +97,7 @@ export default function LoadingScreen({ ...other }) {
     </>
   );
 }
+
+LoadingScreen.propTypes = propTypes;
+
+export default LoadingScreen;

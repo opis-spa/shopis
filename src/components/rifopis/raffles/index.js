@@ -35,14 +35,15 @@ const propTypes = {
     photo: PropTypes.string,
     photos: PropTypes.arrayOf(PropTypes.string),
     stock: PropTypes.string,
-    quantity: PropTypes.number,
-    name: PropTypes.string
+    tickets: PropTypes.arrayOf(PropTypes.shape({})),
+    name: PropTypes.string,
+    goal: PropTypes.number
   }).isRequired
 };
 
 function Raffles(props) {
   const { raffle } = props;
-  const { stock, quantity, name, photos } = raffle;
+  const { stock, tickets, name, photos, goal } = raffle;
 
   return (
     <Stack direction={{ xs: 'column', md: 'row' }}>
@@ -97,13 +98,13 @@ function Raffles(props) {
             </Typography>
             <Scrollbar sx={{ maxHeight: 100, my: 1 }}>
               <Stack>
-                {[...Array(quantity)].map((tickets, index) => (
+                {tickets.map((tickets, index) => (
                   <Typography
                     key={index}
                     variant="title"
                     sx={{ textAlign: 'left', color: 'primary.light', fontWeight: 400, textTransform: 'uppercase' }}
                   >
-                    {`Nº 00000${index + 1}`}
+                    {`#${tickets}`}
                   </Typography>
                 ))}
               </Stack>
@@ -119,9 +120,11 @@ function Raffles(props) {
           sx={{ mt: (theme) => theme.spacing(2) }}
         >
           <Box sx={{ flex: 1, width: '100%', ml: (theme) => theme.spacing(4), mr: (theme) => theme.spacing(2) }}>
-            <RaffleProgress stock={stock} quantity={1333} />
+            <RaffleProgress stock={stock} quantity={goal} />
           </Box>
-          <ButtonTicket title="Comprar más Tokens" sx={{ width: 250 }} />
+          <Box sx={{ flex: 1, maxWidth: 250 }}>
+            <ButtonTicket title="Comprar más" sx={{ width: 250 }} />
+          </Box>
         </Stack>
       </StyledCard>
     </Stack>
