@@ -168,7 +168,7 @@ export default function Order() {
                 />
                 <TableBody>
                   {filteredSales.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, orderCode, amount, createdAt, stock } = row;
+                    const { id, orderCode, amountTotal, createdAt, stock } = row;
 
                     const isItemSelected = selected.indexOf(id) !== -1;
 
@@ -194,7 +194,7 @@ export default function Order() {
                             {sentenceCase('stock')}
                           </Label>
                         </TableCell>
-                        <TableCell align="right">{fCurrency(amount)}</TableCell>
+                        <TableCell align="right">{fCurrency(amountTotal)}</TableCell>
                         <TableCell align="right">
                           <OrderMoreMenu id={id} />
                         </TableCell>

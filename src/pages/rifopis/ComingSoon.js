@@ -73,7 +73,7 @@ const SeparatorStyle = styled(Typography)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function ComingSoon() {
-  const countdown = useCountdown(new Date('11/01/2021 00:00'));
+  const countdown = useCountdown(new Date('11/09/2021 00:00'));
   const dispatch = useDispatch();
   const isMountedRef = useIsMountedRef();
   const { newsletter, isLoading } = useSelector((state) => state.user);
