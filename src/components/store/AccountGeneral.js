@@ -245,9 +245,9 @@ export default function AccountGeneral() {
                     helperText={touched.country && errors.country}
                   >
                     <option value="" />
-                    {countries.map((option) => (
-                      <option key={option.code} value={option.label}>
-                        {option.label}
+                    {cities.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
                       </option>
                     ))}
                   </TextField>
