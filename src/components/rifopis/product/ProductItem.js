@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 // material
-import { styled } from '@mui/material/styles';
-import { Box, Button, Card, Stack, Typography, Divider, DialogContent } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
+import { Box, Button, Card, Stack, Typography, Divider, DialogContent, useMediaQuery } from '@mui/material';
 
 // redux
 import { useSelector } from '../../../redux/store';
@@ -51,9 +51,11 @@ ProductItem.propTypes = {
 
 function ProductItem({ product, onSelectProduct, ...other }) {
   const { goal, name, promo, photo, photos, amount, discountPartnership: discount, stock, prizes, expireAt } = product;
+  const theme = useTheme();
   const { cart, open } = useSelector((state) => state.product.checkout);
   const [detailOpen, setDetailOpen] = useState(false);
   const isPromo = promo === '3x2';
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleProductDetail = () => {
     onSelectProduct(product);
@@ -91,7 +93,7 @@ function ProductItem({ product, onSelectProduct, ...other }) {
           />
         )}
         <Box sx={{ p: 2 }}>
-          <ProductImgStyle alt={name} src={image[1]} />
+          <ProductImgStyle alt={name} src={image[1]} sx={{ height: isMobile ? 170 : 'auto' }} />
           <ProductAdd tooltip={!open} title="Comprar tokens" product={productCart} sx={{ mt: 1 }} />
         </Box>
 
