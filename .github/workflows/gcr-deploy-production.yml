@@ -38,6 +38,22 @@ jobs:
 
       - name: Build Development
         run: npm run build
+        env:
+          FAST_REFRESH: false
+          REACT_APP_PROD: true
+          REACT_APP_URL_API: ${{ secrets.URL_ENDPOINT }}
+          REACT_APP_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          REACT_APP_FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+          REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          REACT_APP_FIREBASE_APPID: ${{ secrets.FIREBASE_APPID }}
+          REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+          REACT_APP_GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
+          REACT_APP_HOTJAR: ${{ secrets.HOTJAR }}
+          REACT_APP_PAYPAL_ID: ${{ secrets.PAYPAL_ID }}
+          REACT_APP_FACEBOOK_PIXEL: ${{ secrets.FACEBOOK_PIXEL }}
 
       - name: Archive Production Artifact
         uses: actions/upload-artifact@main
@@ -72,21 +88,7 @@ jobs:
       - name: Build docker
         run: docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
         env:
-          FAST_REFRESH: false
           REACT_APP_PROD: true
-          REACT_APP_URL_API: ${{ secrets.URL_ENDPOINT }}
-          REACT_APP_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
-          REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
-          REACT_APP_FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
-          REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-          REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
-          REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
-          REACT_APP_FIREBASE_APPID: ${{ secrets.FIREBASE_APPID }}
-          REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
-          REACT_APP_GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
-          REACT_APP_HOTJAR: ${{ secrets.HOTJAR }}
-          REACT_APP_PAYPAL_ID: ${{ secrets.PAYPAL_ID }}
-          REACT_APP_FACEBOOK_PIXEL: ${{ secrets.FACEBOOK_PIXEL }}
 
       - name: Push Container
         run: docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
