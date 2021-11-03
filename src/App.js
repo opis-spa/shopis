@@ -24,6 +24,8 @@ import { isProduction } from './config';
 
 export default function App() {
   const { isInitialized } = useAuth();
+  console.log('isProduction');
+  console.log(isProduction);
   return (
     <ThemeConfig>
       <ThemePrimaryColor>
