@@ -24,8 +24,6 @@ import { isProduction } from './config';
 
 export default function App() {
   const { isInitialized } = useAuth();
-  console.log('isProduction');
-  console.log(isProduction);
   return (
     <ThemeConfig>
       <ThemePrimaryColor>
@@ -36,9 +34,13 @@ export default function App() {
             <ProgressBarStyle />
             <BaseOptionChartStyle />
             <ScrollToTop />
-            {isProduction === true && <FacebookPixel />}
-            {isProduction === true && <GoogleAnalytics />}
-            {isProduction === true && <Hotjar />}
+            {isProduction === true && (
+              <>
+                <FacebookPixel />
+                <GoogleAnalytics />
+                <Hotjar />
+              </>
+            )}
             {isInitialized ? <Router /> : <LoadingScreen />}
           </NotistackProvider>
         </RtlLayout>
