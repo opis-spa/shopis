@@ -34,6 +34,8 @@ const defaultProps = {
 function CarouselItem({ item, isActive, index, onSelectProduct }) {
   const { photo, photos, name } = item;
 
+  const isCrypto = !(name.indexOf('San') >= 0);
+
   const handleSelectProduct = () => {
     onSelectProduct(item);
   };
@@ -82,12 +84,12 @@ function CarouselItem({ item, isActive, index, onSelectProduct }) {
             <MotionContainer open={isActive}>
               <motion.div variants={varFadeInRight}>
                 <Typography variant="h3" gutterBottom sx={{ textTransform: 'uppercase' }}>
-                  sorteos con proposito
+                  {isCrypto ? 'Aceleremos la adopción' : 'Reactivemos el turismo'}
                 </Typography>
               </motion.div>
               <motion.div variants={varFadeInRight}>
                 <Typography variant="h1" noWrap gutterBottom sx={{ fontWeight: 900, textTransform: 'uppercase' }}>
-                  Vuelve <br /> a viajar
+                  {isCrypto ? `Gana \n cripto` : `Vuelve \n a viajar`}
                 </Typography>
               </motion.div>
               <motion.div variants={varFadeInRight}>
@@ -97,7 +99,7 @@ function CarouselItem({ item, isActive, index, onSelectProduct }) {
                   variant="contained"
                   title="Participar"
                   fontSize={28}
-                  sx={{ mt: 3, zIndex: 100 }}
+                  sx={{ mt: 3, width: 240, zIndex: 100 }}
                 >
                   Participar
                 </ButtonTicket>

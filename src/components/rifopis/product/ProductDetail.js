@@ -190,12 +190,7 @@ function ProductDetail({ onBuy, product }) {
               );
             })}
 
-          <Stack spacing={1} sx={{ py: 5 }}>
-            <Typography variant="h5" sx={{ textTransform: 'uppercase', fontWeight: 900 }}>
-              Consideraciones generales sobre el sorteo
-            </Typography>
-            <Typography>Consideraciones generales sobre el sorteo</Typography>
-          </Stack>
+          <Stack spacing={1} sx={{ py: 1 }} />
         </Box>
       </Grid>
 
