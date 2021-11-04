@@ -15,6 +15,8 @@ import usePartnership from '../../hooks/usePartnership';
 import Page from '../../components/Page';
 import { ProductSummary, ProductDescription, ProductDetailsCarousel } from '../../components/shop/product';
 import LinkPartnership from '../../components/LinkPartnership';
+// utils
+import track from '../../utils/analytics';
 
 // ----------------------------------------------------------------------
 
@@ -64,6 +66,8 @@ function Product() {
   };
 
   const handleAddCart = (product) => {
+    const { id } = product;
+    track.event('AddToCart', { productId: id });
     dispatch(addCart({ ...product, quantity: 1 }));
   };
 

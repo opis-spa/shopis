@@ -23,6 +23,8 @@ import {
   CheckoutPayment,
   CheckoutOrderComplete
 } from '../../components/shop/checkout';
+// utils
+import track from '../../utils/analytics';
 
 QontoStepIcon.propTypes = {
   active: PropTypes.bool,
@@ -114,7 +116,11 @@ export default function EcommerceCheckout() {
 
   useEffect(() => {
     if (activeStep === 1) {
+      track.event('InitiateCheckout');
       dispatch(createBilling(null));
+    }
+    if (activeStep === 2) {
+      track.event('CompleteRegistration');
     }
   }, [dispatch, activeStep]);
 

@@ -23,6 +23,8 @@ import { PATH_RIFOPIS, PATH_SHOP } from '../../../routes/paths';
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
+// utils
+import track from '../../../utils/analytics';
 
 // ----------------------------------------------------------------------
 
@@ -79,6 +81,7 @@ export default function CheckoutPayment() {
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
         await dispatch(proccessCheckout(values));
+        track.event('Purchase', values);
       } catch (error) {
         setSubmitting(false);
         setErrors(error.message);

@@ -1,8 +1,8 @@
-import { googleAnalyticsConfig } from '../config';
+import { googleAnalyticsConfig, facebookPixelConfig } from '../config';
 
 // ----------------------------------------------------------------------
 
-const setup = (...args) => {
+const gaMeasurement = (...args) => {
   if (process.env.NODE_ENV !== 'production') {
     return;
   }
@@ -12,12 +12,24 @@ const setup = (...args) => {
   window.gtag(...args);
 };
 
+const pixelMeasurement = (...args) => {
+  if (process.env.NODE_ENV !== 'production') {
+    return;
+  }
+  if (!window.fbq) {
+    return;
+  }
+  window.fbq(...args);
+};
+
 const track = {
   pageview: (props) => {
-    setup('config', googleAnalyticsConfig, props);
+    gaMeasurement('config', googleAnalyticsConfig, props);
+    pixelMeasurement('init', facebookPixelConfig, props);
   },
   event: (type, props) => {
-    setup('event', type, props);
+    gaMeasurement('event', type, props);
+    pixelMeasurement('track', props);
   }
 };
 
