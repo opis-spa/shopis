@@ -1,4 +1,4 @@
-import { googleAnalyticsConfig, facebookPixelConfig } from '../config';
+import { googleAnalyticsConfig } from '../config';
 
 // ----------------------------------------------------------------------
 
@@ -25,11 +25,11 @@ const pixelMeasurement = (...args) => {
 const track = {
   pageview: (props) => {
     gaMeasurement('config', googleAnalyticsConfig, props);
-    pixelMeasurement('init', facebookPixelConfig, props);
+    pixelMeasurement('track', props);
   },
   event: (type, props) => {
     gaMeasurement('event', type, props);
-    pixelMeasurement('track', props);
+    pixelMeasurement('track', type, props);
   }
 };
 
