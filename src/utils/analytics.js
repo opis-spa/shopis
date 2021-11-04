@@ -25,7 +25,7 @@ const pixelMeasurement = (...args) => {
 const track = {
   pageview: (props) => {
     gaMeasurement('config', googleAnalyticsConfig, props);
-    pixelMeasurement('track', props);
+    pixelMeasurement('track', 'PageView', props);
   },
   event: (type, props) => {
     gaMeasurement('event', type, props);
