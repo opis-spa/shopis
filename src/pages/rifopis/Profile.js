@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Button, Container, Typography, Stack } from '@mui/material';
 // hooks
+import usePartnership from '../../hooks/usePartnership';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import useAuth from '../../hooks/useAuth';
 // redux
@@ -37,6 +38,8 @@ const ContentStyle = styled(Stack)(({ theme }) => ({
 }));
 
 const Profile = () => {
+  const { partnership } = usePartnership();
+  const { id } = partnership;
   const isMountedRef = useIsMountedRef();
   const dispatch = useDispatch();
   const { user, logout } = useAuth();
@@ -64,9 +67,11 @@ const Profile = () => {
     const raffles = new Map();
     if (sales && isMountedRef.current === true) {
       // here proccess the orders
+      console.log('partnershipId');
+      console.log(id);
       sales.forEach((sale) => {
-        const { details } = sale;
-        if (details) {
+        const { details, partnershipId } = sale;
+        if (details && partnershipId === id) {
           details.forEach((raffle) => {
             const { _id: ticket, product } = raffle;
             // fixes bug in token no process
@@ -88,7 +93,7 @@ const Profile = () => {
       RafflesMap.push(item);
     });
     return RafflesMap;
-  }, [sales, isMountedRef]);
+  }, [id, sales, isMountedRef]);
 
   return (
     <RootStyle title="Mis sorteos | rifopis">
