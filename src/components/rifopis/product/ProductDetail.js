@@ -33,6 +33,7 @@ import { DialogAnimate } from '../../animate';
 import { positionString } from '../../../utils/positionString';
 import { MIconButton } from '../../@material-extend';
 import ButtonTicket from '../ButtonTicket';
+import Scrollbar from '../../Scrollbar';
 
 const StyledAccordion = styled((props) => <Accordion disableGutters elevation={0} square {...props} />)(
   ({ theme }) => ({
@@ -132,7 +133,7 @@ function ProductDetail({ onBuy, product }) {
   return (
     <Grid container spacing={2} sx={{ mt: 0 }}>
       <Grid item xs={12} md={8}>
-        <Box sx={{ overflow: 'scroll' }}>
+        <Scrollbar>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6} sx={{ maxWidth: 350 }}>
               <RifopisPolaroid
@@ -191,7 +192,7 @@ function ProductDetail({ onBuy, product }) {
             })}
 
           <Stack spacing={1} sx={{ py: 1 }} />
-        </Box>
+        </Scrollbar>
       </Grid>
 
       <Grid item xs={12} md={4}>
