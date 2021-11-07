@@ -1,69 +1,65 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { paramCase } from 'change-case';
 // material
-import { styled, alpha } from '@mui/material/styles';
-import { Avatar, Box, Card, Stack, Typography, Divider } from '@mui/material';
-import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import { styled, useTheme } from '@mui/material/styles';
+import { Box, Button, Card, Stack, Typography, Divider, DialogContent, useMediaQuery } from '@mui/material';
 
 // redux
 import { useSelector } from '../../../redux/store';
 // components
-import Label from '../../Label';
+import RaffleProgress from '../raffles/RaffleProgress';
+import RafflePrizes from '../raffles/RafflePrizes';
+import RafflePrice from '../raffles/RafflePrice';
 import ProductAdd from './ProductAdd';
-import LinkPartnership from '../../LinkPartnership';
+import { DialogAnimate } from '../../animate';
+import ProductDetail from './ProductDetail';
 // utils
-import { fCurrency } from '../../../utils/formatNumber';
+import { positionString } from '../../../utils/positionString';
 
 // ----------------------------------------------------------------------
 
 const CardStyle = styled(Card)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
   border: `1px solid ${theme.palette.secondary.light}`,
   minWidth: '40%',
   [theme.breakpoints.down('md')]: {
     minWidth: '80%!important'
-  }
+  },
+  paddingBottom: theme.spacing(2),
+  boxSizing: 'border-box',
+  boxShadow: '-2px -2px 14px rgba(255, 194, 36, 0.2)',
+  overflow: 'visible',
+  marginLeft: 10
 }));
 
 const ProductImgStyle = styled('img')({
   width: '100%',
   height: 288,
-  borderRadius: 6,
+  borderTopLeftRadius: 6,
+  borderTopRightRadius: 6,
   objectFit: 'cover'
 });
-
-const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-  height: 10,
-  borderRadius: 5,
-  [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor: theme.palette.primary.main
-  },
-  [`& .${linearProgressClasses.bar}`]: {
-    borderRadius: 0,
-    backgroundColor: theme.palette.primary.lighter
-  }
-}));
-
-const StackStyles = styled(Stack)(({ theme }) => ({
-  border: `1px solid ${theme.palette.common.white}`,
-  borderRadius: 6,
-  backgroundColor: alpha(theme.palette.common.white, 0.09),
-  marginTop: theme.spacing(2),
-  marginBottom: theme.spacing(2),
-  paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2)
-}));
 
 // ----------------------------------------------------------------------
 
 ProductItem.propTypes = {
   product: PropTypes.object,
-  className: PropTypes.string
+  className: PropTypes.string,
+  onSelectProduct: PropTypes.func
 };
 
-function ProductItem({ product, ...other }) {
-  const { name, photo, photos, amount, discountPartnership: discount, stock } = product;
+function ProductItem({ product, onSelectProduct, ...other }) {
+  const { goal, name, promo, photo, photos, amount, discountPartnership: discount, stock, prizes, expireAt } = product;
+  const theme = useTheme();
   const { cart, open } = useSelector((state) => state.product.checkout);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const isPromo = promo === '3x2';
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const handleProductDetail = () => {
+    onSelectProduct(product);
+  };
 
   const image = useMemo(() => {
     if (photos) {
@@ -80,115 +76,77 @@ function ProductItem({ product, ...other }) {
     return product;
   }, [cart, product]);
 
-  const linkTo = `/product/${paramCase(name)}`;
-
   return (
-    <CardStyle {...other}>
-      <Box sx={{ p: 2 }}>
-        <LinkPartnership to={linkTo} color="inherit">
-          <Label
-            variant="filled"
-            sx={{
-              top: 30,
-              right: 30,
-              position: 'absolute',
-              textTransform: 'uppercase',
-              zIndex: 100
-            }}
-          >
-            Detalle del sorteo
-          </Label>
-        </LinkPartnership>
+    <>
+      <CardStyle {...other}>
+        <DialogAnimate fullWidth open={detailOpen} maxWidth="md" scroll="paper" onClose={() => setDetailOpen(false)}>
+          <DialogContent>
+            <ProductDetail product={product} productCart={productCart} />
+          </DialogContent>
+        </DialogAnimate>
+        {isPromo && (
+          <Box
+            component="img"
+            src="/static/icons/ic_promo_rifopis.svg"
+            alt="Promo 3x2"
+            sx={{ position: 'absolute', width: 100, height: 100, left: -5, top: -5, zIndex: 1000 }}
+          />
+        )}
+        <Box sx={{ p: 2 }}>
+          <ProductImgStyle alt={name} src={image[1]} sx={{ height: isMobile ? 170 : 'auto' }} />
+          <ProductAdd tooltip={!open} title="Comprar tokens" product={productCart} sx={{ mt: 1 }} />
+        </Box>
 
-        <ProductImgStyle alt={name} src={image[1]} />
-      </Box>
-
-      <Stack sx={{ p: 3 }} spacing={2}>
-        <Stack spacing={1}>
-          <Typography variant="subtitle1" noWrap color="primary" sx={{ textTransform: 'uppercase' }}>
-            Primer Lugar
-            <Typography
-              component="span"
-              variant="caption"
-              sx={{ color: 'secondary.light', textTransform: 'uppercase' }}
-            >
-              &nbsp;- 1 premio
-            </Typography>
-          </Typography>
-          <Typography variant="subtitle1" noWrap sx={{ textTransform: 'uppercase', color: 'text.primary' }}>
-            {name}
-          </Typography>
-        </Stack>
-
-        <Divider variant="middle" sx={{ background: '#000000' }} />
-
-        <Stack direction="row" spacing={2}>
-          <Avatar src="/static/icons/ic-bitcoin.png" sx={{ width: 40, height: 40 }} />
-
+        <Stack sx={{ px: 3, flex: 1 }} spacing={2}>
+          <RaffleProgress stock={stock} quantity={goal} reverse />
           <Stack>
-            <Typography
-              variant="caption"
-              noWrap
-              color="secondary"
-              sx={{ color: 'primary.light', textTransform: 'uppercase' }}
-            >
-              Segundo lugar
+            <Typography variant="subtitle1" noWrap color="primary" sx={{ textTransform: 'uppercase' }}>
+              Primer Lugar
               <Typography
                 component="span"
                 variant="caption"
                 sx={{ color: 'secondary.light', textTransform: 'uppercase' }}
               >
-                &nbsp;- 2 premios
+                &nbsp;- 1 premio
               </Typography>
             </Typography>
-            <Typography variant="subtitle2" noWrap color="secondary" sx={{ color: 'text.main' }}>
-              $50.000 pesos en Bitcoin
+            <Typography variant="subtitle1" noWrap sx={{ textTransform: 'uppercase', color: 'text.primary' }}>
+              {name}
             </Typography>
           </Stack>
-        </Stack>
 
-        <Divider variant="middle" sx={{ background: '#000000' }} />
+          {prizes ? (
+            prizes.map((prize, index) => {
+              const { photos, name, cant } = prize;
+              return (
+                <>
+                  <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
+                  <RafflePrizes photo={photos[0]} quantity={cant} prize={name} position={positionString(index + 2)} />
+                </>
+              );
+            })
+          ) : (
+            <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
+          )}
 
-        <Stack direction="row" spacing={2}>
-          <Avatar src="/static/icons/ic-stellar.png" sx={{ width: 40, height: 40 }} />
-
-          <Stack>
-            <Typography
-              variant="caption"
-              noWrap
-              color="secondary"
-              sx={{ color: 'primary.light', textTransform: 'uppercase' }}
+          <Box sx={{ display: 'flex', flexGrow: 1 }} />
+          <RafflePrice isPromo={promo === '3x2'} price={amount - (discount || 0)} expireAt={expireAt} />
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              color="inherit"
+              sx={{
+                textTransform: 'uppercase',
+                fontWeight: 900,
+                backgroundColor: 'secondary.light'
+              }}
+              onClick={handleProductDetail}
             >
-              Tercer lugar
-              <Typography
-                component="span"
-                variant="caption"
-                sx={{ color: 'secondary.light', textTransform: 'uppercase' }}
-              >
-                &nbsp;- 10 premios
-              </Typography>
-            </Typography>
-            <Typography variant="subtitle2" noWrap color="secondary" sx={{ color: 'text.main' }}>
-              $25.000 pesos en Stellar
-            </Typography>
-          </Stack>
+              Detalle del sorteo
+            </Button>
+          </Box>
         </Stack>
-
-        <StackStyles justifyContent="center" alignItems="center">
-          <Typography>
-            1 ticket x <Typography component="span">{fCurrency(amount - (discount || 0))}</Typography>
-          </Typography>
-        </StackStyles>
-
-        <Typography
-          variant="caption"
-          sx={{ fontWeight: 900, textTransform: 'uppercase', color: 'primary.light', textAlign: 'right' }}
-        >{`¡Quedan solo ${stock} tickets!`}</Typography>
-        <BorderLinearProgress variant="determinate" value={stock === 0 ? 100 : 100 - (stock / 1333) * 100} />
-
-        <ProductAdd tooltip={!open} title="Comprar ticket" product={productCart} />
-      </Stack>
-    </CardStyle>
+      </CardStyle>
+    </>
   );
 }
 

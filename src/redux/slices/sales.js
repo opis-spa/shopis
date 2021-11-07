@@ -68,4 +68,14 @@ export const getSale = (orderId) => async (dispatch) => {
   }
 };
 
+export const getMySales = () => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.get(`/api/v1/sales/me`);
+    dispatch(slice.actions.getSalesSuccess(response.data.orders));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
+};
+
 // -----------------------------------------------------------------------

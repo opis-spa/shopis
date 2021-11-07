@@ -14,8 +14,6 @@ import LinkPartnership from '../../LinkPartnership';
 // ----------------------------------------------------------------------
 
 function applyFilter(products, sortBy, filters) {
-  console.log('filter');
-  console.log(products);
   // SORT BY
   if (sortBy === 'priceDesc') {
     products = orderBy(products, ['amount'], ['desc']);
@@ -27,7 +25,6 @@ function applyFilter(products, sortBy, filters) {
   if (filters.category.length > 0) {
     products = filter(products, (_product) => filters.category.indexOf(_product.subcategory) >= 0);
   }
-  console.log(products);
   return products;
 }
 

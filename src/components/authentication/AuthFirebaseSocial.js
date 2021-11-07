@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import googleFill from '@iconify/icons-eva/google-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
@@ -8,14 +9,26 @@ import useAuth from '../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
-export default function AuthFirebaseSocials() {
+const propTypes = {
+  onHasError: PropTypes.func
+};
+
+const defaultProps = {
+  onHasError: () => {}
+};
+
+function AuthFirebaseSocials(props) {
+  const { onHasError } = props;
   const { loginWithGoogle, loginWithFaceBook } = useAuth();
 
   const handleLoginGoogle = async () => {
     try {
       await loginWithGoogle();
     } catch (error) {
-      console.error(error);
+      const { code, message } = error;
+      if (code !== 'auth/popup-closed-by-user') {
+        onHasError(message);
+      }
     }
   };
 
@@ -23,7 +36,10 @@ export default function AuthFirebaseSocials() {
     try {
       await loginWithFaceBook();
     } catch (error) {
-      console.error(error);
+      const { code, message } = error;
+      if (code !== 'auth/popup-closed-by-user') {
+        onHasError(message);
+      }
     }
   };
 
@@ -47,3 +63,8 @@ export default function AuthFirebaseSocials() {
     </>
   );
 }
+
+AuthFirebaseSocials.propTypes = propTypes;
+AuthFirebaseSocials.defaultProps = defaultProps;
+
+export default AuthFirebaseSocials;

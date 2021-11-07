@@ -22,11 +22,16 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
 }));
 
 const propTypes = {
-  product: PropTypes.object.isRequired
+  product: PropTypes.object.isRequired,
+  filter: PropTypes.bool
 };
 
-const ProductItemSummary = ({ product }) => {
-  const { name, photo, photos, amount, discountPartnership: discount } = product;
+const defaultProps = {
+  filter: true
+};
+
+const ProductItemSummary = ({ filter, product }) => {
+  const { name, photo, photos, quantity } = product;
   const { cart } = useSelector((state) => state.product.checkout);
 
   const image = useMemo(() => {
@@ -41,10 +46,10 @@ const ProductItemSummary = ({ product }) => {
     if (cartNew) {
       return cartNew;
     }
-    return { ...product };
-  }, [cart, product]);
+    return { ...product, quantity: quantity || 0 };
+  }, [cart, product, quantity]);
 
-  if (productCart.quantity === 0) {
+  if (filter && productCart.quantity === 0) {
     return <></>;
   }
 
@@ -56,10 +61,10 @@ const ProductItemSummary = ({ product }) => {
         <Stack sx={{ flex: 1 }}>
           <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
             <Typography sx={{ fontWeight: 700, maxWidth: 180, flex: 1 }}>{name}</Typography>
-            <Typography sx={{ fontWeight: 900 }}>{fCurrency(amount - (discount || 0))}</Typography>
+            <Typography sx={{ fontWeight: 900 }}>{fCurrency(productCart.subtotal)}</Typography>
           </Stack>
 
-          <Typography>{`${productCart.quantity} ticket`}</Typography>
+          <Typography>{`${productCart.quantity} tokens`}</Typography>
         </Stack>
       </Stack>
       <Divider variant="middle" sx={{ mt: 2 }} />
@@ -68,5 +73,6 @@ const ProductItemSummary = ({ product }) => {
 };
 
 ProductItemSummary.propTypes = propTypes;
+ProductItemSummary.defaultProps = defaultProps;
 
 export default ProductItemSummary;

@@ -64,9 +64,6 @@ function AuthProvider({ children }) {
             const { success, user: userData } = response.data;
             if (success) {
               setProfile(userData);
-
-              console.log('init');
-              console.log({ payload: { isAuthenticated: true, user: userData } });
               dispatch({
                 type: 'INITIALISE',
                 payload: { isAuthenticated: true, user: userData }
@@ -97,29 +94,51 @@ function AuthProvider({ children }) {
 
     if (success === true) {
       const user = await signInWithCustomToken(auth, token);
-      console.log(user);
       return user;
     }
 
     return new Error(message);
   };
 
-  const loginWithGoogle = async () => {
+  const loginWithGoogle = async (signIn = true) => {
     const provider = new GoogleAuthProvider();
     const user = await signInWithPopup(auth, provider);
-    const { role } = user;
+
+    const { role } = user.user;
     if (!role) {
-      await register();
+      try {
+        await register();
+      } catch (error) {
+        const { message } = error;
+        if (message === 'User register with other provider') {
+          if (signIn) {
+            throw new Error('Parece que te equivocaste en la opción de inicio de sesión');
+          }
+          throw new Error('El correo electrónico ya está registrado con otra opción de inicio de sesión');
+        }
+        throw new Error(message);
+      }
     }
     return user;
   };
 
-  const loginWithFaceBook = async () => {
+  const loginWithFaceBook = async (signIn = true) => {
     const provider = new FacebookAuthProvider();
     const user = await signInWithPopup(auth, provider);
     const { role } = user;
     if (!role) {
-      await register();
+      try {
+        await register();
+      } catch (error) {
+        const { message } = error;
+        if (message === 'User register with other provider') {
+          if (signIn) {
+            throw new Error('Parece que te equivocaste en la opción de inicio de sesión');
+          }
+          throw new Error('El correo electrónico ya está registrado con otra opción de inicio de sesión');
+        }
+        throw new Error(message);
+      }
     }
     return user;
   };
@@ -133,23 +152,31 @@ function AuthProvider({ children }) {
     return response.data;
   };
 
-  const signup = async (email, password, name, lastName, role = 'business') => {
-    const response = await axios.post('/api/v1/user/create', {
-      name,
-      lastName,
-      email,
-      password,
-      role
-    });
+  const signup = async ({ email, password, name, lastName, phone, role = 'business' }) => {
+    try {
+      const response = await axios.post('/api/v1/user/create', {
+        name,
+        lastName,
+        email,
+        password,
+        phone,
+        role
+      });
+      const { success, token, message } = response.data;
 
-    const { success, token, message } = response.data;
+      if (success) {
+        const user = await signInWithCustomToken(auth, token);
+        return user;
+      }
 
-    if (success) {
-      const user = await signInWithCustomToken(auth, token);
-      return user;
+      throw new Error(message);
+    } catch (error) {
+      const { message } = error;
+      if (message === 'User already exist') {
+        throw new Error('El correo electrónico ya se encuentra registrado');
+      }
+      throw error;
     }
-
-    return new Error(message);
   };
 
   const logout = async () => {

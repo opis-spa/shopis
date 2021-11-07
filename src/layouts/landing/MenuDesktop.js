@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { scroller } from 'react-scroll';
-import { useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Link, Stack } from '@mui/material';
+// router
+import { PATH_SHOP } from '../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -56,20 +57,26 @@ MenuDesktopItem.propTypes = {
 function MenuDesktopItem({ item, isHome, isOffset }) {
   const { title, path } = item;
 
-  const handleScroller = () => {
-    // Somewhere else, even another file
-    scroller.scrollTo(path.replace('#', ''), {
-      duration: 1500,
-      delay: 100,
-      smooth: true,
-      offset: 50 // Scrolls to element + 50 pixels down the page
-    });
-  };
+  if (!isHome) {
+    return (
+      <LinkStyle
+        component={RouterLink}
+        to={`${PATH_SHOP.home}${path}`}
+        sx={{
+          fontWeight: 900,
+          ...(isHome && { color: 'common.white' }),
+          ...(isOffset && { color: 'primary.main' })
+        }}
+      >
+        {title}
+      </LinkStyle>
+    );
+  }
 
   return (
     <LinkStyle
+      component={RouterLink}
       to={path}
-      onClick={handleScroller}
       sx={{
         fontWeight: 200,
         ...(isHome && { color: 'common.white' }),

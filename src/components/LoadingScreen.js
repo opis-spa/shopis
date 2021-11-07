@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import NProgress from 'nprogress';
 import { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 // material
 import { styled, useTheme } from '@mui/material/styles';
-import { GlobalStyles } from '@mui/material';
+import { CircularProgress, GlobalStyles } from '@mui/material';
 //
 import LogoShopis from './LogoShopis';
 
@@ -69,7 +70,14 @@ function ProgressBar() {
   return null;
 }
 
-export default function LoadingScreen({ ...other }) {
+const propTypes = {
+  generic: PropTypes.bool
+};
+
+function LoadingScreen({ ...other }) {
+  const DOMAIN_HOST = window.location.host;
+  const isRifopis = DOMAIN_HOST.indexOf('rifopis.cl') >= 0;
+
   return (
     <>
       <ProgressBar />
@@ -83,9 +91,13 @@ export default function LoadingScreen({ ...other }) {
             repeat: Infinity
           }}
         >
-          <LogoShopis sx={{ width: 64, height: 64 }} />
+          {isRifopis ? <CircularProgress /> : <LogoShopis sx={{ width: 64, height: 64 }} />}
         </motion.div>
       </RootStyle>
     </>
   );
 }
+
+LoadingScreen.propTypes = propTypes;
+
+export default LoadingScreen;

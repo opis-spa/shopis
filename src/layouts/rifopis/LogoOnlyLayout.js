@@ -9,11 +9,8 @@ import PowerBy from '../../components/PowerBy';
 
 // ----------------------------------------------------------------------
 
-const ContanetStyle = styled('div')(() => ({
-  height: '100vh'
-}));
-
 const HeaderStyle = styled('header')(({ theme }) => ({
+  display: 'flex',
   top: 0,
   left: 0,
   lineHeight: 0,
@@ -36,7 +33,7 @@ const LinkStyle = styled(Link)(() => ({
 
 export default function LogoOnlyLayout() {
   return (
-    <ContanetStyle>
+    <>
       <HeaderStyle>
         <LinkStyle component={RouterLink} to="/">
           <LogoRifopis />
@@ -46,6 +43,6 @@ export default function LogoOnlyLayout() {
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: -5 }}>
         <PowerBy />
       </Box>
-    </ContanetStyle>
+    </>
   );
 }

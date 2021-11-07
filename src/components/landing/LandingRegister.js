@@ -110,12 +110,10 @@ export default function LandingRegister() {
       name: ''
     },
     onSubmit: async (values, { setErrors, setSubmitting }) => {
-      console.log(values);
       try {
         setSubmitting(false);
         navigate(PATH_AUTH.register);
       } catch (error) {
-        console.log();
         setErrors({ afterSubmit: error.code });
         setSubmitting(false);
       }

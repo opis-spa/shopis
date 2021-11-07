@@ -1,4 +1,5 @@
 import React from 'react';
+import { Element } from 'react-scroll';
 // material
 import { alpha, styled, useTheme } from '@mui/material/styles';
 import { Typography, Stack, Container, Grid, Box } from '@mui/material';
@@ -7,7 +8,7 @@ import { varFadeInUp, MotionInView } from '../animate';
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled('div')(({ theme }) => ({
+const RootStyle = styled(Element)(({ theme }) => ({
   paddingTop: theme.spacing(15),
   paddingBottom: theme.spacing(10)
 }));
@@ -19,7 +20,7 @@ export default function RifopisHowWork() {
   const isLight = theme.palette.mode === 'light';
 
   return (
-    <RootStyle>
+    <RootStyle name="como-funciona">
       <Container maxWidth="lg">
         <Grid container spacing={5}>
           <Grid item xs={12} sx={{ textAlign: 'center' }}>
@@ -44,7 +45,7 @@ export default function RifopisHowWork() {
             <Stack>
               <Box component="img" src="/static/illustrations/illustration-step-1.svg" sx={{ maxHeight: 150, mb: 1 }} />
               <Typography sx={{ color: 'text.primary', textAlign: 'center', fontWeight: 400 }}>
-                Selecciona un sorteo y cúantos tickets quieres
+                Selecciona un sorteo y cúantos tokens quieres
               </Typography>
             </Stack>
           </Grid>

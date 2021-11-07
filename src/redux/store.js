@@ -3,6 +3,7 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 //
 import { rootPersistConfig, rootReducer } from './rootReducer';
+import { isProduction } from '../config';
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +12,8 @@ const store = configureStore({
   middleware: getDefaultMiddleware({
     serializableCheck: false,
     immutableCheck: false
-  })
+  }),
+  devTools: !(isProduction === true)
 });
 
 const persistor = persistStore(store);

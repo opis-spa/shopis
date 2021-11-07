@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useFormik, FormikProvider } from 'formik';
 // material
 import { styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { Box, Fade } from '@mui/material';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 // hooks
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
@@ -111,6 +111,8 @@ function ProductAdd(props) {
           disableFocusListener
           disableHoverListener
           disableTouchListener
+          TransitionComponent={Fade}
+          TransitionProps={{ timeout: 600 }}
           title="¡1 más para la promo!"
           placement="bottom"
           arrow
@@ -129,7 +131,7 @@ function ProductAdd(props) {
         </TooltipStyle>
       ) : (
         <Box display="flex" justifyContent="center" {...other}>
-          <ButtonTicket fullWidth variant="contained" color="secondary" onClick={handleAddToCart}>
+          <ButtonTicket title={title} fullWidth variant="contained" color="secondary" onClick={handleAddToCart}>
             {title}
           </ButtonTicket>
         </Box>

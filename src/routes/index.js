@@ -44,40 +44,44 @@ const Loadable = (Component) => (props) => {
 export default function Router() {
   const DOMAIN_HOST = window.location.host;
 
-  const routes = [
-    {
-      path: 'auth',
-      children: [
-        {
-          path: 'login',
-          element: (
-            <GuestGuard>
-              <Login />
-            </GuestGuard>
-          )
-        },
-        {
-          path: 'register',
-          element: (
-            <GuestGuard>
-              <Register />
-            </GuestGuard>
-          )
-        },
-        { path: 'reset-password', element: <ResetPassword /> },
-        { path: 'verify', element: <VerifyCode /> }
-      ]
-    }
-  ];
+  const routes = [];
 
   if (DOMAIN_HOST.indexOf('rifopis.cl') >= 0) {
     routes.push(
       {
         path: '',
-        element: <LogoOnlyLayoutRifopis />,
+        element: (
+          <PartnershipGuard init="rifopis">
+            <LogoOnlyLayoutRifopis />
+          </PartnershipGuard>
+        ),
         children: [
           { path: '', element: <RifopisComingSoon /> },
           { path: 'payment/result', element: <RifopisPaymentResult /> }
+        ]
+      },
+      {
+        path: 'auth',
+        element: <LogoOnlyLayoutRifopis />,
+        children: [
+          {
+            path: 'login',
+            element: (
+              <GuestGuard>
+                <Login />
+              </GuestGuard>
+            )
+          },
+          {
+            path: 'register',
+            element: (
+              <GuestGuard>
+                <Register />
+              </GuestGuard>
+            )
+          },
+          { path: 'reset-password', element: <ResetPassword /> },
+          { path: 'verify', element: <VerifyCode /> }
         ]
       },
       {
@@ -91,7 +95,8 @@ export default function Router() {
           { path: '', element: <RifopisHome /> },
           { path: 'cart', element: <RifopisCart /> },
           { path: 'store', element: <RifopisStore /> },
-          { path: 'product/:name', element: <RifopisProduct /> }
+          { path: 'product/:name', element: <RifopisProduct /> },
+          { path: 'terms', element: <RifopisTerms /> }
         ]
       },
       {
@@ -105,10 +110,47 @@ export default function Router() {
           { path: 'checkout', element: <RifopisCheckout /> },
           { path: 'payment', element: <Payment /> }
         ]
+      },
+      {
+        path: 'app',
+        element: (
+          <PartnershipGuard init="rifopis">
+            <AuthGuard>
+              <RifopisLayout />
+            </AuthGuard>
+          </PartnershipGuard>
+        ),
+        children: [
+          { path: '', element: <Navigate to="/app/user/profile" replace /> },
+          { path: 'user/profile', element: <RifopisProfile /> }
+        ]
       }
     );
   } else {
     routes.push(
+      {
+        path: 'auth',
+        children: [
+          {
+            path: 'login',
+            element: (
+              <GuestGuard>
+                <Login />
+              </GuestGuard>
+            )
+          },
+          {
+            path: 'register',
+            element: (
+              <GuestGuard>
+                <Register />
+              </GuestGuard>
+            )
+          },
+          { path: 'reset-password', element: <ResetPassword /> },
+          { path: 'verify', element: <VerifyCode /> }
+        ]
+      },
       // Dashboard Routes
       {
         path: 'app',
@@ -227,6 +269,8 @@ const RifopisProduct = Loadable(lazy(() => import('../pages/rifopis/Product')));
 const RifopisStore = Loadable(lazy(() => import('../pages/rifopis/Store')));
 const RifopisCheckout = Loadable(lazy(() => import('../pages/rifopis/Checkout')));
 const RifopisPaymentResult = Loadable(lazy(() => import('../pages/rifopis/PaymentResult')));
+const RifopisProfile = Loadable(lazy(() => import('../pages/rifopis/Profile')));
+const RifopisTerms = Loadable(lazy(() => import('../pages/rifopis/Terms')));
 // Main
 const LandingPage = Loadable(lazy(() => import('../pages/landing/Home')));
 const ComingSoon = Loadable(lazy(() => import('../pages/ComingSoon')));

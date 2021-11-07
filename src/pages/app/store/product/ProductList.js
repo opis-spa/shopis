@@ -194,8 +194,8 @@ export default function EcommerceProductList() {
                 />
                 <TableBody>
                   {filteredProducts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, photo, amount, discountPartnership, stock } = row;
-
+                    const { id, name, photo, photos, amount, discountPartnership, stock } = row;
+                    const image = photos || [photo];
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -218,7 +218,7 @@ export default function EcommerceProductList() {
                               alignItems: 'center'
                             }}
                           >
-                            <ThumbImgStyle alt={name} src={photo} />
+                            <ThumbImgStyle alt={name} src={image[0]} />
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>

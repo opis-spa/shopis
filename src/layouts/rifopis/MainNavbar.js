@@ -4,9 +4,10 @@ import { NavLink as RouterLink, useLocation } from 'react-router-dom';
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Stack, Button, AppBar, Toolbar, Container } from '@mui/material';
 // routes
-import { PATH_AUTH } from '../../routes/paths';
+import { PATH_AUTH, PATH_APP, PATH_RIFOPIS } from '../../routes/paths';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
+import useAuth from '../../hooks/useAuth';
 // components
 import LogoRifopis from '../../components/LogoRifopis';
 import { MHidden } from '../../components/@material-extend';
@@ -43,8 +44,9 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
 
 export default function MainNavbar() {
   const isOffset = useOffSetTop(100);
+  const { isAuthenticated } = useAuth();
   const { pathname } = useLocation();
-  const isHome = pathname === '/';
+  const isHome = pathname === PATH_RIFOPIS.root;
 
   return (
     <RootStyle>
@@ -64,7 +66,10 @@ export default function MainNavbar() {
             justifyContent: 'space-between'
           }}
         >
-          <RouterLink to="">
+          <MHidden width="mdUp">
+            <MenuMobile isOffset={false} isHome={isHome} navConfig={navConfig} />
+          </MHidden>
+          <RouterLink to={PATH_RIFOPIS.root}>
             <LogoRifopis diapo={!isOffset} />
           </RouterLink>
           <Box sx={{ flexGrow: 1 }} />
@@ -75,26 +80,36 @@ export default function MainNavbar() {
 
           <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
             <MHidden width="mdDown">
-              <Button
-                component={RouterLink}
-                variant="text"
-                target="_blank"
-                to={PATH_AUTH.register}
-                sx={{
-                  fontWeight: 900,
-                  textTransform: 'uppercase',
-                  color: 'primary.light'
-                }}
-              >
-                Ingresar
-              </Button>
+              {isAuthenticated ? (
+                <Button
+                  component={RouterLink}
+                  variant="text"
+                  to={PATH_APP.user.profile}
+                  sx={{
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    color: 'primary.lighter'
+                  }}
+                >
+                  Mis Sorteos
+                </Button>
+              ) : (
+                <Button
+                  component={RouterLink}
+                  variant="text"
+                  to={PATH_AUTH.login}
+                  sx={{
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    color: 'primary.lighter'
+                  }}
+                >
+                  Ingresar
+                </Button>
+              )}
             </MHidden>
             <CartPopover />
           </Stack>
-
-          <MHidden width="mdUp">
-            <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
-          </MHidden>
         </Container>
       </ToolbarStyle>
     </RootStyle>
