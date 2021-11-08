@@ -92,7 +92,7 @@
     "eslint-plugin-testing-library": "^3.9.2",
     "eslint-webpack-plugin": "^2.5.2",
     "file-loader": "6.1.1",
-    "firebase": "^9.1.0",
+    "firebase": "^9.3.0",
     "formik": "^2.2.9",
     "formik-mui": "^4.0.0-alpha.3",
     "framer-motion": "^4.1.17",
