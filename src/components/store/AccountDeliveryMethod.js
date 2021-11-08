@@ -3,26 +3,47 @@ import { Grid, Typography, Card, Box, Collapse, Divider, TextField, IconButton, 
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import EditIcon from '@mui/icons-material/Edit';
 import { Checkbox } from 'formik-mui';
-import { styled } from '@mui/styles';
+import { styled, useTheme } from '@mui/styles';
 import { Form, FormikProvider, useFormik, Field } from 'formik';
 import { LoadingButton } from '@mui/lab';
 import { useSelector } from '../../redux/store';
+import AccountDeliveryForm from './AccountDeliveryForm';
 
 const AccountDeliveryMethod = () => {
+  const theme = useTheme();
   const [openModal, setOpenModal] = useState(false);
+  const [deliveryOpts, setDeliveryOpts] = useState({});
   const { data: deliveryMethods } = useSelector((state) => state.delivery);
+  const {
+    deliveryMethods: userDeliveryMethods,
+    deliveryCost,
+    amountDeliveryFree
+  } = useSelector((state) => state.store.data);
+
+  const getDeliveryType = (deliveryCost, amountDeliveryFree) => {
+    if (!deliveryCost && !amountDeliveryFree) {
+      return 'free';
+    }
+    if (deliveryCost && !amountDeliveryFree) {
+      return 'fixed';
+    }
+    if (deliveryCost && amountDeliveryFree) {
+      return 'amount-to-free';
+    }
+    return 'free';
+  };
 
   const DELIVERY_OPTIONS = [
     {
-      key: 1,
+      key: 'free',
       name: 'Delivery gratis.'
     },
     {
-      key: 2,
+      key: 'fixed',
       name: 'Delivery con monto fijo.'
     },
     {
-      key: 3,
+      key: 'amount-to-free',
       name: 'Delivery gratis luego de un monto.'
     }
   ];
@@ -30,10 +51,10 @@ const AccountDeliveryMethod = () => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      deliveryMethods: [],
-      deliveryCost: '',
-      amountDeliveryFree: '',
-      deliveryType: 1
+      deliveryMethods: userDeliveryMethods || [],
+      deliveryCost: deliveryCost || 0,
+      amountDeliveryFree: amountDeliveryFree || 0,
+      deliveryType: getDeliveryType(deliveryCost, amountDeliveryFree)
     },
     onSubmit: async (values) => {
       console.log(values);
@@ -58,19 +79,28 @@ const AccountDeliveryMethod = () => {
     }
   }));
 
-  const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 500,
-    maxWidth: 'calc(100vw - 40px)'
+  const handleChangeDeliveryOptions = async (opts) => {
+    await setFieldValue('deliveryCost', opts.deliveryCost);
+    await setFieldValue('deliveryType', opts.deliveryType);
+    await setFieldValue('amountDeliveryFree', opts.amountDeliveryFree);
+    setOpenModal(() => false);
   };
 
-  const handleSelectDelivery = (e) => {
-    const { value } = e.target;
-    setFieldValue('deliveryType', value);
-  };
+  const getDeliveryTypeText = () => (
+    <>
+      {values.deliveryType === 'free' ? <>Delivery Gratis</> : <></>}
+      {values.deliveryType === 'fixed' ? <>Costo delivery: {values.deliveryCost}</> : <></>}
+      {values.deliveryType === 'amount-to-free' ? (
+        <>
+          Costo delivery: {values.deliveryCost}
+          <br />
+          Gratis despues de: {values.amountDeliveryFree}
+        </>
+      ) : (
+        <></>
+      )}
+    </>
+  );
 
   return (
     <FormikProvider value={formik}>
@@ -101,12 +131,20 @@ const AccountDeliveryMethod = () => {
                                 sx={{ pt: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
                               >
                                 <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
-                                  <MonetizationOnIcon color="primary" sx={{ mr: 1 }} />
-                                  Delivery Gratis
+                                  <MonetizationOnIcon
+                                    color="primary"
+                                    sx={{ mr: 1, [theme.breakpoints.down('md')]: { display: 'none' } }}
+                                  />
+                                  {getDeliveryTypeText()}
                                 </Typography>
                                 <IconButton
                                   sx={{ color: '#609FBF' }}
                                   onClick={() => {
+                                    setDeliveryOpts(() => ({
+                                      deliveryType: values.deliveryType,
+                                      deliveryCost: values.deliveryCost,
+                                      amountDeliveryFree: values.amountDeliveryFree
+                                    }));
                                     setOpenModal(() => true);
                                   }}
                                 >
@@ -118,41 +156,16 @@ const AccountDeliveryMethod = () => {
                                     setOpenModal(() => false);
                                   }}
                                 >
-                                  <Box sx={modalStyle}>
-                                    <Card sx={{ p: 3 }}>
-                                      <Typography id="modal-modal-title" variant="h6" component="h2">
-                                        Configuración de delivery
-                                      </Typography>
-                                      <TextField
-                                        sx={{ mt: 3 }}
-                                        select
-                                        fullWidth
-                                        label="Tipo de delivery"
-                                        placeholder="Tipo de delivery"
-                                        SelectProps={{ native: true }}
-                                        onChange={handleSelectDelivery}
-                                        value={values.deliveryType}
-                                      >
-                                        {DELIVERY_OPTIONS.map((option) => (
-                                          <option key={option.key} value={option.key}>
-                                            {option.name}
-                                          </option>
-                                        ))}
-                                      </TextField>
-                                      <TextField
-                                        fullWidth
-                                        sx={{ mt: 3 }}
-                                        label="Costo de delivery"
-                                        placeholder="Costo de delivery"
-                                      />
-                                      <TextField
-                                        fullWidth
-                                        sx={{ mt: 3 }}
-                                        label="Monto para ser gratuito"
-                                        placeholder="Monto para ser gratuito"
-                                      />
-                                    </Card>
-                                  </Box>
+                                  <>
+                                    <AccountDeliveryForm
+                                      deliveryOptions={DELIVERY_OPTIONS}
+                                      deliveryInfo={deliveryOpts}
+                                      onSubmitDelivery={handleChangeDeliveryOptions}
+                                      onClose={() => {
+                                        setOpenModal(() => false);
+                                      }}
+                                    />
+                                  </>
                                 </Modal>
                               </Box>
                             </Box>
