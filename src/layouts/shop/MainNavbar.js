@@ -4,7 +4,9 @@ import { Icon } from '@iconify/react';
 import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 // material
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
+import { Box, Stack, AppBar, Typography, Toolbar, IconButton } from '@mui/material';
+// hooks
+import usePartnership from '../../hooks/usePartnership';
 // components
 import { MHidden } from '../../components/@material-extend';
 import Logo from '../../components/Logo';
@@ -44,6 +46,7 @@ const defaultProps = {
 };
 
 function DashboardNavbar({ onOpenSidebar }) {
+  const { partnership } = usePartnership();
   return (
     <RootStyle>
       <ToolbarStyle>
@@ -62,7 +65,10 @@ function DashboardNavbar({ onOpenSidebar }) {
           }}
         >
           <LinkPartnership to="/">
-            <Logo />
+            <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+              <Logo />
+              <Typography>{partnership.name}</Typography>
+            </Stack>
           </LinkPartnership>
         </Box>
 

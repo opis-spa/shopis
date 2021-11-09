@@ -11,7 +11,6 @@ import { getPayments } from '../../redux/slices/payment';
 import { getDeliveries } from '../../redux/slices/delivery';
 // components
 import Page from '../../components/Page';
-import CarouselAnimation from '../../components/carousel/CarouselAnimation';
 import ProductList from '../../components/shop/product/ProductList';
 import { MotionInView, varFadeInUp } from '../../components/animate';
 
