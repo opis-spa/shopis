@@ -167,7 +167,7 @@ export default function MenuMobile({ isHome }) {
                 <Button
                   component={RouterLink}
                   variant="text"
-                  to={PATH_AUTH.login}
+                  to={PATH_AUTH.register}
                   sx={{
                     fontWeight: 900,
                     textTransform: 'uppercase',
@@ -175,7 +175,7 @@ export default function MenuMobile({ isHome }) {
                     padding: 0
                   }}
                 >
-                  Ingresar
+                  Registrar
                 </Button>
               )}
             </Box>
