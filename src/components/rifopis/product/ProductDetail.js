@@ -135,7 +135,7 @@ function ProductDetail({ onBuy, product }) {
       <Grid item xs={12} md={8}>
         <Scrollbar>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={6} sx={{ width: 350 }}>
+            <Grid item xs={12} md={12} sx={{ width: 350 }}>
               <RifopisPolaroid
                 small
                 title="Primer Lugar"
@@ -144,7 +144,7 @@ function ProductDetail({ onBuy, product }) {
                 sx={{ transform: `rotate(-1.5deg)` }}
               />
             </Grid>
-            <Grid item sx={12} md={6}>
+            <Grid item sx={12} md={12}>
               <Stack spacing={2}>
                 <Typography variant="h4">Primer Lugar</Typography>
                 <Typography>{description}</Typography>
