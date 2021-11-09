@@ -9,7 +9,7 @@ export const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
-export const isProduction = process.env.REACT_APP_PROD || false;
+export const isProduction = process.env.REACT_APP_PROD === 'true' || false;
 export const googleAnalyticsConfig = process.env.REACT_APP_GA_MEASUREMENT_ID;
 export const facebookPixelConfig = process.env.REACT_APP_FACEBOOK_PIXEL;
 export const hotjarConfig = process.env.REACT_APP_HOTJAR;

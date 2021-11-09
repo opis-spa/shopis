@@ -55,24 +55,32 @@ function AuthProvider({ children }) {
   const [profile, setProfile] = useState(null);
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const init = async () => {
+    try {
+      const response = await axios.get('/api/v1/user/profile');
+      const { success, user: userData } = response.data;
+      if (success) {
+        setProfile(userData);
+        dispatch({
+          type: 'INITIALISE',
+          payload: { isAuthenticated: true, user: userData }
+        });
+
+        return true;
+      }
+    } catch (error) {
+      signOut(auth);
+    }
+    return false;
+  };
+
   useEffect(
     () =>
       onAuthStateChanged(auth, async (user) => {
         if (user) {
-          try {
-            const response = await axios.get('/api/v1/user/profile');
-            const { success, user: userData } = response.data;
-            if (success) {
-              setProfile(userData);
-              dispatch({
-                type: 'INITIALISE',
-                payload: { isAuthenticated: true, user: userData }
-              });
-
-              return true;
-            }
-          } catch (error) {
-            signOut(auth);
+          const { role } = user;
+          if (role) {
+            return init();
           }
         }
         dispatch({
@@ -108,6 +116,7 @@ function AuthProvider({ children }) {
     if (!role) {
       try {
         await register();
+        await init();
       } catch (error) {
         const { message } = error;
         if (message === 'User register with other provider') {
@@ -119,16 +128,17 @@ function AuthProvider({ children }) {
         throw new Error(message);
       }
     }
-    return user;
+    return user.user;
   };
 
   const loginWithFaceBook = async (signIn = true) => {
     const provider = new FacebookAuthProvider();
     const user = await signInWithPopup(auth, provider);
-    const { role } = user;
+    const { role } = user.user;
     if (!role) {
       try {
         await register();
+        await init();
       } catch (error) {
         const { message } = error;
         if (message === 'User register with other provider') {
@@ -140,7 +150,7 @@ function AuthProvider({ children }) {
         throw new Error(message);
       }
     }
-    return user;
+    return user.user;
   };
 
   const register = async (name = '', lastName = '', role = 'business') => {
