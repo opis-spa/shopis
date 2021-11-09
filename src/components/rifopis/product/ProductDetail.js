@@ -135,7 +135,7 @@ function ProductDetail({ onBuy, product }) {
       <Grid item xs={12} md={8}>
         <Scrollbar>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={6} sx={{ maxWidth: 350 }}>
+            <Grid item xs={12} md={6} sx={{ width: 350 }}>
               <RifopisPolaroid
                 small
                 title="Primer Lugar"
