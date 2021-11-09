@@ -93,6 +93,7 @@ export default function Router() {
         ),
         children: [
           { path: '', element: <RifopisHome /> },
+          { path: 'sorteo/:name', element: <RifopisHome /> },
           { path: 'cart', element: <RifopisCart /> },
           { path: 'store', element: <RifopisStore /> },
           { path: 'product/:name', element: <RifopisProduct /> },

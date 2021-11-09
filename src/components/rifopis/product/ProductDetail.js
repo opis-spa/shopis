@@ -165,7 +165,7 @@ function ProductDetail({ onBuy, product }) {
                       <Typography variant="subtitle1">{accordion.heading}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Typography>{accordion.detail}</Typography>
+                      <Typography>{accordion.description}</Typography>
                     </AccordionDetails>
                   </StyledAccordion>
                 ))}

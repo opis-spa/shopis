@@ -34,7 +34,7 @@ const defaultProps = {
 function CarouselItem({ item, isActive, index, onSelectProduct }) {
   const { photo, photos, name } = item;
 
-  const isCrypto = !(name.indexOf('San') >= 0);
+  const isCrypto = !(name.indexOf('san') >= 0);
 
   const handleSelectProduct = () => {
     onSelectProduct(item);
@@ -149,7 +149,7 @@ function CarouselRifopis({ onSelectProduct }) {
     dots: false,
     arrows: false,
     autoplaySpeed: 6000,
-    autoplay: false,
+    autoplay: true,
     slidesToShow: 1,
     slidesToScroll: 1,
     adaptiveHeight: true,

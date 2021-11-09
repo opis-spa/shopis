@@ -55,10 +55,17 @@ export default function RegisterForm() {
           setSubmitting(false);
         }
       } catch (error) {
+        const { code, message } = error;
         console.error(error);
         if (isMountedRef.current) {
-          setErrors({ afterSubmit: error.message });
+          let messageError = '';
+          if ((code || message) === '') {
+            messageError = 'Error iniciando sesión';
+          } else {
+            messageError = 'Error iniciando sesión';
+          }
           setSubmitting(false);
+          setErrors({ afterSubmit: messageError });
         }
       }
     }

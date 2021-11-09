@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { paramCase } from 'change-case';
 import { Element, scroller } from 'react-scroll';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { CircularProgress, Grid, Typography, Container, Box } from '@mui/material';
@@ -19,6 +19,7 @@ import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import CarouselRifopis from '../../components/carousel/CarouselRifopis';
 import ProductList from '../../components/rifopis/product/ProductList';
+import LandingFaqs from '../../components/rifopis/LandingFaqs';
 import { MotionInView, varFadeInUp } from '../../components/animate';
 import { RifopisHowWork, RifopisWinners, RifopisCart } from '../../components/rifopis';
 import ProductDetail from '../../components/rifopis/product/ProductDetail';
@@ -31,7 +32,9 @@ const Home = () => {
   const { partnership, isLoading } = usePartnership();
   const isMountedRef = useIsMountedRef();
   const location = useLocation();
+  const parms = useParams();
   const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.product);
   const { cart } = useSelector((state) => state.product.checkout);
 
   const handleSelect = (product) => {
@@ -42,10 +45,26 @@ const Home = () => {
     if (!isExists) {
       dispatch(addCart({ ...product, quantity: addQuantity }));
     }
+    console.log(paramCase(name));
     dispatch(getProduct({ name: paramCase(name) }));
   };
 
-  // effects
+  // effect init
+  useEffect(() => {
+    dispatch(getPayments());
+    dispatch(getDeliveries());
+  }, [dispatch]);
+
+  // effect init
+  useEffect(() => {
+    if (parms && products && products.length > 0) {
+      if (isMountedRef.current === true) {
+        const { name } = parms;
+        dispatch(getProduct({ name }));
+      }
+    }
+  }, [dispatch, parms, products, isMountedRef]);
+
   useEffect(() => {
     if (partnership) {
       const { nickname } = partnership;
@@ -55,11 +74,6 @@ const Home = () => {
       }
     }
   }, [dispatch, partnership]);
-
-  useEffect(() => {
-    dispatch(getPayments());
-    dispatch(getDeliveries());
-  }, [dispatch]);
 
   useEffect(() => {
     const { hash } = location;
@@ -114,6 +128,11 @@ const Home = () => {
             <Grid item xs={12}>
               <MotionInView variants={varFadeInUp}>
                 <RifopisWinners />
+              </MotionInView>
+            </Grid>
+            <Grid item xs={12}>
+              <MotionInView variants={varFadeInUp}>
+                <LandingFaqs />
               </MotionInView>
             </Grid>
           </Grid>

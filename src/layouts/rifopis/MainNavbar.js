@@ -69,7 +69,7 @@ export default function MainNavbar() {
           <MHidden width="mdUp">
             <MenuMobile isOffset={false} isHome={isHome} navConfig={navConfig} />
           </MHidden>
-          <RouterLink to={PATH_RIFOPIS.root}>
+          <RouterLink to={PATH_RIFOPIS.home}>
             <LogoRifopis diapo={!isOffset} />
           </RouterLink>
           <Box sx={{ flexGrow: 1 }} />
@@ -97,14 +97,14 @@ export default function MainNavbar() {
                 <Button
                   component={RouterLink}
                   variant="text"
-                  to={PATH_AUTH.login}
+                  to={PATH_AUTH.register}
                   sx={{
                     fontWeight: 900,
                     textTransform: 'uppercase',
                     color: 'primary.lighter'
                   }}
                 >
-                  Ingresar
+                  Registrar
                 </Button>
               )}
             </MHidden>

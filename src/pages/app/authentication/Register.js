@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Link, Container, Typography } from '@mui/material';
+import { Alert, Box, Link, Container, Typography } from '@mui/material';
 // hooks
 import useAuth from '../../../hooks/useAuth';
 // routes
@@ -52,6 +52,11 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Register() {
   const { method } = useAuth();
+  const [error, setError] = useState();
+
+  const handleError = (error) => {
+    setError(error);
+  };
 
   return (
     <RootStyle title="Registro | opis">
@@ -82,7 +87,13 @@ export default function Register() {
             </Box>
           </Box>
 
-          {method === 'firebase' && <AuthFirebaseSocials />}
+          {method === 'firebase' && <AuthFirebaseSocials onHasError={handleError} />}
+
+          {error && (
+            <Alert severity="error" sx={{ mb: (theme) => theme.spacing(2) }}>
+              {error}
+            </Alert>
+          )}
 
           <RegisterForm />
 
