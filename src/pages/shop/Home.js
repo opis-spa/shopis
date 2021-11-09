@@ -44,9 +44,6 @@ const Home = () => {
         ) : (
           <>
             <Grid item xs={12}>
-              <CarouselAnimation />
-            </Grid>
-            <Grid item xs={12}>
               <Box sx={{ p: 5, mt: 10, textAlign: 'center' }}>
                 <MotionInView variants={varFadeInUp}>
                   <Typography variant="h3" sx={{ mb: 3, mt: 3 }}>
