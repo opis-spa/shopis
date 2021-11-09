@@ -77,6 +77,8 @@ function AuthProvider({ children }) {
   useEffect(
     () =>
       onAuthStateChanged(auth, async (user) => {
+        console.log('user');
+        console.log(user);
         if (user) {
           const { role } = user;
           if (role) {
@@ -102,6 +104,7 @@ function AuthProvider({ children }) {
 
     if (success === true) {
       const user = await signInWithCustomToken(auth, token);
+      console.log(user);
       return user;
     }
 
