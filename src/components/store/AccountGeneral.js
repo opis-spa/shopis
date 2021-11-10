@@ -26,9 +26,11 @@ import useAuth from '../../hooks/useAuth';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import { UploadAvatar } from '../upload';
 // redux
-import { useSelector } from '../../redux/store';
+import { useSelector, useDispatch } from '../../redux/store';
+import { setNickname } from '../../redux/slices/store';
 // utils
 import { fData } from '../../utils/formatNumber';
+import axios from '../../utils/axios';
 //
 import countries from '../../assets/data/countries';
 import { regiones } from '../../assets/data/regiones';
@@ -53,22 +55,23 @@ const LinkTextField = styled(TextField)(({ theme }) => ({
 
 export default function AccountGeneral() {
   const isMountedRef = useIsMountedRef();
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { updateProfile } = useAuth();
   const { data: parnership } = useSelector((state) => state.store);
   const [cities, setCities] = useState([]);
   const [link, setLink] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoadingNickname, setIsLoadingNickname] = useState(false);
   const BASE_CATALOGUE_URL = 'https://menu.opis.cl/';
 
   useEffect(() => {
-    if (isMountedRef) {
-      setLink(() => parnership?.nickname || '');
-    }
+    setLink(() => parnership?.nickname || '');
   }, [parnership]);
 
   const UpdateUserSchema = Yup.object().shape({
-    displayName: Yup.string().required('Name is required')
+    displayName: Yup.string().required('Name is required.'),
+    nickname: Yup.string().required('*Campo requerido.')
   });
 
   const formik = useFormik({
@@ -107,7 +110,18 @@ export default function AccountGeneral() {
     }
   });
 
-  const { values, errors, touched, isSubmitting, handleSubmit, getFieldProps, setFieldValue } = formik;
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleSubmit,
+    getFieldProps,
+    setFieldValue,
+    validateField,
+    setFieldError,
+    setFieldTouched
+  } = formik;
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -132,10 +146,12 @@ export default function AccountGeneral() {
       setCities([]);
     }
   };
+
   const handleChangeCity = (e) => {
     const { value } = e.target;
     setFieldValue('location.city', value);
   };
+
   const handleChangeCountry = (e) => {
     const { value } = e.target;
     setFieldValue('location.country', value);
@@ -150,6 +166,35 @@ export default function AccountGeneral() {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
+  };
+
+  const handleSaveNickname = async () => {
+    setIsLoadingNickname(() => true);
+    try {
+      await validateField('nickname');
+      if (errors.nickname) return;
+      const response = await axios.get(`/api/v1/partnerships/validate-nickname/${values.nickname}`);
+      const { success } = response.data;
+      if (success) {
+        await dispatch(setNickname(values.nickname));
+        setIsLoadingNickname(() => false);
+        setIsEditing(() => false);
+        enqueueSnackbar('Link actualizado satisfactoriamente', { variant: 'success' });
+      } else {
+        enqueueSnackbar('Error al guardar link', { variant: 'error' });
+        console.log(response);
+      }
+    } catch (error) {
+      if (error.success === false && error.code === 400) {
+        await setFieldTouched('nickname', true);
+        setFieldError('nickname', '*El link ya está registrado.');
+        setIsLoadingNickname(() => false);
+        return;
+      }
+      console.log(error);
+      setIsLoadingNickname(() => false);
+      enqueueSnackbar('Error al guardar link', { variant: 'error' });
+    }
   };
 
   return (
@@ -206,7 +251,9 @@ export default function AccountGeneral() {
                     fullWidth
                     {...getFieldProps('nickname')}
                     InputLabelProps={{ shrink: true }}
-                    disabled={Boolean(!isEditing)}
+                    disabled={Boolean(!isEditing || isLoadingNickname)}
+                    error={Boolean(touched.nickname && errors.nickname)}
+                    helperText={touched.nickname && errors.nickname}
                   />
                   <Box sx={{ mt: 2 }}>
                     {isEditing ? (
@@ -214,18 +261,28 @@ export default function AccountGeneral() {
                         <Button
                           variant="outlined"
                           sx={{ mr: 1 }}
+                          disabled={isLoadingNickname}
                           onClick={() => {
+                            setFieldValue('nickname', link);
                             setIsEditing(() => false);
                           }}
                         >
                           Cancelar
                         </Button>
-                        <Button variant="contained">Guardar</Button>
+                        <LoadingButton variant="contained" onClick={handleSaveNickname} loading={isLoadingNickname}>
+                          Guardar
+                        </LoadingButton>
                       </>
                     ) : (
                       <>
                         <CopyToClipboard text={`${BASE_CATALOGUE_URL}${values.nickname}`}>
-                          <Button variant="outlined" sx={{ mr: 1 }}>
+                          <Button
+                            variant="outlined"
+                            sx={{ mr: 1 }}
+                            onClick={() => {
+                              enqueueSnackbar('Link copiado', { variant: 'success' });
+                            }}
+                          >
                             Copiar
                           </Button>
                         </CopyToClipboard>

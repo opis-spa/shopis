@@ -1,21 +1,18 @@
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 // material
-import { Box, Grid, Card, Button, Typography, Stack, Paper, Modal } from '@mui/material';
+import { Box, Grid, Card, Button, Typography, Paper, Modal } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { LoadingButton } from '@mui/lab';
 // iconify
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import editFill from '@iconify/icons-eva/edit-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 // redux
-import { useSelector } from '../../redux/store';
-//
-import AccountBillingAddressBook from './AccountBillingAddressBook';
-import AccountBillingPaymentMethod from './AccountBillingPaymentMethod';
-import AccountBillingInvoiceHistory from './AccountBillingInvoiceHistory';
+import { useSelector, useDispatch } from '../../redux/store';
+import { setBankAccounts } from '../../redux/slices/store';
+// components
 import AccountBillingForm from './AccountBillingForm';
 
 // ----------------------------------------------------------------------
@@ -29,71 +26,22 @@ const modalStyle = {
   maxWidth: 'calc(100vw - 40px)'
 };
 
-const accountBook = [
-  {
-    bankId: 'bank1',
-    accountType: 'vista',
-    accountNumber: '123456789'
-  },
-  {
-    bankId: 'bank2',
-    accountType: 'ahorro',
-    accountNumber: '123456789'
-  },
-  {
-    bankId: 'bank3',
-    accountType: 'corriente',
-    accountNumber: '123456789'
-  }
-];
-
 const ACCOUNT_TYPE = [
   { value: 'corriente', display: 'Cuenta corriente' },
   { value: 'ahorro', display: 'Cuenta de ahorro' },
   { value: 'vista', display: 'Cuenta vista' }
 ];
 
-export default function AccountBilling({ banks }) {
-  const { cards, invoices, addressBook } = useSelector((state) => state.user);
+export default function AccountBilling() {
+  const { data: banks } = useSelector((state) => state.bank);
+  const { accounts: userAccounts } = useSelector((state) => state.store.data);
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [modalInfo, setModalInfo] = useState({});
   const [isNewAccount, setIsNewAccount] = useState(false);
-  const [open, setOpen] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
-
-  const NewCardSchema = Yup.object().shape({
-    cardName: Yup.string().required('Name is required'),
-    cardNumber: Yup.string().required('Card number is required'),
-    cardExpired: Yup.string().required('Card expired is required'),
-    cardCvv: Yup.string().required('Cvv is required')
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      cardName: '',
-      cardNumber: '',
-      cardExpired: '',
-      cardCvv: ''
-    },
-    validationSchema: NewCardSchema,
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
-      handleCancel();
-      resetForm();
-      setSubmitting(false);
-      alert(JSON.stringify(values, null, 2));
-      enqueueSnackbar('Add card success', { variant: 'success' });
-    }
-  });
-
-  const handleOpenAddCard = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleCancel = () => {
-    setOpen(false);
-    formik.resetForm();
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
   const getAccountTypeName = (accountTypeId) => {
     const accountTypeFilter = ACCOUNT_TYPE.filter((type) => type.value === accountTypeId);
@@ -105,13 +53,34 @@ export default function AccountBilling({ banks }) {
     return bankFilter.length > 0 ? bankFilter[0].name : '';
   };
 
+  const handleDeleteAccount = async () => {
+    setIsLoading(() => true);
+    try {
+      const newAccounts = userAccounts.filter(
+        (item) =>
+          !(
+            item.bankId === modalInfo.bankId &&
+            item.accountType === modalInfo.accountType &&
+            item.accountNumber === modalInfo.accountNumber
+          )
+      );
+      await dispatch(setBankAccounts(newAccounts));
+      setIsLoading(() => false);
+      setOpenDeleteModal(() => false);
+      enqueueSnackbar('Save success', { variant: 'success' });
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Grid container spacing={5}>
       <Grid item xs={12}>
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2}>
-            {accountBook.map((account) => (
-              <Grid item xs={12} md={6} key={account.bankId}>
+            {userAccounts.map((account, idx) => (
+              <Grid item xs={12} md={6} key={idx}>
                 <Paper
                   sx={{
                     p: 3,
@@ -140,6 +109,7 @@ export default function AccountBilling({ banks }) {
                       size="small"
                       startIcon={<Icon icon={trash2Fill} />}
                       onClick={() => {
+                        setModalInfo(() => account);
                         setOpenDeleteModal(() => true);
                       }}
                       sx={{ mr: 1 }}
@@ -186,6 +156,7 @@ export default function AccountBilling({ banks }) {
                   banks={banks}
                   accountTypes={ACCOUNT_TYPE}
                   isNew={isNewAccount}
+                  prevBanks={userAccounts}
                   onClose={() => {
                     setOpenModal(() => false);
                   }}
@@ -212,6 +183,7 @@ export default function AccountBilling({ banks }) {
                       <Button
                         color="secondary"
                         variant="outlined"
+                        disabled={isLoading}
                         sx={{ mr: 1 }}
                         onClick={() => {
                           setOpenDeleteModal(() => false);
@@ -219,9 +191,14 @@ export default function AccountBilling({ banks }) {
                       >
                         Cancelar
                       </Button>
-                      <Button color="error" variant="contained">
+                      <LoadingButton
+                        loading={isLoading}
+                        color="error"
+                        variant="contained"
+                        onClick={handleDeleteAccount}
+                      >
                         Sí, elimínalo
-                      </Button>
+                      </LoadingButton>
                     </Box>
                   </Box>
                 </Card>

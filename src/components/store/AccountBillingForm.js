@@ -1,11 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
+// form
 import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 // material
 import { Box, Grid, Card, Button, Typography, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+// redux
+import { useDispatch } from '../../redux/store';
+import { setBankAccounts } from '../../redux/slices/store';
 
-const AccountBillingForm = React.forwardRef(({ accountInfo, banks, accountTypes, isNew, onClose }, ref) => {
+const AccountBillingForm = React.forwardRef(({ accountInfo, banks, accountTypes, isNew, onClose, prevBanks }, ref) => {
+  const [bankList, setBankList] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
+
   const modalStyle = {
     position: 'absolute',
     top: '50%',
@@ -29,8 +39,26 @@ const AccountBillingForm = React.forwardRef(({ accountInfo, banks, accountTypes,
       accountNumber: ''
     },
     validationSchema: AccountBillingSchema,
-    onSubmit: async (values) => {
-      console.log(values);
+    onSubmit: async (values, { setSubmitting, setFieldError }) => {
+      try {
+        const accountExist = bankList.filter(
+          (item) =>
+            item.bankId === values.bankId &&
+            item.accountType === values.accountType &&
+            item.accountNumber === values.accountNumber
+        );
+        if (accountExist.length > 0) {
+          setFieldError('accountNumber', '*La cuenta bancaria ya está registrada.');
+          setSubmitting(false);
+          return;
+        }
+        await dispatch(setBankAccounts([...bankList, values]));
+        setSubmitting(false);
+        enqueueSnackbar('Save success', { variant: 'success' });
+        onClose();
+      } catch (error) {
+        console.log(error);
+      }
     }
   });
 
@@ -40,6 +68,21 @@ const AccountBillingForm = React.forwardRef(({ accountInfo, banks, accountTypes,
     setFieldValue('bankId', accountInfo.bankId || '');
     setFieldValue('accountType', accountInfo.accountType || '');
     setFieldValue('accountNumber', accountInfo.accountNumber || '');
+    if (!isNew) {
+      setBankList(() =>
+        prevBanks.filter(
+          (item) =>
+            !(
+              item.bankId === accountInfo.bankId &&
+              item.accountType === accountInfo.accountType &&
+              item.accountNumber === accountInfo.accountNumber
+            )
+        )
+      );
+    } else {
+      setBankList(() => [...prevBanks]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountInfo]);
 
   const handleChangeBank = (e) => {
@@ -69,6 +112,7 @@ const AccountBillingForm = React.forwardRef(({ accountInfo, banks, accountTypes,
                   select
                   label="Banco"
                   placeholder="Banco"
+                  disabled={isSubmitting}
                   value={values.bankId}
                   SelectProps={{ native: true }}
                   onChange={handleChangeBank}
@@ -91,6 +135,7 @@ const AccountBillingForm = React.forwardRef(({ accountInfo, banks, accountTypes,
                   select
                   label="Tipo de cuenta"
                   placeholder="Tipo de cuenta"
+                  disabled={isSubmitting}
                   SelectProps={{ native: true }}
                   value={values.accountType}
                   onChange={handleChangeAccountType}
@@ -111,13 +156,14 @@ const AccountBillingForm = React.forwardRef(({ accountInfo, banks, accountTypes,
                   fullWidth
                   label="Número de Cuenta"
                   placeholder="Número de cuenta"
+                  disabled={isSubmitting}
                   error={Boolean(touched.accountNumber && errors.accountNumber)}
                   helperText={touched.accountNumber && errors.accountNumber}
                 />
               </Grid>
               <Grid item xs={12}>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Button color="primary" variant="outlined" sx={{ mr: 1 }} onClick={onClose}>
+                  <Button disabled={isSubmitting} color="primary" variant="outlined" sx={{ mr: 1 }} onClick={onClose}>
                     Cancelar
                   </Button>
                   <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
@@ -132,5 +178,14 @@ const AccountBillingForm = React.forwardRef(({ accountInfo, banks, accountTypes,
     </FormikProvider>
   );
 });
+
+AccountBillingForm.propTypes = {
+  accountInfo: PropTypes.object,
+  banks: PropTypes.array,
+  accountTypes: PropTypes.array,
+  isNew: PropTypes.bool,
+  onClose: PropTypes.func,
+  prevBanks: PropTypes.array
+};
 
 export default AccountBillingForm;

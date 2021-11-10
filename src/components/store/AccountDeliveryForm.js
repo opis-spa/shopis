@@ -25,13 +25,13 @@ const AccountDeliveryForm = ({ deliveryOptions, onClose, deliveryInfo, onSubmitD
     deliveryCost: Yup.number()
       .when('deliveryType', {
         is: 'free',
-        otherwise: Yup.number().min(5, '*El monto debe ser mayor a 5.')
+        otherwise: Yup.number().moreThan(0, '*El monto debe ser mayor a 0.')
       })
       .required('*Campo requerido.'),
     amountDeliveryFree: Yup.number()
       .when('deliveryType', {
         is: 'amount-to-free',
-        then: Yup.number().min(5, '*El monto debe ser mayor a 5.')
+        then: Yup.number().moreThan(0, '*El monto debe ser mayor a 0.')
       })
       .required('*Campo requerido.')
   });

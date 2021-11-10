@@ -43,12 +43,6 @@ export default function Store() {
     dispatch(getPayments());
   }, [dispatch]);
 
-  const BANK_LIST = [
-    { _id: 'bank1', name: 'Banco Falabella', country: 'Chile' },
-    { _id: 'bank2', name: 'Banco Consorcio', country: 'Chile' },
-    { _id: 'bank3', name: 'Scotiabank Azul', country: 'Chile' }
-  ];
-
   const ACCOUNT_TABS = [
     {
       value: 'general',
@@ -58,7 +52,7 @@ export default function Store() {
     {
       value: 'cuenta_bancaria',
       icon: <Icon icon={roundBanks} width={20} height={20} />,
-      component: <AccountBilling banks={BANK_LIST} />
+      component: <AccountBilling />
     },
     {
       value: 'formas_de_entrega',

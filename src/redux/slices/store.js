@@ -108,3 +108,25 @@ export const setDeliveryMethods = (deliveryOptions) => async (dispatch) => {
     dispatch(slice.actions.hasError(error));
   }
 };
+
+export const setBankAccounts = (accounts) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.post('/api/v1/partnerships/bank', {
+      banks: accounts
+    });
+    dispatch(slice.actions.getStoreSuccess(response.data.partnership));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
+};
+
+export const setNickname = (nickname) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.post('/api/v1/partnerships/nickname', { nickname });
+    dispatch(slice.actions.getStoreSuccess(response.data.result));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
+};
