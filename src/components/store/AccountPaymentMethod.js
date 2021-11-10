@@ -1,10 +1,13 @@
 import React from 'react';
-import { Grid, Typography, Card, Box } from '@mui/material';
-import { Checkbox } from 'formik-mui';
-import { styled, useTheme } from '@mui/styles';
-import { Form, FormikProvider, useFormik, Field } from 'formik';
-import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
+// material
+import { Grid, Typography, Card, Box } from '@mui/material';
+import { styled, useTheme } from '@mui/styles';
+import { LoadingButton } from '@mui/lab';
+// form
+import { Form, FormikProvider, useFormik, Field } from 'formik';
+import { Checkbox } from 'formik-mui';
+// redux
 import { useSelector, useDispatch } from '../../redux/store';
 import { setPaymentMethods } from '../../redux/slices/store';
 
@@ -21,9 +24,17 @@ const AccountPaymentMethod = () => {
       paymentMethods: userPaymentMethods
     },
     onSubmit: async (values, { setSubmitting }) => {
-      setSubmitting(false);
-      dispatch(setPaymentMethods(values.paymentMethods));
-      enqueueSnackbar('Save success', { variant: 'success' });
+      try {
+        const opisArray = paymentMethods?.filter((item) => item.type === 'opis');
+        const opisID = opisArray.length ? opisArray[0].id : '';
+        const valuesToSend =
+          values.paymentMethods?.indexOf(opisID) === -1 ? [...values.paymentMethods, opisID] : values.paymentMethods;
+        await dispatch(setPaymentMethods(valuesToSend));
+        setSubmitting(false);
+        enqueueSnackbar('Save success', { variant: 'success' });
+      } catch (error) {
+        console.log(error);
+      }
     }
   });
 
@@ -54,9 +65,32 @@ const AccountPaymentMethod = () => {
               const { type, name, icons, description, id } = method;
               return (
                 <Grid item xs={12} md={6} key={name}>
-                  <PaymentOption className={values.paymentMethods.indexOf(id) >= 0 ? 'selected' : ''}>
+                  <PaymentOption
+                    className={
+                      (values.paymentMethods?.indexOf(id) >= 0 || type === 'opis') && !isSubmitting ? 'selected' : ''
+                    }
+                  >
                     <Box>
-                      <Field type="checkbox" component={Checkbox} name="paymentMethods" key={type} value={id} />
+                      {type === 'opis' ? (
+                        <Field
+                          type="checkbox"
+                          component={Checkbox}
+                          name="paymentMethods"
+                          key={type}
+                          value={id}
+                          checked
+                          disabled={isSubmitting}
+                        />
+                      ) : (
+                        <Field
+                          type="checkbox"
+                          component={Checkbox}
+                          name="paymentMethods"
+                          key={type}
+                          value={id}
+                          disabled={isSubmitting}
+                        />
+                      )}
                     </Box>
                     <Box>
                       <Typography variant="body1" fontWeight="bold">

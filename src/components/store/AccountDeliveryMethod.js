@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
-import { Grid, Typography, Card, Box, Collapse, Divider, TextField, IconButton, Modal } from '@mui/material';
+import { useSnackbar } from 'notistack';
+// material
+import { Grid, Typography, Card, Box, Collapse, Divider, IconButton, Modal } from '@mui/material';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import EditIcon from '@mui/icons-material/Edit';
-import { Checkbox } from 'formik-mui';
 import { styled, useTheme } from '@mui/styles';
-import { Form, FormikProvider, useFormik, Field } from 'formik';
 import { LoadingButton } from '@mui/lab';
-import { useSelector } from '../../redux/store';
+// form
+import { Checkbox } from 'formik-mui';
+import { Form, FormikProvider, useFormik, Field } from 'formik';
+// redux
+import { useSelector, useDispatch } from '../../redux/store';
+import { setDeliveryMethods } from '../../redux/slices/store';
+// components
 import AccountDeliveryForm from './AccountDeliveryForm';
 
 const AccountDeliveryMethod = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const [openModal, setOpenModal] = useState(false);
   const [deliveryOpts, setDeliveryOpts] = useState({});
   const { data: deliveryMethods } = useSelector((state) => state.delivery);
@@ -56,8 +64,14 @@ const AccountDeliveryMethod = () => {
       amountDeliveryFree: amountDeliveryFree || 0,
       deliveryType: getDeliveryType(deliveryCost, amountDeliveryFree)
     },
-    onSubmit: async (values) => {
-      console.log(values);
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        await dispatch(setDeliveryMethods(values));
+        setSubmitting(false);
+        enqueueSnackbar('Save success', { variant: 'success' });
+      } catch (error) {
+        console.log(error);
+      }
     }
   });
 
@@ -113,9 +127,18 @@ const AccountDeliveryMethod = () => {
 
               return (
                 <Grid item xs={12} md={6} key={id}>
-                  <DeliveryOption className={values.deliveryMethods.indexOf(id) >= 0 ? 'selected' : ''}>
+                  <DeliveryOption
+                    className={values.deliveryMethods?.indexOf(id) >= 0 && !isSubmitting ? 'selected' : ''}
+                  >
                     <Box>
-                      <Field type="checkbox" component={Checkbox} name="deliveryMethods" key={type} value={id} />
+                      <Field
+                        disabled={isSubmitting}
+                        type="checkbox"
+                        component={Checkbox}
+                        name="deliveryMethods"
+                        key={type}
+                        value={id}
+                      />
                     </Box>
                     <Box>
                       <Typography variant="body1" fontWeight="bold">
@@ -145,7 +168,9 @@ const AccountDeliveryMethod = () => {
                                       deliveryCost: values.deliveryCost,
                                       amountDeliveryFree: values.amountDeliveryFree
                                     }));
-                                    setOpenModal(() => true);
+                                    if (!isSubmitting) {
+                                      setOpenModal(() => true);
+                                    }
                                   }}
                                 >
                                   <EditIcon />

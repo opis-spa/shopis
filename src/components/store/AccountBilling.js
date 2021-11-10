@@ -144,7 +144,7 @@ export default function AccountBilling({ banks }) {
                       }}
                       sx={{ mr: 1 }}
                     >
-                      Delete
+                      Borrar
                     </Button>
                     <Button
                       size="small"
@@ -155,7 +155,7 @@ export default function AccountBilling({ banks }) {
                         setOpenModal(() => true);
                       }}
                     >
-                      Edit
+                      Editar
                     </Button>
                   </Box>
                 </Paper>

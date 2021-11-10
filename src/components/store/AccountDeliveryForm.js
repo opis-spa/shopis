@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Typography, Card, Box, Collapse, Divider, TextField, IconButton, Modal, Button } from '@mui/material';
+import PropTypes from 'prop-types';
+// material
+import { Typography, Card, Box, TextField, Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+// form
 import { useFormik, FormikProvider, Form } from 'formik';
 import * as Yup from 'yup';
 
@@ -19,8 +22,18 @@ const AccountDeliveryForm = ({ deliveryOptions, onClose, deliveryInfo, onSubmitD
 
   const AccountDeliverySchema = Yup.object().shape({
     deliveryType: Yup.string().required('*Campo requerido.'),
-    deliveryCost: Yup.string().required('*Campo requerido.'),
-    amountDeliveryFree: Yup.string().required('*Campo requerido.')
+    deliveryCost: Yup.number()
+      .when('deliveryType', {
+        is: 'free',
+        otherwise: Yup.number().min(5, '*El monto debe ser mayor a 5.')
+      })
+      .required('*Campo requerido.'),
+    amountDeliveryFree: Yup.number()
+      .when('deliveryType', {
+        is: 'amount-to-free',
+        then: Yup.number().min(5, '*El monto debe ser mayor a 5.')
+      })
+      .required('*Campo requerido.')
   });
 
   const formik = useFormik({
@@ -52,6 +65,7 @@ const AccountDeliveryForm = ({ deliveryOptions, onClose, deliveryInfo, onSubmitD
       setDisabledCost(() => false);
       setDisabledAmount(() => false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deliveryInfo]);
 
   const handleSelectDelivery = (e) => {
@@ -131,6 +145,13 @@ const AccountDeliveryForm = ({ deliveryOptions, onClose, deliveryInfo, onSubmitD
       </Form>
     </FormikProvider>
   );
+};
+
+AccountDeliveryForm.propTypes = {
+  deliveryOptions: PropTypes.array,
+  onClose: PropTypes.func,
+  deliveryInfo: PropTypes.object,
+  onSubmitDelivery: PropTypes.func
 };
 
 export default AccountDeliveryForm;
