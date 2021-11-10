@@ -192,6 +192,9 @@ const slice = createSlice({
     createBilling(state, action) {
       state.checkout.billing = action.payload;
     },
+    createDelivery(state, action) {
+      state.checkout.delivery = action.payload;
+    },
     createInformation(state, action) {
       state.checkout.data = action.payload;
     },
@@ -294,6 +297,7 @@ export const {
   onNextStep,
   onBackStep,
   createBilling,
+  createDelivery,
   createInformation,
   applyShipping
 } = slice.actions;

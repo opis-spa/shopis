@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getCart, createBilling, onGotoStep } from '../../redux/slices/product';
+import { getCart, onGotoStep, createInformation, createDelivery } from '../../redux/slices/product';
 import { getDeliveries } from '../../redux/slices/delivery';
 import { getPayments } from '../../redux/slices/payment';
 // hooks
@@ -119,7 +119,8 @@ export default function EcommerceCheckout() {
 
   useEffect(() => {
     if (activeStep === 1) {
-      dispatch(createBilling(null));
+      dispatch(createInformation(null));
+      dispatch(createDelivery(null));
     }
   }, [dispatch, activeStep]);
 

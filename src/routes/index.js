@@ -215,7 +215,8 @@ export default function Router() {
         ),
         children: [
           { path: ':id/checkout', element: <Checkout /> },
-          { path: 'payment', element: <Payment /> },
+          { path: ':id/checkout/payment', element: <Payment /> },
+          { path: ':id/checkout/payment/result', element: <PaymentResult /> },
           { path: 'payment/result', element: <PaymentResult /> }
         ]
       }

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
 // material
@@ -8,7 +8,7 @@ import { Box, TextField, Typography, Stack, Skeleton } from '@mui/material';
 import { useSelector, useDispatch } from '../../../../../redux/store';
 import { getQuotation } from '../../../../../redux/slices/wallet';
 // utils
-import { fShortenNumber, fCurrency } from '../../../../../utils/formatNumber';
+import { fNumber, fCurrency } from '../../../../../utils/formatNumber';
 
 const RootStyle = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -48,7 +48,7 @@ const Quotation = (props) => {
     <Box sx={{ display: 'flex', flex: 1, py: 1, justifyContent: 'flex-end' }}>
       <Stack direction="column" alignItems="flex-end">
         <Stack direction="row" spacing={1}>
-          <Typography>{fShortenNumber(quoteAmount[0])}</Typography>
+          <Typography>{fNumber(quoteAmount[0])}</Typography>
           <Typography>{quoteAmount[1]}</Typography>
         </Stack>
         <Stack direction="row" alignItems="flex-end" spacing={1}>
@@ -79,6 +79,10 @@ const propTypes = {
 
 function OpisWallet({ amount, onSelectToken }) {
   const dispatch = useDispatch();
+  const [quotationBase, setQuotationBase] = useState({
+    quote_amount: [amount, 'DCLP'],
+    rate: [1, 'CLP']
+  });
   const { balances, quotation } = useSelector((state) => state.wallet);
 
   const formik = useFormik({
@@ -94,6 +98,11 @@ function OpisWallet({ amount, onSelectToken }) {
       if (values.originCurrency !== values.destinationCurrency) {
         await dispatch(getQuotation(values));
         onSelectToken(values.originCurrency);
+      } else {
+        setQuotationBase({
+          quote_amount: values.amount,
+          rate: [1, 'CLP']
+        });
       }
       setSubmitting(false);
     }
@@ -122,6 +131,7 @@ function OpisWallet({ amount, onSelectToken }) {
           onChange={handleChangeState}
           color="primary"
           disabled={isSubmitting}
+          defaultValue={values.originCurrency}
           value={values.originCurrency}
           SelectProps={{ native: true }}
           error={Boolean(touched.originCurrency && errors.originCurrency)}
@@ -136,7 +146,11 @@ function OpisWallet({ amount, onSelectToken }) {
           ))}
         </TextField>
 
-        <Quotation loading={isSubmitting} quotation={quotation} />
+        {values.originCurrency !== values.destinationCurrency ? (
+          <Quotation loading={isSubmitting} quotation={quotation} />
+        ) : (
+          <Quotation loading={isSubmitting} quotation={quotationBase} />
+        )}
       </Stack>
     </RootStyle>
   );

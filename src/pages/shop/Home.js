@@ -43,9 +43,9 @@ const Home = () => {
         ) : (
           <>
             <Grid item xs={12}>
-              <Box sx={{ p: 5, mt: 10, textAlign: 'center' }}>
+              <Box sx={{ p: 5, mt: 5, textAlign: 'center' }}>
                 <MotionInView variants={varFadeInUp}>
-                  <Typography variant="h3" sx={{ mb: 3, mt: 3 }}>
+                  <Typography variant="h3" sx={{ mb: 3 }}>
                     Nuestros productos
                   </Typography>
                 </MotionInView>

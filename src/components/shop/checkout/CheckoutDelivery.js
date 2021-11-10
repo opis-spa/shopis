@@ -1,13 +1,17 @@
 import React, { useMemo, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
+import { Icon } from '@iconify/react';
+import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
+import logOutFill from '@iconify/icons-ic/sharp-log-out';
 // material
 import { Grid, Stack, Button, Divider, TextField } from '@mui/material';
 // hooks
 import usePartnership from '../../../hooks/usePartnership';
+import useAuth from '../../../hooks/useAuth';
 // redux
 import { useSelector, useDispatch } from '../../../redux/store';
-import { applyShipping, onNextStep, createBilling } from '../../../redux/slices/product';
+import { applyShipping, onBackStep, onNextStep, createDelivery } from '../../../redux/slices/product';
 // componnet
 import CheckoutDeliveryMethod from './CheckoutDeliveryMethod';
 import { regiones } from '../../../assets/data/regiones';
@@ -15,12 +19,20 @@ import { regiones } from '../../../assets/data/regiones';
 // ----------------------------------------------------------------------
 
 const CheckoutDeliverySchema = Yup.object().shape({
+  delivery: Yup.string().required('La forma de entrega es requerida'),
   identityCode: Yup.string().required('El RUT es requerido'),
   phone: Yup.string().required('Teléfono es requerido'),
-  delivery: Yup.string().required('La forma de entrega es requerida'),
   address: Yup.string().when('delivery', {
     is: 'delivery',
     then: Yup.string().required('La dirección es requerida')
+  }),
+  state: Yup.string().when('delivery', {
+    is: 'delivery',
+    then: Yup.string().required('La región es requerida')
+  }),
+  city: Yup.string().when('delivery', {
+    is: 'delivery',
+    then: Yup.string().required('La comúna es requerida')
   })
 });
 
@@ -31,15 +43,24 @@ function CheckoutDelivery() {
   const { partnership } = usePartnership();
   const { data: deliveries } = useSelector((state) => state.delivery);
   const [isLoading] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
   const [cities, setCities] = useState([]);
   const DELIVERY_OPTIONS = useMemo(() => {
     const { deliveryMethods } = partnership;
     return deliveries.filter((item) => deliveryMethods.indexOf(item.id) >= 0);
   }, [partnership, deliveries]);
   const formik = useFormik({
-    initialValues: {},
+    initialValues: {
+      identityCode: '',
+      phone: '',
+      delivery: '',
+      address: '',
+      addressMore: '',
+      state: '',
+      city: ''
+    },
     onSubmit: (values) => {
-      dispatch(createBilling(values.address));
+      dispatch(createDelivery(values));
       dispatch(onNextStep());
     },
     validationSchema: CheckoutDeliverySchema
@@ -52,7 +73,7 @@ function CheckoutDelivery() {
 
   const handleChangeState = (e) => {
     const { value } = e.target;
-    setFieldValue('location.state', value);
+    setFieldValue('state', value);
     if (value) {
       const { comunas: citiesMap } = regiones.find((item) => item.region === value);
       setCities(citiesMap);
@@ -62,12 +83,45 @@ function CheckoutDelivery() {
   };
   const handleChangeCity = (e) => {
     const { value } = e.target;
-    setFieldValue('location.city', value);
+    setFieldValue('city', value);
+  };
+
+  const handleBackStep = () => {
+    dispatch(onBackStep());
+  };
+
+  const handleLogOff = async () => {
+    logout();
+    dispatch(onBackStep());
   };
 
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button
+            type="button"
+            size="small"
+            color="inherit"
+            onClick={handleBackStep}
+            startIcon={<Icon icon={arrowIosBackFill} />}
+          >
+            Volver
+          </Button>
+
+          {isAuthenticated && (
+            <Button
+              type="button"
+              size="small"
+              color="inherit"
+              onClick={handleLogOff}
+              endIcon={<Icon icon={logOutFill} />}
+              sx={{ textTransform: 'uppercase' }}
+            >
+              Cerrar sesión
+            </Button>
+          )}
+        </Grid>
         <Grid item xs={12}>
           <CheckoutDeliveryMethod
             formik={formik}
@@ -132,11 +186,11 @@ function CheckoutDelivery() {
                 fullWidth
                 label="Región"
                 placeholder="Región"
-                value={values.location?.state || ''}
+                value={values?.state || ''}
                 onChange={handleChangeState}
                 SelectProps={{ native: true }}
-                error={Boolean(touched.country && errors.country)}
-                helperText={touched.country && errors.country}
+                error={Boolean(touched.state && errors.state)}
+                helperText={touched.state && errors.state}
               >
                 <option value="" />
                 {regiones.map((option) => (
@@ -152,11 +206,11 @@ function CheckoutDelivery() {
                 disabled={cities.length === 0}
                 label="Comuna"
                 placeholder="Comuna"
-                value={values.location?.city || ''}
+                value={values?.city || ''}
                 onChange={handleChangeCity}
                 SelectProps={{ native: true }}
-                error={Boolean(touched.location?.city && errors.location?.city)}
-                helperText={(touched.location?.city && errors.location?.city) || ''}
+                error={Boolean(touched.city && errors.city)}
+                helperText={(touched.city && errors.city) || ''}
               >
                 <option value="" />
                 {cities.map((option) => (
