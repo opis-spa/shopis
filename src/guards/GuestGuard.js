@@ -18,8 +18,7 @@ export default function GuestGuard({ children }) {
   const { partnership } = usePartnership();
   const { nickname } = partnership || { nickname: '' };
   const { role } = user || { role: '' };
-  console.log(' == authentication user == ');
-  console.log(user);
+
   if (role === 'business' && isAuthenticated) {
     return <Navigate to={PATH_APP.root} />;
   }

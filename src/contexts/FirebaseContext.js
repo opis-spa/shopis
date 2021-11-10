@@ -77,13 +77,9 @@ function AuthProvider({ children }) {
   useEffect(
     () =>
       onAuthStateChanged(auth, async (user) => {
-        console.log('user');
-        console.log(user);
         if (user) {
           const { claims } = await user.getIdTokenResult();
           const { role } = claims;
-          console.log('claims');
-          console.log(claims);
           if (role) {
             return init();
           }
@@ -104,10 +100,9 @@ function AuthProvider({ children }) {
     });
 
     const { success, token, message } = response.data;
-    console.log(token);
+
     if (success === true) {
       const user = await signInWithCustomToken(auth, token);
-      console.log(user);
       return user;
     }
 
