@@ -34,9 +34,13 @@ export default function App() {
             <ProgressBarStyle />
             <BaseOptionChartStyle />
             <ScrollToTop />
-            {isProduction === true && <FacebookPixel />}
-            {isProduction === true && <GoogleAnalytics />}
-            {isProduction === true && <Hotjar />}
+            {isProduction && (
+              <>
+                <FacebookPixel />
+                <GoogleAnalytics />
+                <Hotjar />
+              </>
+            )}
             {isInitialized ? <Router /> : <LoadingScreen />}
           </NotistackProvider>
         </RtlLayout>

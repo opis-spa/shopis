@@ -8,7 +8,7 @@ on:
 env:
   PROJECT_ID: ${{ secrets.GCR_PROJECT }}
   REGION: us-central1
-  SERVICE: opis-front
+  SERVICE: shopis-frontend
 
 jobs:
   build:
@@ -40,6 +40,7 @@ jobs:
         run: npm run build
         env:
           FAST_REFRESH: false
+          REACT_APP_PROD: true
           REACT_APP_URL_API: ${{ secrets.URL_ENDPOINT }}
           REACT_APP_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
@@ -53,7 +54,6 @@ jobs:
           REACT_APP_HOTJAR: ${{ secrets.HOTJAR }}
           REACT_APP_PAYPAL_ID: ${{ secrets.PAYPAL_ID }}
           REACT_APP_FACEBOOK_PIXEL: ${{ secrets.FACEBOOK_PIXEL }}
-          REACT_APP_PROD: true
 
       - name: Archive Production Artifact
         uses: actions/upload-artifact@main
@@ -85,10 +85,13 @@ jobs:
       - name: Authorize Docker push
         run: gcloud auth configure-docker
 
-      - name: Build and Push Container
-        run: |-
-          docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
-          docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+      - name: Build docker
+        run: docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
+        env:
+          REACT_APP_PROD: true
+
+      - name: Push Container
+        run: docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
 
       - name: Deploy to Cloud Run
         run: |-

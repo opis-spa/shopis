@@ -33,6 +33,7 @@ import { DialogAnimate } from '../../animate';
 import { positionString } from '../../../utils/positionString';
 import { MIconButton } from '../../@material-extend';
 import ButtonTicket from '../ButtonTicket';
+import Scrollbar from '../../Scrollbar';
 
 const StyledAccordion = styled((props) => <Accordion disableGutters elevation={0} square {...props} />)(
   ({ theme }) => ({
@@ -132,9 +133,9 @@ function ProductDetail({ onBuy, product }) {
   return (
     <Grid container spacing={2} sx={{ mt: 0 }}>
       <Grid item xs={12} md={8}>
-        <Box sx={{ overflow: 'scroll' }}>
+        <Scrollbar>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={6} sx={{ maxWidth: 350 }}>
+            <Grid item xs={12} md={12} sx={{ width: 350 }}>
               <RifopisPolaroid
                 small
                 title="Primer Lugar"
@@ -143,7 +144,7 @@ function ProductDetail({ onBuy, product }) {
                 sx={{ transform: `rotate(-1.5deg)` }}
               />
             </Grid>
-            <Grid item sx={12} md={6}>
+            <Grid item sx={12} md={12}>
               <Stack spacing={2}>
                 <Typography variant="h4">Primer Lugar</Typography>
                 <Typography>{description}</Typography>
@@ -164,7 +165,7 @@ function ProductDetail({ onBuy, product }) {
                       <Typography variant="subtitle1">{accordion.heading}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Typography>{accordion.detail}</Typography>
+                      <Typography>{accordion.description}</Typography>
                     </AccordionDetails>
                   </StyledAccordion>
                 ))}
@@ -190,13 +191,8 @@ function ProductDetail({ onBuy, product }) {
               );
             })}
 
-          <Stack spacing={1} sx={{ py: 5 }}>
-            <Typography variant="h5" sx={{ textTransform: 'uppercase', fontWeight: 900 }}>
-              Consideraciones generales sobre el sorteo
-            </Typography>
-            <Typography>Consideraciones generales sobre el sorteo</Typography>
-          </Stack>
-        </Box>
+          <Stack spacing={1} sx={{ py: 1 }} />
+        </Scrollbar>
       </Grid>
 
       <Grid item xs={12} md={4}>

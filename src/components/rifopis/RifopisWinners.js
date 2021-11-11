@@ -2,7 +2,7 @@ import React from 'react';
 import { Element } from 'react-scroll';
 // material
 import { alpha, styled, useTheme } from '@mui/material/styles';
-import { Typography, Stack, Container, Grid } from '@mui/material';
+import { Box, Typography, Stack, Container, Grid } from '@mui/material';
 //
 import { varFadeInUp, MotionInView } from '../animate';
 
@@ -10,7 +10,7 @@ import { varFadeInUp, MotionInView } from '../animate';
 
 const RootStyle = styled(Element)(({ theme }) => ({
   paddingTop: theme.spacing(15),
-  paddingBottom: theme.spacing(10)
+  paddingBottom: theme.spacing(5)
 }));
 
 // ----------------------------------------------------------------------
@@ -43,8 +43,12 @@ export default function RifopisWinners() {
             </MotionInView>
           </Grid>
           <Grid item xs={12}>
-            <Stack>
-              <Typography sx={{ color: 'text.primary', textAlign: 'center', fontWeight: 400 }}>Proximamente</Typography>
+            <Stack alignItems="center">
+              <Box sx={{ m: 5, p: 4, px: 10, borderRadius: 8, backgroundColor: 'secondary.dark' }}>
+                <Typography sx={{ color: 'text.primary', textAlign: 'center', fontWeight: 400 }}>
+                  Próximamente
+                </Typography>
+              </Box>
             </Stack>
           </Grid>
         </Grid>

@@ -55,11 +55,18 @@ export default function LoginForm() {
           setSubmitting(false);
         }
       } catch (error) {
+        const { code, message } = error;
         console.error(error);
         resetForm();
         if (isMountedRef.current) {
+          let messageError = '';
+          if ((code || message) === '') {
+            messageError = 'Error iniciando sesión';
+          } else {
+            messageError = 'Error iniciando sesión';
+          }
           setSubmitting(false);
-          setErrors({ afterSubmit: error.message });
+          setErrors({ afterSubmit: messageError });
         }
       }
     }

@@ -11,7 +11,6 @@ import { getPayments } from '../../redux/slices/payment';
 import { getDeliveries } from '../../redux/slices/delivery';
 // components
 import Page from '../../components/Page';
-import CarouselAnimation from '../../components/carousel/CarouselAnimation';
 import ProductList from '../../components/shop/product/ProductList';
 import { MotionInView, varFadeInUp } from '../../components/animate';
 
@@ -44,12 +43,9 @@ const Home = () => {
         ) : (
           <>
             <Grid item xs={12}>
-              <CarouselAnimation />
-            </Grid>
-            <Grid item xs={12}>
-              <Box sx={{ p: 5, mt: 10, textAlign: 'center' }}>
+              <Box sx={{ p: 5, mt: 5, textAlign: 'center' }}>
                 <MotionInView variants={varFadeInUp}>
-                  <Typography variant="h3" sx={{ mb: 3, mt: 3 }}>
+                  <Typography variant="h3" sx={{ mb: 3 }}>
                     Nuestros productos
                   </Typography>
                 </MotionInView>

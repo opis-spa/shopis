@@ -13,6 +13,8 @@ import { addCart, decreaseQuantity, increaseQuantity } from '../../../redux/slic
 // components
 import ButtonTicket from '../ButtonTicket';
 import Increment from './Increment';
+// utils
+import track from '../../../utils/analytics';
 
 const TooltipStyle = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)(
   ({ theme }) => ({
@@ -100,6 +102,8 @@ function ProductAdd(props) {
   const handleAddToCart = async () => {
     const addQuantity = isTreeXTwo ? 3 : 1;
     setCartQuantity(addQuantity);
+    const { id } = product;
+    track.event('AddToCart', { productId: id });
     dispatch(addCart({ ...product, quantity: addQuantity }));
   };
 

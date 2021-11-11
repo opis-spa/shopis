@@ -93,6 +93,7 @@ export default function Router() {
         ),
         children: [
           { path: '', element: <RifopisHome /> },
+          { path: 'sorteo/:name', element: <RifopisHome /> },
           { path: 'cart', element: <RifopisCart /> },
           { path: 'store', element: <RifopisStore /> },
           { path: 'product/:name', element: <RifopisProduct /> },
@@ -214,7 +215,8 @@ export default function Router() {
         ),
         children: [
           { path: ':id/checkout', element: <Checkout /> },
-          { path: 'payment', element: <Payment /> },
+          { path: ':id/checkout/payment', element: <Payment /> },
+          { path: ':id/checkout/payment/result', element: <PaymentResult /> },
           { path: 'payment/result', element: <PaymentResult /> }
         ]
       }
