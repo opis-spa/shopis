@@ -70,8 +70,8 @@ export const setSocialNetwork = (socialNetworks) => async (dispatch) => {
       { name: 'webpage', uri: webpageLink, detail: '' },
       {
         name: 'whatsapp',
-        uri: whatsappLink ? `https://wa.me/${whatsappLink.replace('+', '')}` : '',
-        detail: whatsappLink
+        uri: whatsappLink ? `https://wa.me/569${whatsappLink.replace(' ', '')}` : '',
+        detail: whatsappLink?.replace(' ', '')
       }
     ];
     const response = await axios.post('/api/v1/partnerships/socialNetworks', {
@@ -90,6 +90,42 @@ export const setPaymentMethods = (paymentMethods) => async (dispatch) => {
       paymentMethods
     });
     dispatch(slice.actions.getStoreSuccess(response.data.partnership));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
+};
+
+export const setDeliveryMethods = (deliveryOptions) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const { deliveryMethods, deliveryCost, amountDeliveryFree } = deliveryOptions;
+    const response = await axios.post('/api/v1/partnerships/deliveryMethod', {
+      deliveryMethods,
+      deliveryOptions: { deliveryCost, amountDeliveryFree }
+    });
+    dispatch(slice.actions.getStoreSuccess(response.data.partnership));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
+};
+
+export const setBankAccounts = (accounts) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.post('/api/v1/partnerships/bank', {
+      banks: accounts
+    });
+    dispatch(slice.actions.getStoreSuccess(response.data.partnership));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
+};
+
+export const setNickname = (nickname) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.post('/api/v1/partnerships/nickname', { nickname });
+    dispatch(slice.actions.getStoreSuccess(response.data.result));
   } catch (error) {
     dispatch(slice.actions.hasError(error));
   }

@@ -1,96 +1,211 @@
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 // material
-import { Box, Grid, Card, Button, Typography, Stack } from '@mui/material';
+import { Box, Grid, Card, Button, Typography, Paper, Modal } from '@mui/material';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { LoadingButton } from '@mui/lab';
+// iconify
+import { Icon } from '@iconify/react';
+import plusFill from '@iconify/icons-eva/plus-fill';
+import editFill from '@iconify/icons-eva/edit-fill';
+import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 // redux
-import { useSelector } from '../../redux/store';
-//
-import AccountBillingAddressBook from './AccountBillingAddressBook';
-import AccountBillingPaymentMethod from './AccountBillingPaymentMethod';
-import AccountBillingInvoiceHistory from './AccountBillingInvoiceHistory';
+import { useSelector, useDispatch } from '../../redux/store';
+import { setBankAccounts } from '../../redux/slices/store';
+// components
+import AccountBillingForm from './AccountBillingForm';
 
 // ----------------------------------------------------------------------
 
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  maxWidth: 'calc(100vw - 40px)'
+};
+
+const ACCOUNT_TYPE = [
+  { value: 'corriente', display: 'Cuenta corriente' },
+  { value: 'ahorro', display: 'Cuenta de ahorro' },
+  { value: 'vista', display: 'Cuenta vista' }
+];
+
 export default function AccountBilling() {
-  const { cards, invoices, addressBook } = useSelector((state) => state.user);
-  const [open, setOpen] = useState(false);
+  const { data: banks } = useSelector((state) => state.bank);
+  const { accounts: userAccounts } = useSelector((state) => state.store.data);
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const [openModal, setOpenModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [modalInfo, setModalInfo] = useState({});
+  const [isNewAccount, setIsNewAccount] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const NewCardSchema = Yup.object().shape({
-    cardName: Yup.string().required('Name is required'),
-    cardNumber: Yup.string().required('Card number is required'),
-    cardExpired: Yup.string().required('Card expired is required'),
-    cardCvv: Yup.string().required('Cvv is required')
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      cardName: '',
-      cardNumber: '',
-      cardExpired: '',
-      cardCvv: ''
-    },
-    validationSchema: NewCardSchema,
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
-      handleCancel();
-      resetForm();
-      setSubmitting(false);
-      alert(JSON.stringify(values, null, 2));
-      enqueueSnackbar('Add card success', { variant: 'success' });
-    }
-  });
-
-  const handleOpenAddCard = () => {
-    setOpen((prevOpen) => !prevOpen);
+  const getAccountTypeName = (accountTypeId) => {
+    const accountTypeFilter = ACCOUNT_TYPE.filter((type) => type.value === accountTypeId);
+    return accountTypeFilter.length > 0 ? accountTypeFilter[0].display : '';
   };
 
-  const handleCancel = () => {
-    setOpen(false);
-    formik.resetForm();
+  const getBankName = (bankId) => {
+    const bankFilter = banks.filter((bank) => bank._id === bankId);
+    return bankFilter.length > 0 ? bankFilter[0].name : '';
+  };
+
+  const handleDeleteAccount = async () => {
+    setIsLoading(() => true);
+    try {
+      const newAccounts = userAccounts.filter(
+        (item) =>
+          !(
+            item.bankId === modalInfo.bankId &&
+            item.accountType === modalInfo.accountType &&
+            item.accountNumber === modalInfo.accountNumber
+          )
+      );
+      await dispatch(setBankAccounts(newAccounts));
+      setIsLoading(() => false);
+      setOpenDeleteModal(() => false);
+      enqueueSnackbar('Save success', { variant: 'success' });
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
   };
 
   return (
     <Grid container spacing={5}>
-      <Grid item xs={12} md={8}>
-        <Stack spacing={3}>
-          <Card sx={{ p: 3 }}>
-            <Typography variant="overline" sx={{ mb: 3, display: 'block', color: 'text.secondary' }}>
-              Your Plan
-            </Typography>
-            <Typography variant="h4">Premium</Typography>
-            <Box
-              sx={{
-                mt: { xs: 2, sm: 0 },
-                position: { sm: 'absolute' },
-                top: { sm: 24 },
-                right: { sm: 24 }
+      <Grid item xs={12}>
+        <Card sx={{ p: 3 }}>
+          <Grid container spacing={2}>
+            {userAccounts.map((account, idx) => (
+              <Grid item xs={12} md={6} key={idx}>
+                <Paper
+                  sx={{
+                    p: 3,
+                    width: 1,
+                    bgcolor: 'background.neutral'
+                  }}
+                >
+                  <Typography variant="subtitle1" gutterBottom>
+                    {getBankName(account.bankId)}
+                  </Typography>
+                  <Typography variant="body2" gutterBottom>
+                    <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
+                      Tipo de Cuenta: &nbsp;
+                    </Typography>
+                    {getAccountTypeName(account.accountType)}
+                  </Typography>
+                  <Typography variant="body2" gutterBottom>
+                    <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
+                      Número de Cuenta: &nbsp;
+                    </Typography>
+                    {account.accountNumber}
+                  </Typography>
+                  <Box sx={{ mt: 1 }}>
+                    <Button
+                      color="error"
+                      size="small"
+                      startIcon={<Icon icon={trash2Fill} />}
+                      onClick={() => {
+                        setModalInfo(() => account);
+                        setOpenDeleteModal(() => true);
+                      }}
+                      sx={{ mr: 1 }}
+                    >
+                      Borrar
+                    </Button>
+                    <Button
+                      size="small"
+                      startIcon={<Icon icon={editFill} />}
+                      onClick={() => {
+                        setIsNewAccount(() => false);
+                        setModalInfo(() => account);
+                        setOpenModal(() => true);
+                      }}
+                    >
+                      Editar
+                    </Button>
+                  </Box>
+                </Paper>
+              </Grid>
+            ))}
+            <Grid item xs={12}>
+              <Button
+                size="small"
+                startIcon={<Icon icon={plusFill} />}
+                onClick={() => {
+                  setIsNewAccount(() => true);
+                  setModalInfo(() => ({}));
+                  setOpenModal(() => true);
+                }}
+              >
+                Añadir cuenta
+              </Button>
+            </Grid>
+            <Modal
+              open={openModal}
+              onClose={() => {
+                setOpenModal(() => false);
               }}
             >
-              <Button size="small" color="inherit" variant="outlined" sx={{ mr: 1 }}>
-                Cancel plan
-              </Button>
-              <Button size="small" variant="outlined">
-                Upgrade plan
-              </Button>
-            </Box>
-          </Card>
-
-          <AccountBillingPaymentMethod
-            cards={cards}
-            formik={formik}
-            isOpen={open}
-            onOpen={handleOpenAddCard}
-            onCancel={handleCancel}
-          />
-
-          <AccountBillingAddressBook addressBook={addressBook} />
-        </Stack>
-      </Grid>
-
-      <Grid item xs={12} md={4}>
-        <AccountBillingInvoiceHistory invoices={invoices} />
+              <>
+                <AccountBillingForm
+                  accountInfo={modalInfo}
+                  banks={banks}
+                  accountTypes={ACCOUNT_TYPE}
+                  isNew={isNewAccount}
+                  prevBanks={userAccounts}
+                  onClose={() => {
+                    setOpenModal(() => false);
+                  }}
+                />
+              </>
+            </Modal>
+            <Modal
+              open={openDeleteModal}
+              onClose={() => {
+                setOpenDeleteModal(() => false);
+              }}
+            >
+              <Box sx={modalStyle}>
+                <Card sx={{ p: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                    <ErrorOutlineIcon color="error" sx={{ fontSize: 100, mb: 2 }} />
+                    <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                      ¿Seguro que quieres eliminar esta cuenta?
+                    </Typography>
+                    <Typography variant="body1" sx={{ mb: 2 }}>
+                      Esta acción no se puede deshacer.
+                    </Typography>
+                    <Box>
+                      <Button
+                        color="secondary"
+                        variant="outlined"
+                        disabled={isLoading}
+                        sx={{ mr: 1 }}
+                        onClick={() => {
+                          setOpenDeleteModal(() => false);
+                        }}
+                      >
+                        Cancelar
+                      </Button>
+                      <LoadingButton
+                        loading={isLoading}
+                        color="error"
+                        variant="contained"
+                        onClick={handleDeleteAccount}
+                      >
+                        Sí, elimínalo
+                      </LoadingButton>
+                    </Box>
+                  </Box>
+                </Card>
+              </Box>
+            </Modal>
+          </Grid>
+        </Card>
       </Grid>
     </Grid>
   );
