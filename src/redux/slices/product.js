@@ -29,6 +29,7 @@ const initialState = {
     total: 0,
     discount: 0,
     shipping: 0,
+    deliveryType: null,
     delivery: null,
     billing: null,
     isDelivery: false,
@@ -256,8 +257,9 @@ const slice = createSlice({
     },
     applyShipping(state, action) {
       const shipping = action.payload;
-      state.checkout.shipping = shipping;
-      state.checkout.total = state.checkout.subtotal - state.checkout.discount + shipping;
+      state.checkout.deliveryType = shipping;
+      state.checkout.shipping = 0;
+      state.checkout.total = state.checkout.subtotal - state.checkout.discount + 0;
     },
     addProduct(state, action) {
       const shipping = action.payload;

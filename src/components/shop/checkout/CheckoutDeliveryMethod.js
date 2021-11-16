@@ -46,10 +46,10 @@ export default function CheckoutDelivery({ formik, deliveryOptions, onApplyShipp
       <CardContent>
         <RadioGroup
           name="delivery"
-          value={values.delivery}
+          value={values.deliveryType}
           onChange={(event) => {
             const { value } = event.target;
-            setFieldValue('delivery', value);
+            setFieldValue('deliveryType', value);
             onApplyShipping(value);
           }}
         >
@@ -60,7 +60,7 @@ export default function CheckoutDelivery({ formik, deliveryOptions, onApplyShipp
                 <Grid key={type} item xs={12} md={6}>
                   <OptionStyle
                     sx={{
-                      ...(values.delivery === type && {
+                      ...(values.deliveryType === type && {
                         boxShadow: (theme) => theme.customShadows.z8
                       })
                     }}
@@ -85,10 +85,10 @@ export default function CheckoutDelivery({ formik, deliveryOptions, onApplyShipp
           </Grid>
         </RadioGroup>
 
-        {errors.delivery && (
+        {errors.deliveryType && (
           <FormHelperText error>
             <Box component="span" sx={{ px: 2 }}>
-              {touched.delivery && errors.delivery}
+              {touched.deliveryType && errors.deliveryType}
             </Box>
           </FormHelperText>
         )}

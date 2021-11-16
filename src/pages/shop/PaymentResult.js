@@ -1,20 +1,17 @@
 import React, { useMemo } from 'react';
-import { Link as RouteLink } from 'react-router-dom';
 // materials
 import { styled } from '@mui/material/styles';
-import { Box, Card, Container, Divider, Typography, Stack } from '@mui/material';
+import { Box, Button, Card, Container, Divider, Typography, Stack } from '@mui/material';
 // hooks
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import useQuery from '../../hooks/useQuery';
 // redux
 import { useSelector, useDispatch } from '../../redux/store';
 import { getSale } from '../../redux/slices/sales';
-// routes
-import { PATH_RIFOPIS } from '../../routes/paths';
 // components
 import Page from '../../components/Page';
 import ProductItemSummary from '../../components/rifopis/product/ProductItemSummary';
-import { ButtonTicket } from '../../components/rifopis';
+import LinkPartnership from '../../components/LinkPartnership';
 
 const RootStyle = styled(Page)(({ theme }) => ({
   minHeight: '100%',
@@ -66,11 +63,6 @@ const Payment = () => {
 
   return (
     <RootStyle title="Orden procesada" sx={{ backgroundColor: '#1A0033' }}>
-      <Stack direction="row" sx={{ width: '100%', position: 'absolute', zIndex: 0, overflow: 'hidden' }}>
-        <Box component="img" alt={status} src="/static/illustrations/ic_check_rifopis_left.png" sx={{ flex: 1 }} />
-        <Box component="img" alt={status} src="/static/illustrations/ic_check_rifopis_right.png" sx={{ flex: 1 }} />
-      </Stack>
-
       <Container maxWidth="sm">
         <CardStyle>
           <Stack direction="column" spacing={3}>
@@ -78,16 +70,15 @@ const Payment = () => {
               <Box
                 component="img"
                 alt={status}
-                src="/static/icons/ic_check_rifopis.png"
+                src="/static/icons/ic_check.svg"
                 sx={{ width: 114, height: 114, margin: 'auto', mt: 2 }}
               />
 
               <Typography variant="h4" sx={{ color: 'primary.light', mt: 4, fontWeight: 900 }}>
-                Listo! Te damos la bienvenida al sorteo.
+                Listo! Hemos recibido tu orden.
               </Typography>
               <Typography variant="caption" sx={{ fontWight: 400 }}>
-                Enviaremos el resumen de tu pedido y las instrucciones de los siguientes pasos a tu correo. Te
-                avisaremos el día en que se realice el sorteo.
+                Enviaremos el resumen de tu pedido y las instrucciones de los siguientes pasos a tu correo.
               </Typography>
             </Stack>
 
@@ -108,10 +99,12 @@ const Payment = () => {
               </StackStyle>
             </ContentStyle>
 
-            <Box sx={{ textAlign: 'center', mb: 10 }}>
-              <ButtonTicket title="Explorar otros sorteos" component={RouteLink} to={PATH_RIFOPIS.root} fullWidth>
-                Explorar otros sorteos
-              </ButtonTicket>
+            <Box sx={{ textAlign: 'center', pb: 10 }}>
+              <LinkPartnership to="/">
+                <Button size="large" variant="contained">
+                  Seguir comprando
+                </Button>
+              </LinkPartnership>
             </Box>
           </Stack>
         </CardStyle>

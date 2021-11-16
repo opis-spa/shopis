@@ -188,7 +188,8 @@ export default function Router() {
             path: 'website',
             element: <LandingLayout />,
             children: [{ path: '', element: <LandingPage /> }]
-          }
+          },
+          { path: 'payment/result', element: <PaymentResult /> }
         ]
       },
       // Shop
@@ -216,8 +217,7 @@ export default function Router() {
         children: [
           { path: ':id/checkout', element: <Checkout /> },
           { path: ':id/checkout/payment', element: <Payment /> },
-          { path: ':id/checkout/payment/result', element: <PaymentResult /> },
-          { path: 'payment/result', element: <PaymentResult /> }
+          { path: ':id/checkout/payment/result', element: <PaymentResult /> }
         ]
       }
     );

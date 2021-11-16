@@ -37,7 +37,7 @@ export default function CheckoutPayment() {
   const { partnership } = usePartnership();
   const { data: payments } = useSelector((state) => state.payment);
   const { checkout, checkoutResult } = useSelector((state) => state.product);
-  const { cart, total, discount, subtotal, shipping, isDelivery, data: customer, delivery } = checkout;
+  const { cart, total, discount, subtotal, deliveryType, isDelivery, data: customer, delivery } = checkout;
 
   const PAYMENT_OPTIONS = useMemo(() => {
     const { paymentMethods } = partnership;
@@ -72,6 +72,7 @@ export default function CheckoutPayment() {
     initialValues: {
       partnershipID: partnership.id,
       customer,
+      deliveryType,
       products: cart.map((item) => ({ id: item.id, quantity: item.quantity })),
       ...(isDelivery && { delivery }),
       payment: '',
@@ -158,7 +159,13 @@ export default function CheckoutPayment() {
 
           <Grid item xs={12} md={6}>
             <CheckoutBillingInfo onBackStep={handleBackStep} sx={{ my: 1 }} />
-            <CheckoutSummary total={total} subtotal={subtotal} discount={discount} shipping={shipping} sx={{ my: 1 }} />
+            <CheckoutSummary
+              total={total}
+              subtotal={subtotal}
+              discount={discount}
+              shipping={deliveryType}
+              sx={{ my: 1 }}
+            />
             <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
               Completar orden
             </LoadingButton>
