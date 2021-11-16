@@ -8,7 +8,7 @@ const ROOTS_AUTH = '/auth';
 const ROOTS_APP = '/app';
 const ROOT_SHOP = '/shop';
 const ROOT_SHOPIS = '/website';
-const ROOT_RIFOPIS = '/';
+const ROOT_RIFOPIS = '';
 
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
