@@ -28,6 +28,13 @@ const RootStyle = styled(Page)({
   height: '100%'
 });
 
+const ContainerStyle = styled(Container)(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+    width: '100%',
+    paddingRight: 0
+  }
+}));
+
 const Home = () => {
   const { partnership, isLoading } = usePartnership();
   const isMountedRef = useIsMountedRef();
@@ -95,7 +102,7 @@ const Home = () => {
       <ProductDetail />
       <RifopisCart />
       <CarouselRifopis onSelectProduct={handleSelect} />
-      <Container maxWidth="lg">
+      <ContainerStyle maxWidth="lg">
         <Element name="sorteos">
           <Grid container spacing={2} sx={{ mb: 10 }}>
             {isLoading ? (
@@ -137,7 +144,7 @@ const Home = () => {
             </Grid>
           </Grid>
         </Element>
-      </Container>
+      </ContainerStyle>
     </RootStyle>
   );
 };
