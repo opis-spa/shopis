@@ -56,7 +56,8 @@ const ButtonRoot = React.forwardRef((props, ref) => {
 });
 
 ButtonRoot.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  isBanner: PropTypes.bool
 };
 
 const CustomButtonRoot = styled(ButtonRoot)(
