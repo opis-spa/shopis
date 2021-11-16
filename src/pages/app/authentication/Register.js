@@ -24,9 +24,10 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 const HeaderStyle = styled('header')(({ theme }) => ({
   top: 0,
-  zIndex: 110,
+  right: 0,
+  zIndex: 2500,
   lineHeight: 0,
-  width: '100%',
+  width: '70%',
   display: 'flex',
   alignItems: 'center',
   position: 'absolute',
