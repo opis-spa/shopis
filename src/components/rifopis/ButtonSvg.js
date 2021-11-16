@@ -4,7 +4,7 @@ import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/core/ButtonUnstyled'
 import { styled } from '@mui/system';
 
 const ButtonRoot = React.forwardRef((props, ref) => {
-  const { children, ...other } = props;
+  const { children, isBanner, ...other } = props;
 
   return (
     <svg
@@ -46,7 +46,7 @@ const ButtonRoot = React.forwardRef((props, ref) => {
               mask="url(#mask-2)"
             />
             <foreignObject x="0" y="0" width="100%" {...other}>
-              <div className="content">{children}</div>
+              <div className={isBanner ? 'contentTwo' : 'content'}>{children}</div>
             </foreignObject>
           </g>
         </g>
@@ -99,6 +99,20 @@ const CustomButtonRoot = styled(ButtonRoot)(
       pointer-events: none;
 
     & .content {
+      font-family: 'Nunito';
+      font-size: 14px;
+      font-weight: 200;
+      height: 100%;
+      display: flex;
+      position: fixed;
+      width: 100%;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+    }
+
+    & .contentTwo {
       font-family: 'Nunito';
       font-size: 14px;
       font-weight: 200;

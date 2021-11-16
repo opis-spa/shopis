@@ -95,6 +95,7 @@ function CarouselItem({ item, isActive, index, onSelectProduct }) {
               <motion.div variants={varFadeInRight}>
                 <ButtonTicket
                   fullWidth
+                  isBanner
                   onClick={handleSelectProduct}
                   variant="contained"
                   title="Participar"
