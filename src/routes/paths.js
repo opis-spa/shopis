@@ -58,7 +58,7 @@ export const PATH_SHOP = {
 
 export const PATH_RIFOPIS = {
   root: ROOT_RIFOPIS,
-  home: path(ROOT_RIFOPIS, ''),
+  home: path(ROOT_RIFOPIS, '/'),
   cart: path(ROOT_RIFOPIS, '/cart'),
   checkout: path(ROOT_RIFOPIS, '/checkout'),
   product: path(ROOT_RIFOPIS, '/product'),

@@ -112,7 +112,9 @@ export default function MainFooter() {
 
               <Stack direction="row" spacing={2}>
                 <Icon icon={whatsappFill} width={20} height={20} />
-                <Typography sx={{ fontWeight: 900 }}>+56 9 7977 7557</Typography>
+                <Link href="https://api.whatsapp.com/send?phone=56920549083" target="_blank">
+                  <Typography sx={{ fontWeight: 900 }}>+56 9 2054 9083</Typography>
+                </Link>
               </Stack>
             </Stack>
           </Grid>
