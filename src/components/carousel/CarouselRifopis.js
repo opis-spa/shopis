@@ -108,10 +108,16 @@ function CarouselItem({ item, isActive, index, onSelectProduct }) {
             </MotionContainer>
           </Grid>
           <Grid item xs={12} md={6} display="flex" justifyContent="center" alignItems="center">
-            <Box sx={{ transform: `rotate(${rotateDeg}deg)`, zIndex: 1 }}>
+            <Box sx={{ transform: isCrypto ? `none` : `rotate(${rotateDeg}deg)`, zIndex: 1 }}>
               <MotionContainer open={isActive}>
                 <motion.div variants={varZoomIn}>
-                  {!isCrypto && (
+                  {isCrypto ? (
+                    <Box
+                      component="img"
+                      src="/static/brand/rifopis_lentes.png"
+                      sx={{ height: 460, objectFit: 'contain' }}
+                    />
+                  ) : (
                     <RifopisPolaroid
                       title="Primer lugar"
                       subtitle={name}
