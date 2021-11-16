@@ -115,6 +115,7 @@
     "nprogress": "^0.2.0",
     "numeral": "^2.0.6",
     "optimize-css-assets-webpack-plugin": "5.0.4",
+    "pdf-viewer-reactjs": "^2.2.3",
     "pnp-webpack-plugin": "1.6.4",
     "postcss-flexbugs-fixes": "4.2.1",
     "postcss-loader": "3.0.0",

@@ -15,6 +15,7 @@ import {
   DialogTitle,
   Grid,
   Stack,
+  Link,
   Typography,
   Divider
 } from '@mui/material';
@@ -202,7 +203,19 @@ function ProductDetail({ onBuy, product }) {
 
         <Box sx={{ mt: 2, textAlign: 'center' }}>
           {productCart && productCart?.quantity > 0 && <ButtonTicket title="Comprar tokens" onClick={onBuy} />}
-          <Button color="inherit" sx={{ mt: 2, textTransform: 'uppercase', backgroundColor: 'secondary.light' }}>
+          <Button
+            target="_blank"
+            href="https://firebasestorage.googleapis.com/v0/b/dreampay-73a3a.appspot.com/o/base%2Fbases-legales-rifopis-11-2021.pdf?alt=media&token=80ebab83-9aef-486d-b9a3-360b358897fb"
+            component={Link}
+            color="inherit"
+            sx={{
+              color: 'common.white',
+              textDecoration: 'none',
+              mt: 2,
+              textTransform: 'uppercase',
+              backgroundColor: 'secondary.light'
+            }}
+          >
             Ver bases del sorteo
           </Button>
         </Box>
