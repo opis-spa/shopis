@@ -12,7 +12,7 @@ import { varFadeIn, MotionInView, varFadeInDown } from '../animate';
 const FAQS = [
   {
     id: 'faq-a',
-    heading: '¿Que es RIFOPIS?',
+    heading: '¿Cómo funciona RIFOPIS?',
     detail:
       'Entras a www.rifopis.cl, identificas el sorteo que más te gusta y le das clic en "participar" o "comprar” Tokens. Primero vas a elegir la cantidad de Tokens que quieres, luego ir al carrito de compra en la esquina superior derecha,  introduces los datos de usuario, seleccionas tu método de pago favorito, confirmas tu compra y obtienes tu ticket o boleto ganador.'
   },
