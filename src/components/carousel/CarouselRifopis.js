@@ -110,12 +110,14 @@ function CarouselItem({ item, isActive, index, onSelectProduct }) {
             <Box sx={{ transform: `rotate(${rotateDeg}deg)`, zIndex: 1 }}>
               <MotionContainer open={isActive}>
                 <motion.div variants={varZoomIn}>
-                  <RifopisPolaroid
-                    title="Primer lugar"
-                    subtitle={name}
-                    photo="/static/brand/rifopis.png"
-                    sx={{ zIndex: 0 }}
-                  />
+                  {!isCrypto && (
+                    <RifopisPolaroid
+                      title="Primer lugar"
+                      subtitle={name}
+                      photo="/static/brand/rifopis.png"
+                      sx={{ zIndex: 0 }}
+                    />
+                  )}
                 </motion.div>
               </MotionContainer>
             </Box>

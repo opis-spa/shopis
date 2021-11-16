@@ -8,9 +8,7 @@ import MainNavbar from './MainNavbar';
 import MainFooter from './MainFooter';
 
 const MainStyle = styled('div')(() => ({
-  flexGrow: 1,
-  overflow: 'auto',
-  minHeight: '100%'
+  flexGrow: 1
 }));
 
 export default function MainLayout() {
