@@ -105,7 +105,7 @@ export default function LandingFaqs() {
             <TypographyTitle
               variant="h3"
               sx={{
-                textTransformation: 'uppercase',
+                textTransform: 'uppercase',
                 fontWeight: 900,
                 color: 'primary.light',
                 mb: 5,
