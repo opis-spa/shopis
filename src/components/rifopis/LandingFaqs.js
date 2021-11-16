@@ -18,7 +18,7 @@ const FAQS = [
   },
   {
     id: 'faq-b',
-    heading: '¿Que es un token?',
+    heading: '¿Qué es un token?',
     detail:
       'Un token es como un ticket o boleto digital, basado en la tecnología blockchain, que te garantiza participar en los sorteos que realizaremos.'
   },
