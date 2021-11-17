@@ -25,7 +25,8 @@ const FAQS = [
   {
     id: 'faq-c',
     heading: '¿Tipo de premios?',
-    detail: 'Expediciones, tours y viajes. Activos digitales como Bitcoin. Tecnologías sustentables y recicladas.'
+    detail:
+      'Expediciones, tours, viajes, activos digitales como #Bitcoin, DCLP, XLM. Servicios y productos tecnológicos de base sustentable o reciclados que nos permiten potenciar estratégicamente la activación económica y acelerar el proceso de adopción #blockchain.'
   }
 ];
 
