@@ -82,7 +82,7 @@ export default function CheckoutPayment() {
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
         await dispatch(proccessCheckout(values));
-        track.event('Purchase', values);
+        track.event('Purchase', { ...values, value: total, currency: values.token || 'CLP' });
       } catch (error) {
         setSubmitting(false);
         setErrors(error.message);
