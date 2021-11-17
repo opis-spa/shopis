@@ -100,11 +100,11 @@ export default function Register() {
 
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 3 }}>
             Al crear una cuenta, aceptas los&nbsp;
-            <Link underline="always" color="text.primary" href="#">
+            <Link underline="always" color="text.primary" href="http://opis.cl/terms-conditions" target="_blank">
               Términos
             </Link>
             &nbsp;y&nbsp;
-            <Link underline="always" color="text.primary" href="#">
+            <Link underline="always" color="text.primary" href="http://opis.cl/privacy-policy/" target="_blank">
               Políticas de privacidad
             </Link>
             &nbsp;de opis.
