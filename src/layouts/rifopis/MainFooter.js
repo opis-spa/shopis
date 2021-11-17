@@ -112,7 +112,11 @@ export default function MainFooter() {
 
               <Stack direction="row" spacing={2}>
                 <Icon icon={whatsappFill} width={20} height={20} />
-                <Link href="https://api.whatsapp.com/send?phone=56920549083" target="_blank">
+                <Link
+                  href="https://api.whatsapp.com/send?phone=56920549083"
+                  target="_blank"
+                  sx={{ textDecoration: 'none', color: 'common.white' }}
+                >
                   <Typography sx={{ fontWeight: 900 }}>+56 9 2054 9083</Typography>
                 </Link>
               </Stack>
@@ -146,18 +150,20 @@ export default function MainFooter() {
                   </Link>
                 </Stack>
 
-                <Link
-                  component={RouterLink}
-                  to={PATH_RIFOPIS.terms}
-                  sx={{ color: 'common.white', textDecoration: 'none' }}
-                >
-                  <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-                    <IconMaterialStyle>
-                      <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
-                    </IconMaterialStyle>
-                    <Typography>Política de privacidad</Typography>
-                  </Stack>
-                </Link>
+                {false === true && (
+                  <Link
+                    component={RouterLink}
+                    to={PATH_RIFOPIS.terms}
+                    sx={{ color: 'common.white', textDecoration: 'none' }}
+                  >
+                    <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+                      <IconMaterialStyle>
+                        <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
+                      </IconMaterialStyle>
+                      <Typography>Política de privacidad</Typography>
+                    </Stack>
+                  </Link>
+                )}
               </Stack>
             </Grid>
           </MHidden>
