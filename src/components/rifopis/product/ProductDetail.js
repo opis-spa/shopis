@@ -135,7 +135,7 @@ function ProductDetail({ onBuy, product }) {
     <Grid container spacing={2} sx={{ mt: 0 }}>
       <Grid item xs={12} md={8}>
         <Scrollbar>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} sx={{ mb: 4 }}>
             <Grid item xs={12} md={12} sx={{ width: 350 }}>
               <RifopisPolaroid
                 small
@@ -148,14 +148,27 @@ function ProductDetail({ onBuy, product }) {
             <Grid item sx={12} md={12}>
               <Stack spacing={2}>
                 <Typography variant="h4">Primer Lugar</Typography>
-                <Typography>{description}</Typography>
+                <Stack direction="column">
+                  {description.split('\\n').reduce(
+                    (a, b) => (
+                      <>
+                        {a}
+                        <Typography variant="span">
+                          {b}
+                          <br />
+                        </Typography>
+                      </>
+                    ),
+                    null
+                  )}
+                </Stack>
               </Stack>
             </Grid>
           </Grid>
 
           {extra && (
             <>
-              <Typography variant="h4" sx={{ mt: 3, textTransform: 'uppercase' }}>
+              <Typography variant="h4" sx={{ textTransform: 'uppercase' }}>
                 Itinerario
               </Typography>
 
