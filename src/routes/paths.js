@@ -65,5 +65,6 @@ export const PATH_RIFOPIS = {
   payment: path(ROOT_RIFOPIS, '/payment'),
   result: path(ROOT_RIFOPIS, '/payment/result'),
   terms: path(ROOT_RIFOPIS, '/terms'),
+  raffle: path(ROOT_RIFOPIS, '/sorteo'),
   legalBase: path(ROOT_RIFOPIS, '/legal-base')
 };

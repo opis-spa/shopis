@@ -142,7 +142,7 @@ function ProductDetail({ onBuy, product }) {
                 title="Primer Lugar"
                 subtitle={name}
                 photo={photos[1]}
-                sx={{ transform: `rotate(-1.5deg)` }}
+                sx={{ mt: 1, transform: `rotate(-1.5deg)` }}
               />
             </Grid>
             <Grid item sx={12} md={12}>
@@ -191,7 +191,7 @@ function ProductDetail({ onBuy, product }) {
             prizes.map((prize, index) => {
               const { photos, name, description, cant } = prize;
               return (
-                <>
+                <Box key={name}>
                   <Divider />
                   <Prize
                     name={name}
@@ -201,7 +201,7 @@ function ProductDetail({ onBuy, product }) {
                     description={description}
                     sx={{ my: 2 }}
                   />
-                </>
+                </Box>
               );
             })}
 
@@ -246,6 +246,7 @@ function DialogoProduct() {
 
   const handleClose = () => {
     dispatch(getProduct({ name: '' }));
+    navigate(PATH_RIFOPIS.home);
   };
 
   const handleBuy = async () => {
