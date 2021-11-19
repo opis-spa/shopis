@@ -72,26 +72,11 @@ export default function MainFooter() {
                   <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
                 </IconMaterialStyle>
                 <Link
+                  sx={{ color: 'common.white', textDecoration: 'none' }}
                   target="_blank"
                   to="https://firebasestorage.googleapis.com/v0/b/dreampay-73a3a.appspot.com/o/base%2Fbases-legales-rifopis-11-2021.pdf?alt=media&token=80ebab83-9aef-486d-b9a3-360b358897fb"
                 >
                   <Typography>Bases legales</Typography>
-                </Link>
-              </Stack>
-
-              <Stack direction="row" spacing={2}>
-                <IconMaterialStyle>
-                  <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
-                </IconMaterialStyle>
-                <Link
-                  component={RouterLink}
-                  to={`${PATH_RIFOPIS.terms}`}
-                  sx={{
-                    fontWeight: 900,
-                    color: 'text.primary'
-                  }}
-                >
-                  <Typography sx={{ fontWeight: 900 }}>Términos y condiciones</Typography>
                 </Link>
               </Stack>
             </Stack>
