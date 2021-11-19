@@ -162,23 +162,18 @@ export default function Router() {
           { path: 'coupons', element: <Coupons /> }
         ]
       },
-      // Landing (comingSoon active)
+      // Landing
       {
         path: '/',
         children: [
           {
-            element: <LogoOnlyLayout />,
+            path: '',
+            element: <LandingLayout />,
             children: [
-              { path: '', element: <ComingSoon /> },
+              { path: '', element: <LandingPage /> },
               { path: 'not-exists', element: <NotFound /> }
             ]
-          },
-          {
-            path: 'website',
-            element: <LandingLayout />,
-            children: [{ path: '', element: <LandingPage /> }]
-          },
-          { path: 'payment/result', element: <PaymentResult /> }
+          }
         ]
       },
       // Shop
