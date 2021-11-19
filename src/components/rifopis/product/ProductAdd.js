@@ -87,9 +87,9 @@ function ProductAdd(props) {
   }, [isTreeXTwo, cartQuantity, amount]);
 
   const open = useMemo(() => {
-    const isPrimo = (cartQuantity + 1) % 3 === 0;
-    return isTreeXTwo && isPrimo;
-  }, [isTreeXTwo, cartQuantity]);
+    const residuo = cartQuantity % 3;
+    return 3 - residuo;
+  }, [cartQuantity]);
 
   const handleIncrease = () => {
     dispatch(increaseQuantity(id));
@@ -111,14 +111,14 @@ function ProductAdd(props) {
     <FormikProvider value={formik}>
       {(cartQuantity || 0) > 0 ? (
         <TooltipStyle
-          open={tooltip && open}
+          open={tooltip && isTreeXTwo && open !== 3}
           disableFocusListener
           disableHoverListener
           disableTouchListener
           TransitionComponent={Fade}
           TransitionProps={{ timeout: 600 }}
-          title="¡1 más para la promo!"
-          placement="bottom"
+          title={`${open === 3 ? 1 : open} más para la promo!`}
+          placement="top"
           arrow
         >
           <Increment

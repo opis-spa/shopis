@@ -15,6 +15,7 @@ import {
   DialogTitle,
   Grid,
   Stack,
+  Link,
   Typography,
   Divider
 } from '@mui/material';
@@ -134,27 +135,40 @@ function ProductDetail({ onBuy, product }) {
     <Grid container spacing={2} sx={{ mt: 0 }}>
       <Grid item xs={12} md={8}>
         <Scrollbar>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} sx={{ mb: 4 }}>
             <Grid item xs={12} md={12} sx={{ width: 350 }}>
               <RifopisPolaroid
                 small
                 title="Primer Lugar"
                 subtitle={name}
                 photo={photos[1]}
-                sx={{ transform: `rotate(-1.5deg)` }}
+                sx={{ mt: 1, transform: `rotate(-1.5deg)` }}
               />
             </Grid>
             <Grid item sx={12} md={12}>
               <Stack spacing={2}>
                 <Typography variant="h4">Primer Lugar</Typography>
-                <Typography>{description}</Typography>
+                <Stack direction="column">
+                  {description.split('\\n').reduce(
+                    (a, b) => (
+                      <>
+                        {a}
+                        <Typography variant="span">
+                          {b}
+                          <br />
+                        </Typography>
+                      </>
+                    ),
+                    null
+                  )}
+                </Stack>
               </Stack>
             </Grid>
           </Grid>
 
           {extra && (
             <>
-              <Typography variant="h4" sx={{ mt: 3, textTransform: 'uppercase' }}>
+              <Typography variant="h4" sx={{ textTransform: 'uppercase' }}>
                 Itinerario
               </Typography>
 
@@ -177,7 +191,7 @@ function ProductDetail({ onBuy, product }) {
             prizes.map((prize, index) => {
               const { photos, name, description, cant } = prize;
               return (
-                <>
+                <Box key={name}>
                   <Divider />
                   <Prize
                     name={name}
@@ -187,7 +201,7 @@ function ProductDetail({ onBuy, product }) {
                     description={description}
                     sx={{ my: 2 }}
                   />
-                </>
+                </Box>
               );
             })}
 
@@ -202,7 +216,19 @@ function ProductDetail({ onBuy, product }) {
 
         <Box sx={{ mt: 2, textAlign: 'center' }}>
           {productCart && productCart?.quantity > 0 && <ButtonTicket title="Comprar tokens" onClick={onBuy} />}
-          <Button color="inherit" sx={{ mt: 2, textTransform: 'uppercase', backgroundColor: 'secondary.light' }}>
+          <Button
+            target="_blank"
+            href="https://firebasestorage.googleapis.com/v0/b/dreampay-73a3a.appspot.com/o/base%2Fbases-legales-rifopis-11-2021.pdf?alt=media&token=80ebab83-9aef-486d-b9a3-360b358897fb"
+            component={Link}
+            color="inherit"
+            sx={{
+              color: 'common.white',
+              textDecoration: 'none',
+              mt: 2,
+              textTransform: 'uppercase',
+              backgroundColor: 'secondary.light'
+            }}
+          >
             Ver bases del sorteo
           </Button>
         </Box>
@@ -220,6 +246,7 @@ function DialogoProduct() {
 
   const handleClose = () => {
     dispatch(getProduct({ name: '' }));
+    navigate(PATH_RIFOPIS.home);
   };
 
   const handleBuy = async () => {

@@ -19,20 +19,26 @@ import { regiones } from '../../../assets/data/regiones';
 // ----------------------------------------------------------------------
 
 const CheckoutDeliverySchema = Yup.object().shape({
-  delivery: Yup.string().required('La forma de entrega es requerida'),
-  identityCode: Yup.string().required('El RUT es requerido'),
-  phone: Yup.string().required('Teléfono es requerido'),
-  address: Yup.string().when('delivery', {
+  deliveryType: Yup.string().required('La forma de entrega es requerida'),
+  address: Yup.string().when('deliveryType', {
     is: 'delivery',
     then: Yup.string().required('La dirección es requerida')
   }),
-  state: Yup.string().when('delivery', {
+  state: Yup.string().when('deliveryType', {
     is: 'delivery',
     then: Yup.string().required('La región es requerida')
   }),
-  city: Yup.string().when('delivery', {
+  city: Yup.string().when('deliveryType', {
     is: 'delivery',
     then: Yup.string().required('La comúna es requerida')
+  }),
+  identityCode: Yup.string().when('deliveryType', {
+    is: 'delivery',
+    then: Yup.string().required('El RUT es requerido')
+  }),
+  phone: Yup.string().when('deliveryType', {
+    is: 'delivery',
+    then: Yup.string().required('Teléfono es requerido')
   })
 });
 
@@ -53,7 +59,7 @@ function CheckoutDelivery() {
     initialValues: {
       identityCode: '',
       phone: '',
-      delivery: '',
+      deliveryType: '',
       address: '',
       addressMore: '',
       state: '',
@@ -130,7 +136,7 @@ function CheckoutDelivery() {
           />
         </Grid>
         <Grid item xs={12}>
-          {values.delivery === 'delivery' && (
+          {values.deliveryType === 'delivery' && (
             <Stack spacing={2} sx={{ mt: 3, mb: 5 }}>
               <TextField
                 disabled={isLoading}

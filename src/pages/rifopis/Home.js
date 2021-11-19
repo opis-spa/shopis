@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { paramCase } from 'change-case';
 import { Element, scroller } from 'react-scroll';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { CircularProgress, Grid, Typography, Container, Box } from '@mui/material';
+// router
+import { PATH_RIFOPIS } from '../../routes/paths';
 // hooks
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import usePartnership from '../../hooks/usePartnership';
@@ -28,6 +30,13 @@ const RootStyle = styled(Page)({
   height: '100%'
 });
 
+const ContainerStyle = styled(Container)(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+    width: '100%',
+    paddingRight: 0
+  }
+}));
+
 const Home = () => {
   const { partnership, isLoading } = usePartnership();
   const isMountedRef = useIsMountedRef();
@@ -36,17 +45,19 @@ const Home = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.product);
   const { cart } = useSelector((state) => state.product.checkout);
+  const navigate = useNavigate();
 
-  const handleSelect = (product) => {
+  const handleSelect = (product, loadCart = false) => {
     const { id, name, promo } = product;
-    const isExists = cart.find((item) => item.id === id);
-    const isTreeXTwo = promo === '3x2';
-    const addQuantity = isTreeXTwo ? 3 : 1;
-    if (!isExists) {
-      dispatch(addCart({ ...product, quantity: addQuantity }));
+    if (loadCart) {
+      const isExists = cart.find((item) => item.id === id);
+      const isTreeXTwo = promo === '3x2';
+      const addQuantity = isTreeXTwo ? 3 : 1;
+      if (!isExists) {
+        dispatch(addCart({ ...product, quantity: addQuantity }));
+      }
     }
-    console.log(paramCase(name));
-    dispatch(getProduct({ name: paramCase(name) }));
+    navigate(`${PATH_RIFOPIS.raffle}/${paramCase(name)}`, { replace: true });
   };
 
   // effect init
@@ -94,8 +105,8 @@ const Home = () => {
     <RootStyle title={partnership.name}>
       <ProductDetail />
       <RifopisCart />
-      <CarouselRifopis onSelectProduct={handleSelect} />
-      <Container maxWidth="lg">
+      <CarouselRifopis onSelectProduct={(product) => handleSelect(product, true)} />
+      <ContainerStyle maxWidth="lg">
         <Element name="sorteos">
           <Grid container spacing={2} sx={{ mb: 10 }}>
             {isLoading ? (
@@ -137,7 +148,7 @@ const Home = () => {
             </Grid>
           </Grid>
         </Element>
-      </Container>
+      </ContainerStyle>
     </RootStyle>
   );
 };

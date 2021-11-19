@@ -8,12 +8,13 @@ import ButtonSvg from './ButtonSvg';
 const propTypes = {
   title: PropTypes.string,
   fontSize: PropTypes.number,
-  sx: PropTypes.shape({})
+  sx: PropTypes.shape({}),
+  isBanner: PropTypes.bool
 };
 
-function ButtonTicket({ title, sx, fontSize, ...props }) {
+function ButtonTicket({ title, sx, isBanner, fontSize, ...props }) {
   return (
-    <ButtonSvg height={70} {...props} sx={{ zIndex: 1000, ...sx }}>
+    <ButtonSvg height={70} isBanner={isBanner} {...props} sx={{ zIndex: 10000, ...sx }}>
       <Typography variant="span" sx={{ fontSize: fontSize || 18, color: 'common.white', fontWeight: 900, zIndex: 10 }}>
         {title}
       </Typography>

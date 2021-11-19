@@ -49,18 +49,6 @@ export default function Router() {
   if (DOMAIN_HOST.indexOf('rifopis.cl') >= 0) {
     routes.push(
       {
-        path: '',
-        element: (
-          <PartnershipGuard init="rifopis">
-            <LogoOnlyLayoutRifopis />
-          </PartnershipGuard>
-        ),
-        children: [
-          { path: '', element: <RifopisComingSoon /> },
-          { path: 'payment/result', element: <RifopisPaymentResult /> }
-        ]
-      },
-      {
         path: 'auth',
         element: <LogoOnlyLayoutRifopis />,
         children: [
@@ -85,7 +73,7 @@ export default function Router() {
         ]
       },
       {
-        path: 'website',
+        path: '',
         element: (
           <PartnershipGuard init="rifopis">
             <RifopisLayout />
@@ -101,13 +89,14 @@ export default function Router() {
         ]
       },
       {
-        path: 'website',
+        path: '',
         element: (
           <PartnershipGuard init="rifopis">
             <LogoOnlyLayoutRifopis />
           </PartnershipGuard>
         ),
         children: [
+          { path: 'payment/result', element: <RifopisPaymentResult /> },
           { path: 'checkout', element: <RifopisCheckout /> },
           { path: 'payment', element: <Payment /> }
         ]
@@ -212,8 +201,7 @@ export default function Router() {
         children: [
           { path: ':id/checkout', element: <Checkout /> },
           { path: ':id/checkout/payment', element: <Payment /> },
-          { path: ':id/checkout/payment/result', element: <PaymentResult /> },
-          { path: 'payment/result', element: <PaymentResult /> }
+          { path: ':id/checkout/payment/result', element: <PaymentResult /> }
         ]
       }
     );
@@ -272,7 +260,7 @@ const RifopisTerms = Loadable(lazy(() => import('../pages/rifopis/Terms')));
 // Main
 const LandingPage = Loadable(lazy(() => import('../pages/landing/Home')));
 const ComingSoon = Loadable(lazy(() => import('../pages/ComingSoon')));
-const RifopisComingSoon = Loadable(lazy(() => import('../pages/rifopis/ComingSoon')));
+// const RifopisComingSoon = Loadable(lazy(() => import('../pages/rifopis/ComingSoon')));
 const Maintenance = Loadable(lazy(() => import('../pages/Maintenance')));
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));

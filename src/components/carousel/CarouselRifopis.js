@@ -95,6 +95,7 @@ function CarouselItem({ item, isActive, index, onSelectProduct }) {
               <motion.div variants={varFadeInRight}>
                 <ButtonTicket
                   fullWidth
+                  isBanner
                   onClick={handleSelectProduct}
                   variant="contained"
                   title="Participar"
@@ -107,15 +108,23 @@ function CarouselItem({ item, isActive, index, onSelectProduct }) {
             </MotionContainer>
           </Grid>
           <Grid item xs={12} md={6} display="flex" justifyContent="center" alignItems="center">
-            <Box sx={{ transform: `rotate(${rotateDeg}deg)`, zIndex: 1 }}>
+            <Box sx={{ transform: isCrypto ? `none` : `rotate(${rotateDeg}deg)`, zIndex: 1 }}>
               <MotionContainer open={isActive}>
                 <motion.div variants={varZoomIn}>
-                  <RifopisPolaroid
-                    title="Primer lugar"
-                    subtitle={name}
-                    photo="/static/brand/rifopis.png"
-                    sx={{ zIndex: 0 }}
-                  />
+                  {isCrypto ? (
+                    <Box
+                      component="img"
+                      src="/static/brand/rifopis_lentes.png"
+                      sx={{ height: 460, objectFit: 'contain' }}
+                    />
+                  ) : (
+                    <RifopisPolaroid
+                      title="Primer lugar"
+                      subtitle={name}
+                      photo="/static/brand/rifopis.png"
+                      sx={{ zIndex: 0 }}
+                    />
+                  )}
                 </motion.div>
               </MotionContainer>
             </Box>
