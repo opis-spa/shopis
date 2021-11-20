@@ -12,18 +12,21 @@ import { varFadeIn, MotionInView, varFadeInDown } from '../animate';
 const FAQS = [
   {
     id: 'faq-a',
-    heading: '¿Que es RIFOPIS?',
-    detail: 'Información sobre rifopis.'
+    heading: '¿Cómo funciona RIFOPIS?',
+    detail:
+      'Entras a www.rifopis.cl, identificas el sorteo que más te gusta y le das clic en "participar" o "comprar” Tokens. Primero vas a elegir la cantidad de Tokens que quieres, luego ir al carrito de compra en la esquina superior derecha,  introduces los datos de usuario, seleccionas tu método de pago favorito, confirmas tu compra y obtienes tu ticket o boleto ganador.'
   },
   {
     id: 'faq-b',
-    heading: '¿Que es un token?',
-    detail: 'Información sobre que es un token'
+    heading: '¿Qué es un token?',
+    detail:
+      'Un token es como un ticket o boleto digital, basado en la tecnología blockchain, que te garantiza participar en los sorteos que realizaremos.'
   },
   {
     id: 'faq-c',
     heading: '¿Tipo de premios?',
-    detail: 'Cuales son los tipos de premios.'
+    detail:
+      'Expediciones, tours, viajes, activos digitales como #Bitcoin, DCLP, XLM. Servicios y productos tecnológicos de base sustentable o reciclados que nos permiten potenciar estratégicamente la activación económica y acelerar el proceso de adopción #blockchain.'
   }
 ];
 
@@ -103,7 +106,7 @@ export default function LandingFaqs() {
             <TypographyTitle
               variant="h3"
               sx={{
-                textTransformation: 'uppercase',
+                textTransform: 'uppercase',
                 fontWeight: 900,
                 color: 'primary.light',
                 mb: 5,

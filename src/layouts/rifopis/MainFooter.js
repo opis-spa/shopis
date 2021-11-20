@@ -71,22 +71,12 @@ export default function MainFooter() {
                 <IconMaterialStyle>
                   <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
                 </IconMaterialStyle>
-                <Typography>Bases del sorteo</Typography>
-              </Stack>
-
-              <Stack direction="row" spacing={2}>
-                <IconMaterialStyle>
-                  <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
-                </IconMaterialStyle>
                 <Link
-                  component={RouterLink}
-                  to={`${PATH_RIFOPIS.terms}`}
-                  sx={{
-                    fontWeight: 900,
-                    color: 'text.primary'
-                  }}
+                  sx={{ color: 'common.white', textDecoration: 'none' }}
+                  target="_blank"
+                  to="https://firebasestorage.googleapis.com/v0/b/dreampay-73a3a.appspot.com/o/base%2Fbases-legales-rifopis-11-2021.pdf?alt=media&token=80ebab83-9aef-486d-b9a3-360b358897fb"
                 >
-                  <Typography sx={{ fontWeight: 900 }}>Términos y condiciones</Typography>
+                  <Typography>Bases legales</Typography>
                 </Link>
               </Stack>
             </Stack>
@@ -107,7 +97,13 @@ export default function MainFooter() {
 
               <Stack direction="row" spacing={2}>
                 <Icon icon={whatsappFill} width={20} height={20} />
-                <Typography sx={{ fontWeight: 900 }}>+56 9 7977 7557</Typography>
+                <Link
+                  href="https://api.whatsapp.com/send?phone=56920549083"
+                  target="_blank"
+                  sx={{ textDecoration: 'none', color: 'common.white' }}
+                >
+                  <Typography sx={{ fontWeight: 900 }}>+56 9 2054 9083</Typography>
+                </Link>
               </Stack>
             </Stack>
           </Grid>
@@ -130,21 +126,29 @@ export default function MainFooter() {
                   <IconMaterialStyle>
                     <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
                   </IconMaterialStyle>
-                  <Typography>Bases del sorteo</Typography>
+                  <Link
+                    sx={{ color: 'common.white', textDecoration: 'none' }}
+                    target="_blank"
+                    href="https://firebasestorage.googleapis.com/v0/b/dreampay-73a3a.appspot.com/o/base%2Fbases-legales-rifopis-11-2021.pdf?alt=media&token=80ebab83-9aef-486d-b9a3-360b358897fb"
+                  >
+                    <Typography>Bases del sorteo</Typography>
+                  </Link>
                 </Stack>
 
-                <Link
-                  component={RouterLink}
-                  to={PATH_RIFOPIS.terms}
-                  sx={{ color: 'common.white', textDecoration: 'none' }}
-                >
-                  <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-                    <IconMaterialStyle>
-                      <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
-                    </IconMaterialStyle>
-                    <Typography>Política de privacidad</Typography>
-                  </Stack>
-                </Link>
+                {false === true && (
+                  <Link
+                    component={RouterLink}
+                    to={PATH_RIFOPIS.terms}
+                    sx={{ color: 'common.white', textDecoration: 'none' }}
+                  >
+                    <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+                      <IconMaterialStyle>
+                        <ArrowForwardRoundedIcon color="primary" sx={{ fontSize: 12 }} />
+                      </IconMaterialStyle>
+                      <Typography>Política de privacidad</Typography>
+                    </Stack>
+                  </Link>
+                )}
               </Stack>
             </Grid>
           </MHidden>

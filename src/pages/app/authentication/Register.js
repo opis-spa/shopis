@@ -24,9 +24,10 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 const HeaderStyle = styled('header')(({ theme }) => ({
   top: 0,
-  zIndex: 110,
+  right: 0,
+  zIndex: 2500,
   lineHeight: 0,
-  width: '100%',
+  width: '70%',
   display: 'flex',
   alignItems: 'center',
   position: 'absolute',
@@ -99,11 +100,11 @@ export default function Register() {
 
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 3 }}>
             Al crear una cuenta, aceptas los&nbsp;
-            <Link underline="always" color="text.primary" href="#">
+            <Link underline="always" color="text.primary" href="http://opis.cl/terms-conditions" target="_blank">
               Términos
             </Link>
             &nbsp;y&nbsp;
-            <Link underline="always" color="text.primary" href="#">
+            <Link underline="always" color="text.primary" href="http://opis.cl/privacy-policy/" target="_blank">
               Políticas de privacidad
             </Link>
             &nbsp;de opis.

@@ -7,12 +7,14 @@ import { styled } from '@mui/material/styles';
 import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getCart, onGotoStep, createInformation, createDelivery } from '../../redux/slices/product';
+import { getCart, onGotoStep, getProductStore, createInformation, createDelivery } from '../../redux/slices/product';
 import { getDeliveries } from '../../redux/slices/delivery';
 import { getPayments } from '../../redux/slices/payment';
 // hooks
+import usePartnership from '../../hooks/usePartnership';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import useSettings from '../../hooks/useSettings';
+import useAuth from '../../hooks/useAuth';
 // components
 import Page from '../../components/Page';
 import {
@@ -98,6 +100,9 @@ const MainStyle = styled(Page)(({ theme }) => ({
 export default function EcommerceCheckout() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
+  const { isAuthenticated, user } = useAuth();
+  const { partnership } = usePartnership();
+  const { nickname } = partnership;
   const isMountedRef = useIsMountedRef();
   const { checkout } = useSelector((state) => state.product);
   const { cart, activeStep, isDelivery } = checkout;
@@ -111,11 +116,19 @@ export default function EcommerceCheckout() {
   useEffect(() => {
     if (isMountedRef.current) {
       dispatch(getCart(cart));
+      dispatch(getProductStore(nickname));
       dispatch(getDeliveries());
       dispatch(getPayments());
       dispatch(onGotoStep(1));
     }
-  }, [dispatch, isMountedRef, cart]);
+  }, [dispatch, isMountedRef, cart, nickname]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(createInformation(user));
+      dispatch(onGotoStep(2));
+    }
+  }, [dispatch, isAuthenticated, user]);
 
   useEffect(() => {
     if (activeStep === 1) {

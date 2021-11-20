@@ -24,6 +24,9 @@ const CardStyle = styled(Card)(({ theme }) => ({
   border: `1px solid ${theme.palette.secondary.light}`,
   minWidth: '40%',
   [theme.breakpoints.down('md')]: {
+    minWidth: '50%!important'
+  },
+  [theme.breakpoints.down('sm')]: {
     minWidth: '80%!important'
   },
   paddingBottom: theme.spacing(2),
@@ -77,76 +80,74 @@ function ProductItem({ product, onSelectProduct, ...other }) {
   }, [cart, product]);
 
   return (
-    <>
-      <CardStyle {...other}>
-        <DialogAnimate fullWidth open={detailOpen} maxWidth="md" scroll="paper" onClose={() => setDetailOpen(false)}>
-          <DialogContent>
-            <ProductDetail product={product} productCart={productCart} />
-          </DialogContent>
-        </DialogAnimate>
-        {isPromo && (
-          <Box
-            component="img"
-            src="/static/icons/ic_promo_rifopis.svg"
-            alt="Promo 3x2"
-            sx={{ position: 'absolute', width: 100, height: 100, left: -5, top: -5, zIndex: 1000 }}
-          />
-        )}
-        <Box sx={{ p: 2 }}>
-          <ProductImgStyle alt={name} src={image[1]} sx={{ height: isMobile ? 170 : 'auto' }} />
-          <ProductAdd tooltip={!open} title="Comprar tokens" product={productCart} sx={{ mt: 1 }} />
-        </Box>
+    <CardStyle {...other}>
+      <DialogAnimate fullWidth open={detailOpen} maxWidth="md" scroll="paper" onClose={() => setDetailOpen(false)}>
+        <DialogContent>
+          <ProductDetail product={product} productCart={productCart} />
+        </DialogContent>
+      </DialogAnimate>
+      {isPromo && (
+        <Box
+          component="img"
+          src="/static/icons/ic_promo_rifopis.svg"
+          alt="Promo 3x2"
+          sx={{ position: 'absolute', width: 100, height: 100, left: -5, top: -5, zIndex: 1000 }}
+        />
+      )}
+      <Box sx={{ p: 2 }}>
+        <ProductImgStyle alt={name} src={image[1]} sx={{ height: isMobile ? 170 : 'auto' }} />
+        <ProductAdd tooltip={!open} title="Comprar tokens" product={productCart} sx={{ mt: 1 }} />
+      </Box>
 
-        <Stack sx={{ px: 3, flex: 1 }} spacing={2}>
-          <RaffleProgress stock={stock} quantity={goal} reverse />
-          <Stack>
-            <Typography variant="subtitle1" noWrap color="primary" sx={{ textTransform: 'uppercase' }}>
-              Primer Lugar
-              <Typography
-                component="span"
-                variant="caption"
-                sx={{ color: 'secondary.light', textTransform: 'uppercase' }}
-              >
-                &nbsp;- 1 premio
-              </Typography>
-            </Typography>
-            <Typography variant="subtitle1" noWrap sx={{ textTransform: 'uppercase', color: 'text.primary' }}>
-              {name}
-            </Typography>
-          </Stack>
-
-          {prizes ? (
-            prizes.map((prize, index) => {
-              const { photos, name, cant } = prize;
-              return (
-                <>
-                  <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
-                  <RafflePrizes photo={photos[0]} quantity={cant} prize={name} position={positionString(index + 2)} />
-                </>
-              );
-            })
-          ) : (
-            <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
-          )}
-
-          <Box sx={{ display: 'flex', flexGrow: 1 }} />
-          <RafflePrice isPromo={promo === '3x2'} price={amount - (discount || 0)} expireAt={expireAt} />
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              color="inherit"
-              sx={{
-                textTransform: 'uppercase',
-                fontWeight: 900,
-                backgroundColor: 'secondary.light'
-              }}
-              onClick={handleProductDetail}
+      <Stack sx={{ px: 3, flex: 1 }} spacing={2}>
+        <RaffleProgress stock={stock} quantity={goal} reverse />
+        <Stack>
+          <Typography variant="subtitle1" noWrap color="primary" sx={{ textTransform: 'uppercase' }}>
+            Primer Lugar
+            <Typography
+              component="span"
+              variant="caption"
+              sx={{ color: 'secondary.light', textTransform: 'uppercase' }}
             >
-              Detalle del sorteo
-            </Button>
-          </Box>
+              &nbsp;- 1 premio
+            </Typography>
+          </Typography>
+          <Typography variant="subtitle1" noWrap sx={{ textTransform: 'uppercase', color: 'text.primary' }}>
+            {name}
+          </Typography>
         </Stack>
-      </CardStyle>
-    </>
+
+        {prizes ? (
+          prizes.map((prize, index) => {
+            const { photos, name, cant } = prize;
+            return (
+              <>
+                <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
+                <RafflePrizes photo={photos[0]} quantity={cant} prize={name} position={positionString(index + 2)} />
+              </>
+            );
+          })
+        ) : (
+          <Divider variant="middle" sx={{ background: 'primary.lighter' }} />
+        )}
+
+        <Box sx={{ display: 'flex', flexGrow: 1 }} />
+        <RafflePrice isPromo={promo === '3x2'} price={amount - (discount || 0)} expireAt={expireAt} />
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button
+            color="inherit"
+            sx={{
+              textTransform: 'uppercase',
+              fontWeight: 900,
+              backgroundColor: 'secondary.light'
+            }}
+            onClick={handleProductDetail}
+          >
+            Detalle del sorteo
+          </Button>
+        </Box>
+      </Stack>
+    </CardStyle>
   );
 }
 

@@ -8,7 +8,7 @@ const ROOTS_AUTH = '/auth';
 const ROOTS_APP = '/app';
 const ROOT_SHOP = '/shop';
 const ROOT_SHOPIS = '/website';
-const ROOT_RIFOPIS = '/website';
+const ROOT_RIFOPIS = '';
 
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
@@ -58,12 +58,13 @@ export const PATH_SHOP = {
 
 export const PATH_RIFOPIS = {
   root: ROOT_RIFOPIS,
-  home: path(ROOT_RIFOPIS, ''),
+  home: path(ROOT_RIFOPIS, '/'),
   cart: path(ROOT_RIFOPIS, '/cart'),
   checkout: path(ROOT_RIFOPIS, '/checkout'),
   product: path(ROOT_RIFOPIS, '/product'),
   payment: path(ROOT_RIFOPIS, '/payment'),
   result: path(ROOT_RIFOPIS, '/payment/result'),
   terms: path(ROOT_RIFOPIS, '/terms'),
+  raffle: path(ROOT_RIFOPIS, '/sorteo'),
   legalBase: path(ROOT_RIFOPIS, '/legal-base')
 };

@@ -35,11 +35,14 @@ function ProductItem({ product, ...other }) {
   const { cart } = useSelector((state) => state.product.checkout);
 
   const image = useMemo(() => {
-    if (photos) {
+    if (photos && photos.length > 0) {
       return photos;
     }
-    return [photo];
+    return [photo || '/static/brand/shopis-default.svg'];
   }, [photos, photo]);
+
+  console.log(' iamges ');
+  console.log(image);
 
   const productCart = useMemo(() => {
     const cartNew = cart.find((item) => item.id === product.id);
