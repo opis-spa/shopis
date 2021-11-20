@@ -57,7 +57,7 @@ export default function OrderListToolbar({ numSelected, filterName, onFilterName
         <SearchStyle
           value={filterName}
           onChange={onFilterName}
-          placeholder="Buscar productos..."
+          placeholder="Buscar ordenes..."
           startAdornment={
             <InputAdornment position="start">
               <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
@@ -68,7 +68,7 @@ export default function OrderListToolbar({ numSelected, filterName, onFilterName
 
       {numSelected > 0 && (
         <Tooltip title="Eliminar">
-          <IconButton>
+          <IconButton color="primary">
             <Icon icon={trash2Fill} />
           </IconButton>
         </Tooltip>

@@ -124,9 +124,11 @@ export default function AccountSocialLinks() {
       try {
         await dispatch(setSocialNetwork(values));
         setSubmitting(false);
-        enqueueSnackbar('Save success', { variant: 'success' });
+        enqueueSnackbar('Redes de contacto guardadas satisfactoriamente', { variant: 'success' });
       } catch (error) {
         console.log(error);
+        setSubmitting(false);
+        enqueueSnackbar('Error al guardar redes de contacto', { variant: 'error' });
       }
     }
   });

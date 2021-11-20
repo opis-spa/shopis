@@ -169,7 +169,7 @@ export default function Router() {
           { path: 'product/:name/edit', element: <ProductCreate /> },
           { path: 'products', element: <Products /> },
           { path: 'orders', element: <Orders /> },
-          { path: 'order/:id', element: <Order /> },
+          { path: 'orders/:id', element: <Order /> },
           { path: 'coupons', element: <Coupons /> }
         ]
       },
@@ -253,8 +253,8 @@ const DashboardBusiness = Loadable(lazy(() => import('../pages/app/dashboard/Bus
 const Store = Loadable(lazy(() => import('../pages/app/store/Store')));
 const Products = Loadable(lazy(() => import('../pages/app/store/product/ProductList')));
 const ProductCreate = Loadable(lazy(() => import('../pages/app/store/product/ProductCreate')));
-const Orders = Loadable(lazy(() => import('../pages/app/store/Orders')));
-const Order = Loadable(lazy(() => import('../pages/app/store/Order')));
+const Orders = Loadable(lazy(() => import('../pages/app/store/orders/OrderList')));
+const Order = Loadable(lazy(() => import('../pages/app/store/orders/OrderDetail')));
 const Coupons = Loadable(lazy(() => import('../pages/app/store/Coupons')));
 // Shop
 const ShopHome = Loadable(lazy(() => import('../pages/shop/Home')));

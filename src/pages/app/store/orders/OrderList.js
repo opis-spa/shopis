@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
+import { Link as RouterLink } from 'react-router-dom';
 // material
 import { useTheme } from '@mui/material/styles';
 import {
@@ -13,25 +14,29 @@ import {
   TableCell,
   Container,
   TableContainer,
-  TablePagination
+  TablePagination,
+  IconButton
 } from '@mui/material';
+// iconify
+import { Icon } from '@iconify/react';
+import EyeIcon from '@iconify/icons-ic/baseline-remove-red-eye';
 // redux
-import { useDispatch, useSelector } from '../../../redux/store';
-import { getSales } from '../../../redux/slices/sales';
+import { useDispatch, useSelector } from '../../../../redux/store';
+import { getSales } from '../../../../redux/slices/sales';
 // utils
-import { fDate } from '../../../utils/formatTime';
-import { fCurrency } from '../../../utils/formatNumber';
+import { fDate } from '../../../../utils/formatTime';
+import { fCurrency } from '../../../../utils/formatNumber';
 // routes
-import { PATH_APP } from '../../../routes/paths';
+import { PATH_APP } from '../../../../routes/paths';
 // hooks
-import useSettings from '../../../hooks/useSettings';
+import useSettings from '../../../../hooks/useSettings';
 // components
-import Page from '../../../components/Page';
-import Label from '../../../components/Label';
-import Scrollbar from '../../../components/Scrollbar';
-import SearchNotFound from '../../../components/SearchNotFound';
-import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import { OrderListHead, OrderListToolbar, OrderMoreMenu } from '../../../components/store/order-list';
+import Page from '../../../../components/Page';
+import Label from '../../../../components/Label';
+import Scrollbar from '../../../../components/Scrollbar';
+import SearchNotFound from '../../../../components/SearchNotFound';
+import HeaderBreadcrumbs from '../../../../components/HeaderBreadcrumbs';
+import { OrderListHead, OrderListToolbar, OrderMoreMenu } from '../../../../components/store/order-list';
 
 // ----------------------------------------------------------------------
 
@@ -78,7 +83,7 @@ function applySortFilter(array, comparator, query) {
 
 // ----------------------------------------------------------------------
 
-export default function Order() {
+export default function OrderList() {
   const { themeStretch } = useSettings();
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -146,10 +151,7 @@ export default function Order() {
   return (
     <Page title="Ordenes | shopis">
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <HeaderBreadcrumbs
-          heading="Ordenes"
-          links={[{ name: 'Shopis', href: PATH_APP.root }, { name: 'Lista de ordenes' }]}
-        />
+        <HeaderBreadcrumbs heading="Ordenes" links={[{ name: 'Shopis', href: PATH_APP.root }, { name: 'Ordenes' }]} />
 
         <Card>
           <OrderListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
@@ -181,9 +183,6 @@ export default function Order() {
                         selected={isItemSelected}
                         aria-checked={isItemSelected}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
-                        </TableCell>
                         <TableCell style={{ minWidth: 160 }}>{orderCode}</TableCell>
                         <TableCell style={{ minWidth: 160 }}>{fDate(createdAt)}</TableCell>
                         <TableCell style={{ minWidth: 160 }}>
@@ -196,7 +195,11 @@ export default function Order() {
                         </TableCell>
                         <TableCell align="right">{fCurrency(amountTotal)}</TableCell>
                         <TableCell align="right">
-                          <OrderMoreMenu id={id} />
+                          <RouterLink to={`${PATH_APP.business.orders}/${id}`}>
+                            <IconButton>
+                              <Icon icon={EyeIcon} />
+                            </IconButton>
+                          </RouterLink>
                         </TableCell>
                       </TableRow>
                     );

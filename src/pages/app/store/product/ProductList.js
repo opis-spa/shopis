@@ -23,7 +23,7 @@ import {
 } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../../../redux/store';
-import { getProducts, deleteProduct } from '../../../../redux/slices/product';
+import { getProducts, deleteStoreProduct } from '../../../../redux/slices/product';
 // utils
 import { fCurrency } from '../../../../utils/formatNumber';
 // routes
@@ -149,8 +149,8 @@ export default function EcommerceProductList() {
     setFilterName(event.target.value);
   };
 
-  const handleDeleteProduct = (productId) => {
-    dispatch(deleteProduct(productId));
+  const handleDeleteProduct = async (productId) => {
+    await dispatch(deleteStoreProduct(productId));
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;

@@ -54,10 +54,15 @@ const AccountBillingForm = React.forwardRef(({ accountInfo, banks, accountTypes,
         }
         await dispatch(setBankAccounts([...bankList, values]));
         setSubmitting(false);
-        enqueueSnackbar('Save success', { variant: 'success' });
+        enqueueSnackbar(isNew ? 'Cuenta añadida satisfactoriamente' : 'Cuenta editada satisfactoriamente', {
+          variant: 'success'
+        });
         onClose();
       } catch (error) {
         console.log(error);
+        setSubmitting(false);
+        enqueueSnackbar(isNew ? 'Error al añadir cuenta' : 'Error al editar cuenta', { variant: 'error' });
+        onClose();
       }
     }
   });
