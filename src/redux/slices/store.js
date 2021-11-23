@@ -60,6 +60,28 @@ export const getStore = () => async (dispatch) => {
   }
 };
 
+export const createStore = (data) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.post('/api/v1/partnerships/create', data);
+    dispatch(slice.actions.getStoreSuccess(response.data.partnership));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
+};
+
+export const updateStore = (data) => async (dispatch, getState) => {
+  const state = getState();
+  const { _id: partnershipId } = state.store.data;
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.put(`/api/v1/partnerships/${partnershipId}`, data);
+    dispatch(slice.actions.getStoreSuccess(response.data.partnership));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
+};
+
 export const setSocialNetwork = (socialNetworks) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
