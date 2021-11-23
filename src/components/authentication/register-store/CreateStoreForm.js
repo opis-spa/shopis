@@ -1,8 +1,9 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { debounce } from 'lodash';
+import PropTypes from 'prop-types';
 // material
 import { Typography, Grid, TextField, CircularProgress } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -108,6 +109,7 @@ const CreateStoreForm = ({ nextStep }) => {
     [setFieldValue]
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceNickname = useCallback(
     debounce(async (value) => {
       setIsValidatingNickname(true);
@@ -214,6 +216,10 @@ const CreateStoreForm = ({ nextStep }) => {
       </Form>
     </FormikProvider>
   );
+};
+
+CreateStoreForm.propTypes = {
+  nextStep: PropTypes.func
 };
 
 export default CreateStoreForm;

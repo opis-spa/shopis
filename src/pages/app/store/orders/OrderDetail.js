@@ -1,31 +1,33 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import moment from 'moment';
 import 'moment/locale/es';
+import { useSnackbar } from 'notistack';
 // material
 import {
   Box,
   Card,
   Grid,
   Button,
+  IconButton,
   Table,
   TableRow,
-  Checkbox,
   TableBody,
   TableCell,
   TableHead,
   Container,
   TableContainer,
-  TablePagination,
   Typography
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 // iconify
 import { Icon } from '@iconify/react';
 import backIcon from '@iconify/icons-jam/arrow-circle-left-f';
+import editFill from '@iconify/icons-eva/edit-fill';
+import closeFill from '@iconify/icons-carbon/close-filled';
 // redux
 import { useDispatch, useSelector } from '../../../../redux/store';
-import { getSale } from '../../../../redux/slices/sales';
+import { getSale, setOrderAccept, setOrderDelivery, setOrderReject } from '../../../../redux/slices/sales';
 // routes
 import { PATH_APP } from '../../../../routes/paths';
 // hooks
@@ -57,7 +59,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderDetail = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEditingState, setIsEditingState] = useState(false);
   const { themeStretch } = useSettings();
+  const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -65,7 +70,42 @@ const OrderDetail = () => {
 
   useEffect(() => {
     dispatch(getSale(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
+
+  const handleUpdateOrder = async () => {
+    setIsLoading(true);
+    try {
+      if (sale?.state === 1) {
+        await dispatch(setOrderAccept(sale._id));
+        setIsLoading(false);
+        enqueueSnackbar('Estado de orden actualizado satisfactoriamente', { variant: 'success' });
+      } else if (sale?.state === 2) {
+        await dispatch(setOrderDelivery(sale._id));
+        setIsLoading(false);
+        enqueueSnackbar('Estado de orden actualizado satisfactoriamente', { variant: 'success' });
+      }
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      enqueueSnackbar('Error al actualizar estado de orden', { variant: 'error' });
+    }
+  };
+
+  const handleRejectOrder = async () => {
+    setIsLoading(true);
+    try {
+      await dispatch(setOrderReject(sale._id));
+      setIsLoading(false);
+      enqueueSnackbar(sale?.state === 1 ? 'Orden rechazada satisfactoriamente' : 'Orden anulada satisfactoriamente', {
+        variant: 'success'
+      });
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      enqueueSnackbar(sale?.state === 1 ? 'Error al rechazar orden' : 'Error al anular orden', { variant: 'error' });
+    }
+  };
 
   return (
     <Page title="Detalle Orden | shopis">
@@ -95,16 +135,83 @@ const OrderDetail = () => {
             </Grid>
             <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
               <Box sx={{ textAlign: { sm: 'right' } }}>
-                <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase', mb: 1 }}>
-                  Pagado
-                </Label>
+                {isEditingState ? (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      mb: 1,
+                      justifyContent: 'flex-end',
+                      flexDirection: { xs: 'row-reverse', sm: 'row' }
+                    }}
+                  >
+                    <IconButton
+                      disabled={isLoading}
+                      color="primary"
+                      sx={{ marginRight: { xs: 0, sm: 1 } }}
+                      onClick={() => setIsEditingState(false)}
+                    >
+                      <Icon icon={closeFill} />
+                    </IconButton>
+                    <Box>
+                      <Button
+                        disabled={isLoading}
+                        variant="contained"
+                        color="primary"
+                        onClick={handleUpdateOrder}
+                        sx={{ mr: 1 }}
+                      >
+                        {sale?.state === 1 ? 'Confirmar' : 'Despachar'}
+                      </Button>
+                      <Button disabled={isLoading} variant="contained" onClick={handleRejectOrder} color="error">
+                        {sale?.state === 1 ? 'Rechazar' : 'Anular'}
+                      </Button>
+                    </Box>
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      mb: 1,
+                      justifyContent: 'flex-end',
+                      flexDirection: { xs: 'row-reverse', sm: 'row' }
+                    }}
+                  >
+                    {(sale?.state === 1 || sale?.state === 2) && (
+                      <IconButton
+                        size="small"
+                        color="primary"
+                        sx={{ marginRight: { xs: 0, sm: 1 } }}
+                        onClick={() => setIsEditingState(true)}
+                      >
+                        <Icon icon={editFill} />
+                      </IconButton>
+                    )}
+                    <Label
+                      variant="ghost"
+                      color={
+                        (sale?.state === 1 && 'warning') ||
+                        (sale?.state === 0 && 'error') ||
+                        (sale?.state === 2 && 'success') ||
+                        (sale?.state === 3 && 'success') ||
+                        'default'
+                      }
+                      sx={{ textTransform: 'uppercase', fontSize: 14, height: 28, padding: '0 10px' }}
+                    >
+                      {(sale?.state === 1 && 'Por Confirmar') ||
+                        (sale?.state === 0 && 'Rechazado') ||
+                        (sale?.state === 2 && 'Confirmado') ||
+                        (sale?.state === 3 && 'Despachado')}
+                    </Label>
+                  </Box>
+                )}
                 <Typography variant="h6">{sale?._id}</Typography>
               </Box>
             </Grid>
             <Grid item xs={12} sx={{ mb: 5 }}>
-              {/* <Box sx={{ p: 3, borderRadius: 2, boxShadow: 'inset 3px 3px 8px .5px rgba(0,0,0,.10)' }}> */}
               <Grid container spacing={3}>
-                <Grid item xs={12} sm={6} md={4}>
+                <Grid item xs={12} sm={6} md={sale?.address ? 4 : 6}>
                   <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
                     Datos personales
                   </Typography>
@@ -123,7 +230,7 @@ const OrderDetail = () => {
                     <strong>Teléfono:</strong> {sale?.customer?.phone}
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4}>
+                <Grid item xs={12} sm={6} md={sale?.address ? 4 : 6}>
                   <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
                     Datos de orden
                   </Typography>
@@ -143,49 +250,70 @@ const OrderDetail = () => {
                     <strong>Forma de pago:</strong> {sale?.paymentMethod?.type}
                   </Typography>
                 </Grid>
-                <Grid item xs={12} md={4}>
-                  <Typography paragraph variant="overline" sx={{ color: 'primary.main' }}>
-                    Datos de envío
-                  </Typography>
-                  <Grid container columnSpacing={3}>
-                    <Grid item xs={12} sm={6} md={12}>
-                      <Typography variant="body2">
-                        <Typography component="span" variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
-                          Despacho:{' '}
+                {sale?.address && (
+                  <Grid item xs={12} md={4}>
+                    <Typography paragraph variant="overline" sx={{ color: 'primary.main' }}>
+                      Datos de envío
+                    </Typography>
+                    <Grid container columnSpacing={3}>
+                      <Grid item xs={12} sm={6} md={12}>
+                        <Typography variant="body2">
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            sx={{ color: 'primary.main', fontWeight: 'bold' }}
+                          >
+                            Despacho:{' '}
+                          </Typography>
+                          asdsad@asdasd.com
                         </Typography>
-                        asdsad@asdasd.com
-                      </Typography>
-                      <Typography variant="body2">
-                        <Typography component="span" variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
-                          Dirección:{' '}
+                        <Typography variant="body2">
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            sx={{ color: 'primary.main', fontWeight: 'bold' }}
+                          >
+                            Dirección:{' '}
+                          </Typography>
+                          {sale?.address?.address}
                         </Typography>
-                        {sale?.address?.address}
-                      </Typography>
-                      <Typography variant="body2">
-                        <Typography component="span" variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
-                          País:{' '}
+                        <Typography variant="body2">
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            sx={{ color: 'primary.main', fontWeight: 'bold' }}
+                          >
+                            País:{' '}
+                          </Typography>
+                          Chile
                         </Typography>
-                        Chile
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={12}>
-                      <Typography variant="body2">
-                        <Typography component="span" variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
-                          Región:{' '}
+                      </Grid>
+                      <Grid item xs={12} sm={6} md={12}>
+                        <Typography variant="body2">
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            sx={{ color: 'primary.main', fontWeight: 'bold' }}
+                          >
+                            Región:{' '}
+                          </Typography>
+                          {sale?.address?.state}
                         </Typography>
-                        {sale?.address?.state}
-                      </Typography>
-                      <Typography variant="body2">
-                        <Typography component="span" variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
-                          Comuna:{' '}
+                        <Typography variant="body2">
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            sx={{ color: 'primary.main', fontWeight: 'bold' }}
+                          >
+                            Comuna:{' '}
+                          </Typography>
+                          {sale?.address?.city}
                         </Typography>
-                        {sale?.address?.city}
-                      </Typography>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
+                )}
               </Grid>
-              {/* </Box> */}
             </Grid>
           </Grid>
           <Scrollbar>
@@ -246,6 +374,17 @@ const OrderDetail = () => {
                       </Typography>
                     </TableCell>
                   </TableRow>
+                  {sale?.deliveryCost && (
+                    <TableRow className={classes.rowResult}>
+                      <TableCell colSpan={4} />
+                      <TableCell align="right">
+                        <Typography variant="body1">Costo delivery</Typography>
+                      </TableCell>
+                      <TableCell align="center" width={120}>
+                        <Typography variant="body1">{`$${sale?.deliveryCost?.toFixed(2) || ''}`}</Typography>
+                      </TableCell>
+                    </TableRow>
+                  )}
                   <TableRow className={classes.rowResult}>
                     <TableCell colSpan={4} />
                     <TableCell align="right">

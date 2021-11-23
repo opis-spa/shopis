@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 // material
 import { styled } from '@mui/material/styles';
 import {
@@ -170,6 +171,10 @@ const RegisterStore = ({ setHasPartnership }) => {
       </RootStyle>
     </>
   );
+};
+
+RegisterStore.propTypes = {
+  setHasPartnership: PropTypes.func
 };
 
 export default RegisterStore;

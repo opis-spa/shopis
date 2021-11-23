@@ -9,7 +9,6 @@ import {
   Card,
   Table,
   TableRow,
-  Checkbox,
   TableBody,
   TableCell,
   Container,
@@ -36,7 +35,7 @@ import Label from '../../../../components/Label';
 import Scrollbar from '../../../../components/Scrollbar';
 import SearchNotFound from '../../../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../../../components/HeaderBreadcrumbs';
-import { OrderListHead, OrderListToolbar, OrderMoreMenu } from '../../../../components/store/order-list';
+import { OrderListHead, OrderListToolbar } from '../../../../components/store/order-list';
 
 // ----------------------------------------------------------------------
 
@@ -113,21 +112,6 @@ export default function OrderList() {
       return;
     }
     setSelected([]);
-  };
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {

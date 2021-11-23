@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { paramCase } from 'change-case';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 // material
 import { Container } from '@mui/material';
@@ -41,6 +40,7 @@ export default function ProductCreate() {
 
   useEffect(() => {
     getProd();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   return (
