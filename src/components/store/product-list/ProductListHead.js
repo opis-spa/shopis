@@ -25,19 +25,14 @@ export default function ProductListHead({
   onSelectAllClick
 }) {
   const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
+    if (property) {
+      onRequestSort(event, property);
+    }
   };
 
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          />
-        </TableCell>
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}

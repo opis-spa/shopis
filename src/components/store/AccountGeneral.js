@@ -71,7 +71,10 @@ export default function AccountGeneral() {
 
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Name is required.'),
-    nickname: Yup.string().required('*Campo requerido.')
+    nickname: Yup.string()
+      .trim()
+      .matches(/^[a-z0-9_-]+$/, 'Solo se permiten letras en minúsculas y números, sin espacios o caracteres especiales')
+      .required('*Campo requerido.')
   });
 
   const formik = useFormik({

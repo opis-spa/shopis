@@ -155,7 +155,7 @@ export default function Router() {
           { path: 'store', element: <Store /> },
           { path: 'products', element: <Products /> },
           { path: 'product/new', element: <ProductCreate /> },
-          { path: 'product/:name/edit', element: <ProductCreate /> },
+          { path: 'product/:id', element: <ProductCreate /> },
           { path: 'products', element: <Products /> },
           { path: 'orders', element: <Orders /> },
           { path: 'orders/:id', element: <Order /> },

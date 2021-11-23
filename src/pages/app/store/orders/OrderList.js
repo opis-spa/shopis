@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { filter } from 'lodash';
+import { filter, get } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -41,20 +41,21 @@ import { OrderListHead, OrderListToolbar, OrderMoreMenu } from '../../../../comp
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'order', label: 'Orden', alignRight: false },
-  { id: 'createdAt', label: 'Fecha', alignRight: false },
-  { id: 'inventoryType', label: 'Estado', alignRight: false },
-  { id: 'price', label: 'Precio', alignRight: true },
-  { id: '' }
+  { key: 1, id: 'orderCode', label: 'Orden', alignRight: false },
+  { key: 2, id: 'createdAt', label: 'Fecha', alignRight: false },
+  { key: 3, id: 'customer.name', label: 'Cliente', alignRight: false },
+  { key: 4, id: '', label: 'Estado', alignRight: false },
+  { key: 5, id: 'amountTotal', label: 'Precio', alignRight: true },
+  { key: 6, id: '' }
 ];
 
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  if (get(b, orderBy) < get(a, orderBy)) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (get(b, orderBy) > get(a, orderBy)) {
     return 1;
   }
   return 0;
@@ -75,7 +76,7 @@ function applySortFilter(array, comparator, query) {
   });
 
   if (query) {
-    return filter(array, (_product) => _product.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_product) => _product.orderCode.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
 
   return stabilizedThis.map((el) => el[0]);
@@ -151,7 +152,10 @@ export default function OrderList() {
   return (
     <Page title="Ordenes | shopis">
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <HeaderBreadcrumbs heading="Ordenes" links={[{ name: 'Shopis', href: PATH_APP.root }, { name: 'Ordenes' }]} />
+        <HeaderBreadcrumbs
+          heading="Tus Ordenes"
+          links={[{ name: 'Shopis', href: PATH_APP.root }, { name: 'Ordenes' }]}
+        />
 
         <Card>
           <OrderListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
@@ -170,7 +174,15 @@ export default function OrderList() {
                 />
                 <TableBody>
                   {filteredSales.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, orderCode, amountTotal, createdAt, stock } = row;
+                    const {
+                      id,
+                      orderCode,
+                      amountTotal,
+                      createdAt,
+                      stock,
+                      status,
+                      customer: { name }
+                    } = row;
 
                     const isItemSelected = selected.indexOf(id) !== -1;
 
@@ -185,12 +197,13 @@ export default function OrderList() {
                       >
                         <TableCell style={{ minWidth: 160 }}>{orderCode}</TableCell>
                         <TableCell style={{ minWidth: 160 }}>{fDate(createdAt)}</TableCell>
+                        <TableCell style={{ minWidth: 160 }}>{name}</TableCell>
                         <TableCell style={{ minWidth: 160 }}>
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
                             color={(stock === 0 && 'error') || (stock !== -1 && stock <= 10 && 'warning') || 'success'}
                           >
-                            {sentenceCase('stock')}
+                            {sentenceCase(status)}
                           </Label>
                         </TableCell>
                         <TableCell align="right">{fCurrency(amountTotal)}</TableCell>

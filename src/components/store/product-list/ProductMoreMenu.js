@@ -29,7 +29,7 @@ import { PATH_APP } from '../../../routes/paths';
 
 ProductMoreMenu.propTypes = {
   onDelete: PropTypes.func,
-  productName: PropTypes.string
+  productID: PropTypes.string
 };
 
 const modalStyle = {
@@ -41,7 +41,7 @@ const modalStyle = {
   maxWidth: 'calc(100vw - 40px)'
 };
 
-export default function ProductMoreMenu({ onDelete, productName }) {
+export default function ProductMoreMenu({ onDelete, productID }) {
   const ref = useRef(null);
   const { enqueueSnackbar } = useSnackbar();
   const [isOpen, setIsOpen] = useState(false);
@@ -79,11 +79,7 @@ export default function ProductMoreMenu({ onDelete, productName }) {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem
-          component={RouterLink}
-          to={`${PATH_APP.root}/product/${paramCase(productName)}/edit`}
-          sx={{ color: 'text.secondary' }}
-        >
+        <MenuItem component={RouterLink} to={`${PATH_APP.root}/product/${productID}`} sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>

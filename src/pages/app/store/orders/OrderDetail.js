@@ -65,7 +65,7 @@ const OrderDetail = () => {
 
   useEffect(() => {
     dispatch(getSale(id));
-  }, dispatch);
+  }, [dispatch]);
 
   return (
     <Page title="Detalle Orden | shopis">
@@ -108,9 +108,11 @@ const OrderDetail = () => {
                   <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
                     Datos personales
                   </Typography>
-                  <Typography variant="body2">
-                    <strong>RUT:</strong> {sale?.partnershipId?.identityCode}
-                  </Typography>
+                  {sale?.customer?.identityCode && (
+                    <Typography variant="body2">
+                      <strong>RUT:</strong> {sale?.customer?.identityCode}
+                    </Typography>
+                  )}
                   <Typography variant="body2">
                     <strong>Nombre:</strong> {sale?.customer?.name}
                   </Typography>
@@ -132,7 +134,10 @@ const OrderDetail = () => {
                     <strong>Creado:</strong> {moment().to(sale?.createdAt)}
                   </Typography>
                   <Typography variant="body2">
-                    <strong>Estado de pago:</strong> {sale?.status}
+                    <strong>Estado de pago: </strong>
+                    <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
+                      Pagado
+                    </Label>
                   </Typography>
                   <Typography variant="body2">
                     <strong>Forma de pago:</strong> {sale?.paymentMethod?.type}
@@ -190,8 +195,9 @@ const OrderDetail = () => {
                   <TableRow>
                     <TableCell width={40}>#</TableCell>
                     <TableCell align="left">Producto</TableCell>
-                    <TableCell align="left">Cantidad</TableCell>
+                    <TableCell align="center">Cantidad</TableCell>
                     <TableCell align="center">Precio Unitario</TableCell>
+                    <TableCell align="center">Descuento</TableCell>
                     <TableCell align="center">Total</TableCell>
                   </TableRow>
                 </TableHead>
@@ -201,7 +207,7 @@ const OrderDetail = () => {
                       _id,
                       quantity,
                       subtotal,
-                      product: { amount, name }
+                      product: { amount, name, discountPartnership }
                     } = product;
                     return (
                       <TableRow className={classes.row} key={_id}>
@@ -213,12 +219,13 @@ const OrderDetail = () => {
                         </TableCell>
                         <TableCell align="center">{quantity}</TableCell>
                         <TableCell align="center">{`$${amount.toFixed(2)}`}</TableCell>
+                        <TableCell align="center">{`$${discountPartnership.toFixed(2)}`}</TableCell>
                         <TableCell align="center">{`$${subtotal.toFixed(2)}`}</TableCell>
                       </TableRow>
                     );
                   })}
                   <TableRow className={classes.rowResult}>
-                    <TableCell colSpan={3} />
+                    <TableCell colSpan={4} />
                     <TableCell align="right">
                       <Box sx={{ mt: 2 }} />
                       <Typography variant="body1">Subtotal</Typography>
@@ -229,23 +236,23 @@ const OrderDetail = () => {
                     </TableCell>
                   </TableRow>
                   <TableRow className={classes.rowResult}>
-                    <TableCell colSpan={3} />
+                    <TableCell colSpan={4} />
                     <TableCell align="right">
                       <Typography variant="body1">Comisión</Typography>
                     </TableCell>
                     <TableCell align="center" width={120}>
                       <Typography sx={{ color: 'error.main' }} variant="body1">
-                        -$3.50
+                        {`-$${sale?.amountDream?.toFixed(2) || ''}`}
                       </Typography>
                     </TableCell>
                   </TableRow>
                   <TableRow className={classes.rowResult}>
-                    <TableCell colSpan={3} />
+                    <TableCell colSpan={4} />
                     <TableCell align="right">
                       <Typography variant="h6">Total</Typography>
                     </TableCell>
                     <TableCell align="center" width={140}>
-                      <Typography variant="h6">{`$${(sale?.amountTotal - 3.5).toFixed(2)}`}</Typography>
+                      <Typography variant="h6">{`$${sale?.amountPartnership?.toFixed(2) || ''}`}</Typography>
                     </TableCell>
                   </TableRow>
                 </TableBody>

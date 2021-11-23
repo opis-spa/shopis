@@ -136,7 +136,7 @@ export default function UploadAvatar({ error, file, caption, sx, ...other }) {
             }}
           >
             <Box component={Icon} icon={roundAddAPhoto} sx={{ width: 24, height: 24, mb: 1 }} />
-            <Typography variant="caption">{file ? 'Update photo' : 'Upload photo'}</Typography>
+            <Typography variant="caption">{file ? 'Actualizar imagen' : 'Subir imagen'}</Typography>
           </PlaceholderStyle>
         </DropZoneStyle>
       </RootStyle>

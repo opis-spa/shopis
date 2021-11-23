@@ -42,8 +42,8 @@ import { ProductListHead, ProductListToolbar, ProductMoreMenu } from '../../../.
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Nombre', alignRight: false },
-  { id: 'inventoryType', label: 'Inventario', alignRight: false },
-  { id: 'price', label: 'Precio', alignRight: true },
+  { id: '', label: 'Inventario', alignRight: false },
+  { id: 'amount', label: 'Precio', alignRight: true },
   { id: '' }
 ];
 
@@ -160,11 +160,11 @@ export default function EcommerceProductList() {
   const isProductNotFound = filteredProducts.length === 0;
 
   return (
-    <Page title="Products | shopis">
+    <Page title="Productos | shopis">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Lista de productos"
-          links={[{ name: 'Shopis', href: PATH_APP.root }, { name: 'Lista de productos' }]}
+          heading="Tus Productos"
+          links={[{ name: 'Shopis', href: PATH_APP.root }, { name: 'Productos' }]}
           action={
             <Button
               variant="contained"
@@ -207,9 +207,6 @@ export default function EcommerceProductList() {
                         selected={isItemSelected}
                         aria-checked={isItemSelected}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
-                        </TableCell>
                         <TableCell component="th" scope="row" padding="none">
                           <Box
                             sx={{
@@ -218,7 +215,7 @@ export default function EcommerceProductList() {
                               alignItems: 'center'
                             }}
                           >
-                            <ThumbImgStyle alt={name} src={image[0]} />
+                            <ThumbImgStyle alt={name} src={image[0] ? image[0] : '/static/brand/shopis-default.svg'} />
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
@@ -229,7 +226,7 @@ export default function EcommerceProductList() {
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
                             color={(stock === 0 && 'error') || (stock !== -1 && stock <= 10 && 'warning') || 'success'}
                           >
-                            {sentenceCase('stock')}
+                            {sentenceCase((stock === 0 && 'agotado') || 'stock')}
                           </Label>
                         </TableCell>
                         <TableCell align="right">
@@ -243,7 +240,7 @@ export default function EcommerceProductList() {
                           </Stack>
                         </TableCell>
                         <TableCell align="right">
-                          <ProductMoreMenu onDelete={() => handleDeleteProduct(id)} productName={name} />
+                          <ProductMoreMenu onDelete={() => handleDeleteProduct(id)} productID={id} />
                         </TableCell>
                       </TableRow>
                     );

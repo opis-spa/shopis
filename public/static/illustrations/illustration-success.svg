@@ -1,0 +1,66 @@
+<svg width="245" height="245" viewBox="0 0 245 245" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="122.5" cy="122.5" r="122.5" fill="url(#paint0_linear_525_191)" fill-opacity="0.1" class="bgThree" />
+<circle cx="123" cy="123" r="115" fill="url(#paint1_linear_525_191)" fill-opacity="0.3" class="bgTwo" />
+<circle cx="122.5" cy="122.5" r="107.5" fill="url(#paint2_linear_525_191)" fill-opacity="0.5" class="bgOne" />
+<circle cx="123" cy="123" r="100" fill="url(#paint3_linear_525_191)" class="circlePrimary" />
+<path d="M106.972 138.546C106.415 139.094 105.515 139.071 104.987 138.496L88.9298 120.996C84.2156 115.858 76.1812 115.652 71.2101 120.542V120.542C66.5888 125.087 66.2795 132.436 70.5027 137.354L93.6337 164.289C100.136 171.861 111.908 171.697 118.197 163.946L178.628 89.4666C181.074 86.4521 180.715 82.0469 177.814 79.4679V79.4679C174.978 76.9471 170.679 77.0357 167.949 79.6712L106.972 138.546V138.546Z" fill="white" class="check" />
+<defs>
+<style>
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;  
+    }
+  }
+  @keyframes checkIn {
+    0% {
+      transform: rotate(270deg);
+      opacity: 0;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;  
+      transform: rotate(360deg);
+    }
+  }
+
+  .check {
+    animation: checkIn 1s ease-out forwards;
+  }
+  .bgOne {
+    opacity: 0;
+    animation: fadeIn .4s ease-out forwards;
+  }
+  .bgTwo {
+    opacity: 0;
+    animation: fadeIn .4s ease-out forwards;
+    animation-delay: .4s;
+  }
+  .bgThree {
+    opacity: 0;
+    animation: fadeIn .4s ease-out forwards;
+    animation-delay: 8s;
+  }
+</style>
+<linearGradient id="paint0_linear_525_191" x1="0" y1="0" x2="245" y2="245" gradientUnits="userSpaceOnUse">
+<stop offset="0.234375" stop-color="#8AE778"/>
+<stop offset="1" stop-color="#03BAE6"/>
+</linearGradient>
+<linearGradient id="paint1_linear_525_191" x1="8" y1="8" x2="238" y2="238" gradientUnits="userSpaceOnUse">
+<stop offset="0.234375" stop-color="#8AE778"/>
+<stop offset="1" stop-color="#03BAE6"/>
+</linearGradient>
+<linearGradient id="paint2_linear_525_191" x1="15" y1="15" x2="230" y2="230" gradientUnits="userSpaceOnUse">
+<stop offset="0.234375" stop-color="#8AE778"/>
+<stop offset="1" stop-color="#03BAE6"/>
+</linearGradient>
+<linearGradient id="paint3_linear_525_191" x1="23" y1="23" x2="223" y2="223" gradientUnits="userSpaceOnUse">
+<stop offset="0.234375" stop-color="#8AE778"/>
+<stop offset="1" stop-color="#03BAE6"/>
+</linearGradient>
+</defs>
+</svg>

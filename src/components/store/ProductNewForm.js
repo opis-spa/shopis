@@ -82,6 +82,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   });
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       name: currentProduct?.name || '',
       description: currentProduct?.description || '',
@@ -96,7 +97,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     onSubmit: async (values, { setSubmitting }) => {
       try {
         if (isEdit) {
-          await dispatch(editProduct(values, files, currentProduct.id));
+          await dispatch(editProduct(values, files, currentProduct._id));
         } else {
           await dispatch(createProduct(values, files));
         }
@@ -155,14 +156,14 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
               <Stack spacing={3}>
                 <TextField
                   fullWidth
-                  label="Nombre del producto"
+                  label="Nombre del producto *"
                   {...getFieldProps('name')}
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}
                 />
 
                 <div>
-                  <LabelStyle error={touched.description && errors.description}>Descripción</LabelStyle>
+                  <LabelStyle error={touched.description && errors.description}>Descripción *</LabelStyle>
                   <QuillEditor
                     simple
                     id="product-description"
@@ -179,7 +180,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                 </div>
 
                 <div>
-                  <LabelStyle>Imagenes</LabelStyle>
+                  <LabelStyle>Imágenes</LabelStyle>
                   <UploadMultiFile
                     showPreview
                     maxSize={3145728}
@@ -239,7 +240,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   {!values.stockInfinity && (
                     <TextField
                       fullWidth
-                      label={`Inventario${isEdit ? '' : ' Inicial'}`}
+                      label={`Inventario${isEdit ? ' *' : ' Inicial *'}`}
                       type="number"
                       value={values.stock}
                       {...getFieldProps('stock')}
@@ -250,7 +251,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   <TextField
                     fullWidth
                     placeholder="0.00"
-                    label="Precio"
+                    label="Precio *"
                     {...getFieldProps('amount')}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">$</InputAdornment>,

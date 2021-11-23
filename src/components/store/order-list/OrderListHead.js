@@ -25,7 +25,9 @@ export default function OrderListHead({
   onSelectAllClick
 }) {
   const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
+    if (property) {
+      onRequestSort(event, property);
+    }
   };
 
   return (
@@ -33,7 +35,7 @@ export default function OrderListHead({
       <TableRow>
         {headLabel.map((headCell) => (
           <TableCell
-            key={headCell.id}
+            key={headCell.key}
             align={headCell.alignRight ? 'right' : 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
           >

@@ -151,6 +151,10 @@ const slice = createSlice({
       state.product = state.products.find((product) => paramCase(product.name) === name);
     },
 
+    getStoreProduct(state, action) {
+      state.product = action.payload;
+    },
+
     clearFilterProducts(state) {
       state.filters = initialState.filters;
     },
@@ -336,6 +340,18 @@ export function getProductStore(nickname) {
   };
 }
 
+export const getProductByID = (id) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.get(`/api/v1/products/${id}`);
+    dispatch(slice.actions.getStoreProduct(response.data.product));
+  } catch (error) {
+    console.error(error);
+    dispatch(slice.actions.hasError(error));
+    throw error;
+  }
+};
+
 // ----------------------------------------------------------------------
 
 export const aplicateCoupon = (body) => async (dispatch) => {
@@ -426,8 +442,8 @@ export const editProduct = (body, photos, id) => async (dispatch) => {
 export const deleteStoreProduct = (id) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
-    const response = await axios.delete(`/api/v1/products/${id}`);
-    console.log(response);
+    await axios.delete(`/api/v1/products/${id}`);
+    dispatch(slice.actions.deleteProduct(id));
   } catch (error) {
     console.error(error);
     dispatch(slice.actions.hasError(error));
