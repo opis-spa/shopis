@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { Form, useFormik, FormikProvider } from 'formik';
 import * as Yup from 'yup';
+import { useSnackbar } from 'notistack';
+import PropTypes from 'prop-types';
 // material
 import { styled } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
@@ -17,6 +19,9 @@ import {
   FormHelperText,
   FormControlLabel
 } from '@mui/material';
+// redux
+import { useDispatch } from '../../../redux/store';
+import { createProduct } from '../../../redux/slices/product';
 // components
 import { QuillEditor } from '../../editor';
 import { UploadMultiFile } from '../../upload';
@@ -44,6 +49,8 @@ const LabelStyle = styled(Typography)(({ theme, error }) => ({
 
 const FirstProductForm = ({ nextStep }) => {
   const [files, setFiles] = useState([]);
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required('El nombre es requerido'),
@@ -76,9 +83,17 @@ const FirstProductForm = ({ nextStep }) => {
       stock: -1
     },
     validationSchema: NewProductSchema,
-    onSubmit: async (values) => {
-      console.log(values);
-      nextStep();
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        await dispatch(createProduct(values, files));
+        setSubmitting(false);
+        enqueueSnackbar('Producto creado satisfactoriamente', { variant: 'success' });
+        nextStep();
+      } catch (error) {
+        console.log(error);
+        setSubmitting(false);
+        enqueueSnackbar('Error al crear producto', { variant: 'error' });
+      }
     }
   });
 
@@ -243,6 +258,10 @@ const FirstProductForm = ({ nextStep }) => {
       </Form>
     </FormikProvider>
   );
+};
+
+FirstProductForm.propTypes = {
+  nextStep: PropTypes.func
 };
 
 export default FirstProductForm;

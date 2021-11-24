@@ -86,7 +86,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     initialValues: {
       name: currentProduct?.name || '',
       description: currentProduct?.description || '',
-      photos: currentProduct?.photos || [],
+      photos: [],
       amount: currentProduct?.amount || 0,
       discountPartnership: currentProduct?.discountPartnership || 0,
       tags: currentProduct?.tags || [],
@@ -158,6 +158,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   fullWidth
                   label="Nombre del producto *"
                   {...getFieldProps('name')}
+                  disabled={isSubmitting}
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}
                 />
@@ -169,6 +170,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     id="product-description"
                     placeHolder="Escribe algo grandioso que destaque tu producto"
                     value={values.description}
+                    readOnly={isSubmitting}
                     onChange={(val) => setFieldValue('description', val)}
                     error={Boolean(touched.description && errors.description)}
                   />
@@ -185,6 +187,8 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     showPreview
                     maxSize={3145728}
                     accept="image/*"
+                    disabled={isSubmitting}
+                    prevFiles={currentProduct?.photos || []}
                     files={values.photos || []}
                     onDrop={handleDrop}
                     onRemove={handleRemove}
@@ -210,6 +214,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     freeSolo
                     fullWidth
                     value={values.tags}
+                    disabled={isSubmitting}
                     options={TAGS_OPTION.map((option) => option)}
                     filterSelectedOptions
                     onChange={(e, newTags) => setFieldValue('tags', newTags)}
@@ -228,6 +233,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   control={
                     <Switch
                       {...getFieldProps('stockInfinity')}
+                      disabled={isSubmitting}
                       onChange={handleChangeStock}
                       checked={values.stockInfinity}
                     />
@@ -244,6 +250,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                       type="number"
                       value={values.stock}
                       {...getFieldProps('stock')}
+                      disabled={isSubmitting}
                       error={Boolean(touched.stock && errors.stock)}
                       helperText={(touched.stock && errors.stock) || ''}
                     />
@@ -253,6 +260,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     placeholder="0.00"
                     label="Precio *"
                     {...getFieldProps('amount')}
+                    disabled={isSubmitting}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">$</InputAdornment>,
                       type: 'number'
@@ -266,6 +274,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     placeholder="0.00"
                     label="Descuento"
                     {...getFieldProps('discountPartnership')}
+                    disabled={isSubmitting}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">$</InputAdornment>,
                       type: 'number'

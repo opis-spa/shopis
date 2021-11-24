@@ -79,10 +79,12 @@ const OrderDetail = () => {
       if (sale?.state === 1) {
         await dispatch(setOrderAccept(sale._id));
         setIsLoading(false);
+        setIsEditingState(false);
         enqueueSnackbar('Estado de orden actualizado satisfactoriamente', { variant: 'success' });
       } else if (sale?.state === 2) {
         await dispatch(setOrderDelivery(sale._id));
         setIsLoading(false);
+        setIsEditingState(false);
         enqueueSnackbar('Estado de orden actualizado satisfactoriamente', { variant: 'success' });
       }
     } catch (error) {
@@ -97,6 +99,7 @@ const OrderDetail = () => {
     try {
       await dispatch(setOrderReject(sale._id));
       setIsLoading(false);
+      setIsEditingState(false);
       enqueueSnackbar(sale?.state === 1 ? 'Orden rechazada satisfactoriamente' : 'Orden anulada satisfactoriamente', {
         variant: 'success'
       });
@@ -255,62 +258,36 @@ const OrderDetail = () => {
                     <Typography paragraph variant="overline" sx={{ color: 'primary.main' }}>
                       Datos de envío
                     </Typography>
-                    <Grid container columnSpacing={3}>
-                      <Grid item xs={12} sm={6} md={12}>
-                        <Typography variant="body2">
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            sx={{ color: 'primary.main', fontWeight: 'bold' }}
-                          >
-                            Despacho:{' '}
-                          </Typography>
-                          asdsad@asdasd.com
-                        </Typography>
-                        <Typography variant="body2">
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            sx={{ color: 'primary.main', fontWeight: 'bold' }}
-                          >
-                            Dirección:{' '}
-                          </Typography>
-                          {sale?.address?.address}
-                        </Typography>
-                        <Typography variant="body2">
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            sx={{ color: 'primary.main', fontWeight: 'bold' }}
-                          >
-                            País:{' '}
-                          </Typography>
-                          Chile
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12} sm={6} md={12}>
-                        <Typography variant="body2">
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            sx={{ color: 'primary.main', fontWeight: 'bold' }}
-                          >
-                            Región:{' '}
-                          </Typography>
-                          {sale?.address?.state}
-                        </Typography>
-                        <Typography variant="body2">
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            sx={{ color: 'primary.main', fontWeight: 'bold' }}
-                          >
-                            Comuna:{' '}
-                          </Typography>
-                          {sale?.address?.city}
-                        </Typography>
-                      </Grid>
-                    </Grid>
+                    <Typography variant="body2">
+                      <Typography component="span" variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
+                        Despacho:{' '}
+                      </Typography>
+                      asdsad@asdasd.com
+                    </Typography>
+                    <Typography variant="body2">
+                      <Typography component="span" variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
+                        Dirección:{' '}
+                      </Typography>
+                      {sale?.address?.address}
+                    </Typography>
+                    <Typography variant="body2">
+                      <Typography component="span" variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
+                        Comuna:{' '}
+                      </Typography>
+                      {sale?.address?.city}
+                    </Typography>
+                    <Typography variant="body2">
+                      <Typography component="span" variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
+                        Región:{' '}
+                      </Typography>
+                      {sale?.address?.state}
+                    </Typography>
+                    <Typography variant="body2">
+                      <Typography component="span" variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
+                        País:{' '}
+                      </Typography>
+                      Chile
+                    </Typography>
                   </Grid>
                 )}
               </Grid>

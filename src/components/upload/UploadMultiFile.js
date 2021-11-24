@@ -49,12 +49,22 @@ UploadMultiFile.propTypes = {
   error: PropTypes.bool,
   showPreview: PropTypes.bool,
   files: PropTypes.array,
+  prevFiles: PropTypes.array,
   onRemove: PropTypes.func,
   onRemoveAll: PropTypes.func,
   sx: PropTypes.object
 };
 
-export default function UploadMultiFile({ error, showPreview = false, files, onRemove, onRemoveAll, sx, ...other }) {
+export default function UploadMultiFile({
+  error,
+  showPreview = false,
+  files,
+  prevFiles = [],
+  onRemove,
+  onRemoveAll,
+  sx,
+  ...other
+}) {
   const hasFile = files.length > 0;
 
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
@@ -113,7 +123,7 @@ export default function UploadMultiFile({ error, showPreview = false, files, onR
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Arrastra o haz click &nbsp;
+            Arrastra o haz click&nbsp;
             <Typography variant="body2" component="span" sx={{ color: 'primary.main', textDecoration: 'underline' }}>
               aquí
             </Typography>
@@ -126,6 +136,58 @@ export default function UploadMultiFile({ error, showPreview = false, files, onR
 
       <List disablePadding sx={{ ...(hasFile && { my: 3 }) }}>
         <AnimatePresence>
+          {prevFiles.map((file, idx) => {
+            if (showPreview) {
+              return (
+                <ListItem
+                  key={idx}
+                  component={motion.div}
+                  sx={{
+                    p: 0,
+                    m: 0.5,
+                    width: 80,
+                    height: 80,
+                    borderRadius: 1.5,
+                    overflow: 'hidden',
+                    position: 'relative',
+                    display: 'inline-flex'
+                  }}
+                >
+                  <Paper
+                    variant="outlined"
+                    component="img"
+                    src={isString(file) && file}
+                    sx={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute' }}
+                  />
+                </ListItem>
+              );
+            }
+            return (
+              <ListItem
+                key={idx}
+                component={motion.div}
+                {...varFadeInRight}
+                sx={{
+                  my: 1,
+                  py: 0.75,
+                  px: 2,
+                  borderRadius: 1,
+                  border: (theme) => `solid 1px ${theme.palette.divider}`,
+                  bgcolor: 'background.paper'
+                }}
+              >
+                <ListItemIcon>
+                  <Icon icon={fileFill} width={28} height={28} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={isString(file) && file}
+                  secondary={isString(file) && ''}
+                  primaryTypographyProps={{ variant: 'subtitle2' }}
+                  secondaryTypographyProps={{ variant: 'caption' }}
+                />
+              </ListItem>
+            );
+          })}
           {files.map((file) => {
             const { name, size, preview } = file;
             const key = isString(file) ? file : name;
