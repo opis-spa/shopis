@@ -63,14 +63,16 @@ const CreateStoreForm = ({ nextStep }) => {
     validationSchema: CreateStoreSchema,
     onSubmit: async (values, { setFieldError, setSubmitting }) => {
       try {
-        const response = await axios.get(`/api/v1/partnerships/validate-nickname/${values.nickname}`);
-        const { success } = response.data;
-        if (success) {
-          console.log(values);
-          nextStep();
-        } else {
-          setFieldError('nickname', 'El link ya está registrado');
+        if (values.nickname !== '') {
+          const response = await axios.get(`/api/v1/partnerships/validate-nickname/${values.nickname}`);
+          if (!response.success) {
+            setFieldError('nickname', 'El link ya está registrado');
+            setSubmitting(false);
+            return;
+          }
         }
+        console.log(values);
+        nextStep();
         setSubmitting(false);
       } catch (error) {
         const { code, message } = error;

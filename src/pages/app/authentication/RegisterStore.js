@@ -67,7 +67,7 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 const RegisterStore = ({ setHasPartnership }) => {
   const isOffset = useOffSetTop(100);
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
