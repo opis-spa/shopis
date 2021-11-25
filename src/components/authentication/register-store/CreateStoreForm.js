@@ -46,6 +46,7 @@ const LinkTextField = styled(TextField)(({ theme }) => ({
 
 const CreateStoreForm = ({ nextStep }) => {
   const [isValidatingNickname, setIsValidatingNickname] = useState(false);
+  const [nicknameChanges, setNicknameChanges] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
@@ -143,13 +144,14 @@ const CreateStoreForm = ({ nextStep }) => {
     const { value } = e.target;
     setFieldValue('nickname', value);
     setIsValidatingNickname(true);
+    setNicknameChanges((prev) => prev + 1);
     debounceNickname(value);
   };
 
   const handleChangeName = (e) => {
     const { value } = e.target;
     setFieldValue('name', value);
-    if (!touched.nickname) {
+    if (!nicknameChanges) {
       setFieldValue('nickname', paramCase(value));
       setIsValidatingNickname(true);
       debounceNickname(paramCase(value));
