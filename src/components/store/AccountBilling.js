@@ -67,10 +67,12 @@ export default function AccountBilling() {
       await dispatch(setBankAccounts(newAccounts));
       setIsLoading(() => false);
       setOpenDeleteModal(() => false);
-      enqueueSnackbar('Save success', { variant: 'success' });
+      enqueueSnackbar('Cuenta eliminada satisfactoriamente', { variant: 'success' });
     } catch (error) {
       console.log(error);
       setIsLoading(false);
+      setOpenDeleteModal(() => false);
+      enqueueSnackbar('Error al eliminar cuenta', { variant: 'error' });
     }
   };
 

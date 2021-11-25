@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
-import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
+// iconify
+import { Icon } from '@iconify/react';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
+import documentIcon from '@iconify/icons-jam/document';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 // routes
@@ -37,22 +38,18 @@ export default function OrderMoreMenu({ onDelete, id }) {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
+        <MenuItem component={RouterLink} to={`${PATH_APP.business.orders}/${id}`} sx={{ color: 'text.secondary' }}>
+          <ListItemIcon>
+            <Icon icon={documentIcon} width={24} height={24} />
+          </ListItemIcon>
+          <ListItemText primary="Detalle" primaryTypographyProps={{ variant: 'body2' }} />
+        </MenuItem>
+
         <MenuItem onClick={onDelete} sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Eliminar" primaryTypographyProps={{ variant: 'body2' }} />
-        </MenuItem>
-
-        <MenuItem
-          component={RouterLink}
-          to={`${PATH_APP.business.store}/order/${id}/edit`}
-          sx={{ color: 'text.secondary' }}
-        >
-          <ListItemIcon>
-            <Icon icon={editFill} width={24} height={24} />
-          </ListItemIcon>
-          <ListItemText primary="Editar" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
       </Menu>
     </>

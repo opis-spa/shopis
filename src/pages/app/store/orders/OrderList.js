@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { filter } from 'lodash';
-import { Icon } from '@iconify/react';
+import { filter, get } from 'lodash';
 import { sentenceCase } from 'change-case';
-import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { useTheme, styled } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Card,
   Table,
-  Button,
   TableRow,
   TableBody,
   TableCell,
   Container,
-  Typography,
-  Stack,
   TableContainer,
-  TablePagination
+  TablePagination,
+  IconButton
 } from '@mui/material';
+// iconify
+import { Icon } from '@iconify/react';
+import EyeIcon from '@iconify/icons-ic/baseline-remove-red-eye';
 // redux
 import { useDispatch, useSelector } from '../../../../redux/store';
-import { getProducts, deleteStoreProduct } from '../../../../redux/slices/product';
+import { getSales } from '../../../../redux/slices/sales';
 // utils
+import { fDate } from '../../../../utils/formatTime';
 import { fCurrency } from '../../../../utils/formatNumber';
 // routes
 import { PATH_APP } from '../../../../routes/paths';
@@ -35,32 +35,26 @@ import Label from '../../../../components/Label';
 import Scrollbar from '../../../../components/Scrollbar';
 import SearchNotFound from '../../../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../../../components/HeaderBreadcrumbs';
-import { ProductListHead, ProductListToolbar, ProductMoreMenu } from '../../../../components/store/product-list';
+import { OrderListHead, OrderListToolbar } from '../../../../components/store/order-list';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Nombre', alignRight: false },
-  { id: '', label: 'Inventario', alignRight: false },
-  { id: 'amount', label: 'Precio', alignRight: true },
-  { id: '' }
+  { key: 1, id: 'orderCode', label: 'Orden', alignRight: false },
+  { key: 2, id: 'createdAt', label: 'Fecha', alignRight: false },
+  { key: 3, id: 'customer.name', label: 'Cliente', alignRight: false },
+  { key: 4, id: '', label: 'Estado', alignRight: false },
+  { key: 5, id: 'amountTotal', label: 'Precio', alignRight: true },
+  { key: 6, id: '' }
 ];
-
-const ThumbImgStyle = styled('img')(({ theme }) => ({
-  width: 64,
-  height: 64,
-  objectFit: 'cover',
-  margin: theme.spacing(0, 2),
-  borderRadius: theme.shape.borderRadiusSm
-}));
 
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  if (get(b, orderBy) < get(a, orderBy)) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (get(b, orderBy) > get(a, orderBy)) {
     return 1;
   }
   return 0;
@@ -81,7 +75,7 @@ function applySortFilter(array, comparator, query) {
   });
 
   if (query) {
-    return filter(array, (_product) => _product.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_product) => _product.orderCode.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
 
   return stabilizedThis.map((el) => el[0]);
@@ -89,11 +83,11 @@ function applySortFilter(array, comparator, query) {
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceProductList() {
+export default function OrderList() {
   const { themeStretch } = useSettings();
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.product);
+  const { sales } = useSelector((state) => state.sale);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -102,7 +96,7 @@ export default function EcommerceProductList() {
   const [orderBy, setOrderBy] = useState('createdAt');
 
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getSales());
   }, [dispatch]);
 
   const handleRequestSort = (event, property) => {
@@ -113,7 +107,7 @@ export default function EcommerceProductList() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = products.map((n) => n.name);
+      const newSelecteds = sales.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -133,54 +127,48 @@ export default function EcommerceProductList() {
     setFilterName(event.target.value);
   };
 
-  const handleDeleteProduct = async (productId) => {
-    await dispatch(deleteStoreProduct(productId));
-  };
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - sales.length) : 0;
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;
+  const filteredSales = applySortFilter(sales, getComparator(order, orderBy), filterName);
 
-  const filteredProducts = applySortFilter(products, getComparator(order, orderBy), filterName);
-
-  const isProductNotFound = filteredProducts.length === 0;
+  const isProductNotFound = filteredSales.length === 0;
 
   return (
-    <Page title="Productos | shopis">
+    <Page title="Ordenes | shopis">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Tus Productos"
-          links={[{ name: 'Shopis', href: PATH_APP.root }, { name: 'Productos' }]}
-          action={
-            <Button
-              variant="contained"
-              component={RouterLink}
-              to={PATH_APP.business.newProduct}
-              startIcon={<Icon icon={plusFill} />}
-            >
-              Nuevo producto
-            </Button>
-          }
+          heading="Tus Ordenes"
+          links={[{ name: 'Shopis', href: PATH_APP.root }, { name: 'Ordenes' }]}
         />
 
         <Card>
-          <ProductListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <OrderListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <ProductListHead
+                <OrderListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={products.length}
+                  rowCount={sales.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredProducts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, photo, photos, amount, discountPartnership, stock } = row;
-                    const image = photos || [photo];
-                    const isItemSelected = selected.indexOf(name) !== -1;
+                  {filteredSales.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                    const {
+                      id,
+                      orderCode,
+                      amountTotal,
+                      createdAt,
+                      stock,
+                      status,
+                      customer: { name }
+                    } = row;
+
+                    const isItemSelected = selected.indexOf(id) !== -1;
 
                     return (
                       <TableRow
@@ -191,40 +179,24 @@ export default function EcommerceProductList() {
                         selected={isItemSelected}
                         aria-checked={isItemSelected}
                       >
-                        <TableCell component="th" scope="row" padding="none">
-                          <Box
-                            sx={{
-                              py: 2,
-                              display: 'flex',
-                              alignItems: 'center'
-                            }}
-                          >
-                            <ThumbImgStyle alt={name} src={image[0] ? image[0] : '/static/brand/shopis-default.svg'} />
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Box>
-                        </TableCell>
+                        <TableCell style={{ minWidth: 160 }}>{orderCode}</TableCell>
+                        <TableCell style={{ minWidth: 160 }}>{fDate(createdAt)}</TableCell>
+                        <TableCell style={{ minWidth: 160 }}>{name}</TableCell>
                         <TableCell style={{ minWidth: 160 }}>
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
                             color={(stock === 0 && 'error') || (stock !== -1 && stock <= 10 && 'warning') || 'success'}
                           >
-                            {sentenceCase((stock === 0 && 'agotado') || 'stock')}
+                            {sentenceCase(status)}
                           </Label>
                         </TableCell>
+                        <TableCell align="right">{fCurrency(amountTotal)}</TableCell>
                         <TableCell align="right">
-                          <Stack direction="row" spacing={2} justifyContent="flex-end">
-                            <Typography>{fCurrency(amount - discountPartnership)}</Typography>
-                            {discountPartnership > 0 && (
-                              <Typography sx={{ opacity: 0.6, textDecoration: 'line-through' }}>
-                                {fCurrency(amount)}
-                              </Typography>
-                            )}
-                          </Stack>
-                        </TableCell>
-                        <TableCell align="right">
-                          <ProductMoreMenu onDelete={() => handleDeleteProduct(id)} productID={id} />
+                          <RouterLink to={`${PATH_APP.business.orders}/${id}`}>
+                            <IconButton>
+                              <Icon icon={EyeIcon} />
+                            </IconButton>
+                          </RouterLink>
                         </TableCell>
                       </TableRow>
                     );
@@ -253,7 +225,7 @@ export default function EcommerceProductList() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={products.length}
+            count={sales.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

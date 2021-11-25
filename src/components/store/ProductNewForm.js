@@ -24,32 +24,29 @@ import {
 import { PATH_APP } from '../../routes/paths';
 // redux
 import { useDispatch } from '../../redux/store';
-import { createProduct } from '../../redux/slices/product';
+import { createProduct, editProduct } from '../../redux/slices/product';
 // components
 import { QuillEditor } from '../editor';
 import { UploadMultiFile } from '../upload';
+// utils
+import { isEmptyTag } from '../../utils/regexValidation';
 
 // ----------------------------------------------------------------------
 
 const TAGS_OPTION = [
-  'Toy Story 3',
-  'Logan',
-  'Full Metal Jacket',
-  'Dangal',
-  'The Sting',
-  '2001: A Space Odyssey',
-  "Singin' in the Rain",
-  'Toy Story',
-  'Bicycle Thieves',
-  'The Kid',
-  'Inglourious Basterds',
-  'Snatch',
-  '3 Idiots'
+  'Herramientas',
+  'Electrdomésticos',
+  'Digital',
+  'Comida',
+  'Estudios',
+  'Libros',
+  'Computadoras',
+  'Hogar'
 ];
 
-const LabelStyle = styled(Typography)(({ theme }) => ({
+const LabelStyle = styled(Typography)(({ theme, error }) => ({
   ...theme.typography.subtitle2,
-  color: theme.palette.text.secondary,
+  color: error ? theme.palette.error.main : theme.palette.text.secondary,
   marginBottom: theme.spacing(1)
 }));
 
@@ -68,28 +65,42 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
 
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required('El nombre es requerido'),
-    description: Yup.string().required('La descripción es requerida'),
-    amount: Yup.number().required('El precio es requerido'),
-    discountPartnership: Yup.number(),
-    stock: Yup.number().required('El stock es requerido'),
-    photos: Yup.array()
+    description: Yup.string()
+      .test('not-empty-tag', 'La descripción es requerida', (value) => !isEmptyTag.test(value))
+      .required('La descripción es requerida'),
+    amount: Yup.number().moreThan(0, 'El precio debe ser mayor a 0.').required('El precio es requerido'),
+    discountPartnership: Yup.number().min(0, 'El descuento no puede ser negativo.'),
+    stock: Yup.number()
+      .when('stockInfinity', {
+        is: true,
+        otherwise: Yup.number().integer('El stock debe ser un número entero').min(1, 'El stock debe ser 1 como mínimo')
+      })
+      .required('El stock es requerido'),
+    photos: Yup.array(),
+    tags: Yup.array(),
+    stockInfinity: Yup.bool()
   });
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       name: currentProduct?.name || '',
       description: currentProduct?.description || '',
-      photos: currentProduct?.photos || [],
+      photos: [],
       amount: currentProduct?.amount || 0,
       discountPartnership: currentProduct?.discountPartnership || 0,
-      tags: currentProduct?.tags || '',
+      tags: currentProduct?.tags || [],
       stockInfinity: (currentProduct?.stock || -1) === -1,
       stock: currentProduct?.stock || -1
     },
     validationSchema: NewProductSchema,
-    onSubmit: async (values, { setSubmitting, setErrors }) => {
+    onSubmit: async (values, { setSubmitting }) => {
       try {
-        await dispatch(createProduct(values, files));
+        if (isEdit) {
+          await dispatch(editProduct(values, files, currentProduct._id));
+        } else {
+          await dispatch(createProduct(values, files));
+        }
         setSubmitting(false);
         enqueueSnackbar(!isEdit ? 'Producto creado satisfactoriamente' : 'Producto editado satisfactoriamente', {
           variant: 'success'
@@ -98,7 +109,9 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       } catch (error) {
         console.error(error);
         setSubmitting(false);
-        setErrors(error);
+        enqueueSnackbar(!isEdit ? 'Error al crear producto' : 'Error al editar producto', {
+          variant: 'error'
+        });
       }
     }
   });
@@ -143,19 +156,21 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
               <Stack spacing={3}>
                 <TextField
                   fullWidth
-                  label="Nombre del producto"
+                  label="Nombre del producto *"
                   {...getFieldProps('name')}
+                  disabled={isSubmitting}
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}
                 />
 
                 <div>
-                  <LabelStyle>Descripción</LabelStyle>
+                  <LabelStyle error={touched.description && errors.description}>Descripción *</LabelStyle>
                   <QuillEditor
                     simple
                     id="product-description"
                     placeHolder="Escribe algo grandioso que destaque tu producto"
                     value={values.description}
+                    readOnly={isSubmitting}
                     onChange={(val) => setFieldValue('description', val)}
                     error={Boolean(touched.description && errors.description)}
                   />
@@ -167,12 +182,14 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                 </div>
 
                 <div>
-                  <LabelStyle>Imagenes</LabelStyle>
+                  <LabelStyle>Imágenes</LabelStyle>
                   <UploadMultiFile
                     showPreview
                     maxSize={3145728}
                     accept="image/*"
-                    files={values.photos}
+                    disabled={isSubmitting}
+                    prevFiles={currentProduct?.photos || []}
+                    files={values.photos || []}
                     onDrop={handleDrop}
                     onRemove={handleRemove}
                     onRemoveAll={handleRemoveAll}
@@ -195,17 +212,18 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   <Autocomplete
                     multiple
                     freeSolo
+                    fullWidth
                     value={values.tags}
-                    onChange={(event, newValue) => {
-                      setFieldValue('tags', newValue);
-                    }}
+                    disabled={isSubmitting}
                     options={TAGS_OPTION.map((option) => option)}
+                    filterSelectedOptions
+                    onChange={(e, newTags) => setFieldValue('tags', newTags)}
+                    renderInput={(params) => <TextField label="Etiquetas" {...params} />}
                     renderTags={(value, getTagProps) =>
                       value.map((option, index) => (
                         <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
                       ))
                     }
-                    renderInput={(params) => <TextField label="Etiquetas" {...params} />}
                   />
                 </Stack>
               </Card>
@@ -215,6 +233,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   control={
                     <Switch
                       {...getFieldProps('stockInfinity')}
+                      disabled={isSubmitting}
                       onChange={handleChangeStock}
                       checked={values.stockInfinity}
                     />
@@ -227,10 +246,11 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   {!values.stockInfinity && (
                     <TextField
                       fullWidth
-                      label={`Inventario${isEdit ? '' : ' Inicial'}`}
+                      label={`Inventario${isEdit ? ' *' : ' Inicial *'}`}
                       type="number"
                       value={values.stock}
                       {...getFieldProps('stock')}
+                      disabled={isSubmitting}
                       error={Boolean(touched.stock && errors.stock)}
                       helperText={(touched.stock && errors.stock) || ''}
                     />
@@ -238,14 +258,15 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   <TextField
                     fullWidth
                     placeholder="0.00"
-                    label="Precio"
+                    label="Precio *"
                     {...getFieldProps('amount')}
+                    disabled={isSubmitting}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">$</InputAdornment>,
                       type: 'number'
                     }}
-                    error={Boolean(touched.price && errors.price)}
-                    helperText={touched.price && errors.price}
+                    error={Boolean(touched.amount && errors.amount)}
+                    helperText={touched.amount && errors.amount}
                   />
 
                   <TextField
@@ -253,10 +274,13 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     placeholder="0.00"
                     label="Descuento"
                     {...getFieldProps('discountPartnership')}
+                    disabled={isSubmitting}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">$</InputAdornment>,
                       type: 'number'
                     }}
+                    error={Boolean(touched.discountPartnership && errors.discountPartnership)}
+                    helperText={touched.discountPartnership && errors.discountPartnership}
                   />
                 </Stack>
               </Card>

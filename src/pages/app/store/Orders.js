@@ -36,7 +36,7 @@ import { OrderListHead, OrderListToolbar, OrderMoreMenu } from '../../../compone
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'createdAt', label: 'Orden', alignRight: false },
+  { id: 'order', label: 'Orden', alignRight: false },
   { id: 'createdAt', label: 'Fecha', alignRight: false },
   { id: 'inventoryType', label: 'Estado', alignRight: false },
   { id: 'price', label: 'Precio', alignRight: true },

@@ -102,6 +102,7 @@ export const setSocialNetwork = (socialNetworks) => async (dispatch) => {
     dispatch(slice.actions.getStoreSuccess(response.data.partnership));
   } catch (error) {
     dispatch(slice.actions.hasError(error));
+    throw error;
   }
 };
 
@@ -114,6 +115,7 @@ export const setPaymentMethods = (paymentMethods) => async (dispatch) => {
     dispatch(slice.actions.getStoreSuccess(response.data.partnership));
   } catch (error) {
     dispatch(slice.actions.hasError(error));
+    throw error;
   }
 };
 
@@ -128,6 +130,7 @@ export const setDeliveryMethods = (deliveryOptions) => async (dispatch) => {
     dispatch(slice.actions.getStoreSuccess(response.data.partnership));
   } catch (error) {
     dispatch(slice.actions.hasError(error));
+    throw error;
   }
 };
 
@@ -140,6 +143,7 @@ export const setBankAccounts = (accounts) => async (dispatch) => {
     dispatch(slice.actions.getStoreSuccess(response.data.partnership));
   } catch (error) {
     dispatch(slice.actions.hasError(error));
+    throw error;
   }
 };
 
