@@ -22,12 +22,11 @@ import { styled } from '@mui/styles';
 import QRCode from 'qrcode.react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 // hooks
-import useAuth from '../../hooks/useAuth';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import { UploadAvatar } from '../upload';
 // redux
 import { useSelector, useDispatch } from '../../redux/store';
-import { setNickname } from '../../redux/slices/store';
+import { setNickname, updateStore } from '../../redux/slices/store';
 // utils
 import { fData } from '../../utils/formatNumber';
 import axios from '../../utils/axios';
@@ -57,7 +56,6 @@ export default function AccountGeneral() {
   const isMountedRef = useIsMountedRef();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const { updateProfile } = useAuth();
   const { data: parnership } = useSelector((state) => state.store);
   const [cities, setCities] = useState([]);
   const [link, setLink] = useState('');
@@ -70,7 +68,6 @@ export default function AccountGeneral() {
   }, [parnership]);
 
   const UpdateUserSchema = Yup.object().shape({
-    displayName: Yup.string().required('Name is required.'),
     nickname: Yup.string().required('*Campo requerido.')
   });
 
@@ -96,7 +93,7 @@ export default function AccountGeneral() {
     validationSchema: UpdateUserSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
-        await updateProfile({ ...values });
+        await dispatch(updateStore({ ...values }));
         enqueueSnackbar('Datos guardados satisfactoriamente', { variant: 'success' });
         if (isMountedRef.current) {
           setSubmitting(false);
@@ -122,6 +119,10 @@ export default function AccountGeneral() {
     setFieldError,
     setFieldTouched
   } = formik;
+
+  useEffect(() => {
+    console.log(touched, errors);
+  }, [touched, errors]);
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
