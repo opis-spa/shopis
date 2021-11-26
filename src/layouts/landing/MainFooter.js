@@ -145,7 +145,7 @@ export default function MainFooter() {
             >
               <Grid item>
                 <Typography sx={{ fontSize: 14, [theme.breakpoints.up('sm')]: { fontSize: 16 } }}>
-                  Copyright &copy; 2021 Opis Wallet
+                  Copyright &copy; 2021 Shopis
                 </Typography>
               </Grid>
               <Grid item>

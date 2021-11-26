@@ -9,6 +9,7 @@ import axios from '../../utils/axios';
 const initialState = {
   isLoading: false,
   error: false,
+  partnership: '',
   products: [],
   product: null,
   sortBy: null,
@@ -282,6 +283,14 @@ const slice = createSlice({
         success: true,
         ...action.payload
       };
+    },
+    // GET PRODUCTS
+    setParnership(state, action) {
+      state.isLoading = false;
+      if (state.partnership !== action.payload) {
+        state.checkout = initialState.checkout;
+        state.partnership = action.payload;
+      }
     }
   }
 });
@@ -311,7 +320,8 @@ export const {
   createBilling,
   createDelivery,
   createInformation,
-  applyShipping
+  applyShipping,
+  setParnership
 } = slice.actions;
 
 // ----------------------------------------------------------------------

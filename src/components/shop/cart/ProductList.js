@@ -28,7 +28,7 @@ import { MIconButton } from '../../@material-extend';
 const ButtonDelete = styled(Button)(({ theme }) => ({
   padding: theme.spacing(0.05),
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: theme.palette.grey[500_32],
+  backgroundColor: theme.palette.grey['500_32'],
   boxShadow: 'none',
   '&:hover': {
     backgroundColor: '#0069d9',
@@ -44,7 +44,7 @@ const IncrementerStyle = styled('div')(({ theme }) => ({
   marginBottom: theme.spacing(0.5),
   padding: theme.spacing(0.5, 0.75),
   borderRadius: theme.shape.borderRadius,
-  border: `solid 1px ${theme.palette.grey[500_32]}`
+  border: `solid 1px ${theme.palette.grey['500_32']}`
 }));
 
 const ThumbImgStyle = styled('img')(({ theme }) => ({
