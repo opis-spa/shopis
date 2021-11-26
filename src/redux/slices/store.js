@@ -67,6 +67,7 @@ export const createStore = (data) => async (dispatch) => {
     dispatch(slice.actions.getStoreSuccess(response.data.partnership));
   } catch (error) {
     dispatch(slice.actions.hasError(error));
+    throw error;
   }
 };
 

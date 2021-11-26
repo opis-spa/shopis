@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
+import { paramCase } from 'change-case';
 // material
 import { Typography, Grid, TextField, CircularProgress } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -13,6 +14,9 @@ import { UploadAvatar } from '../../upload';
 // utils
 import { fData } from '../../../utils/formatNumber';
 import axios from '../../../utils/axios';
+// redux
+import { useDispatch } from '../../../redux/store';
+import { createStore } from '../../../redux/slices/store';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +46,9 @@ const LinkTextField = styled(TextField)(({ theme }) => ({
 
 const CreateStoreForm = ({ nextStep }) => {
   const [isValidatingNickname, setIsValidatingNickname] = useState(false);
+  const [nicknameChanges, setNicknameChanges] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
 
   const CreateStoreSchema = Yup.object().shape({
     name: Yup.string().required('Campo requerido.'),
@@ -50,6 +56,7 @@ const CreateStoreForm = ({ nextStep }) => {
     nickname: Yup.string()
       .trim()
       .matches(/^[a-z0-9_-]+$/, 'Solo se permiten letras en minúsculas y números, sin espacios o caracteres especiales')
+      .required('El link es requerido')
   });
 
   const formik = useFormik({
@@ -63,15 +70,18 @@ const CreateStoreForm = ({ nextStep }) => {
     validationSchema: CreateStoreSchema,
     onSubmit: async (values, { setFieldError, setSubmitting }) => {
       try {
-        const response = await axios.get(`/api/v1/partnerships/validate-nickname/${values.nickname}`);
-        const { success } = response.data;
-        if (success) {
-          console.log(values);
-          nextStep();
-        } else {
-          setFieldError('nickname', 'El link ya está registrado');
+        if (values.nickname !== '') {
+          const response = await axios.get(`/api/v1/partnerships/validate-nickname/${values.nickname}`);
+          if (!response.data.success) {
+            setFieldError('nickname', 'El link ya está registrado');
+            setSubmitting(false);
+            return;
+          }
         }
+        await dispatch(createStore(values));
         setSubmitting(false);
+        enqueueSnackbar('Tienda creada satisfactoriamente', { variant: 'success' });
+        nextStep();
       } catch (error) {
         const { code, message } = error;
         if (code === 400 && message === 'this nickname is used') {
@@ -134,7 +144,18 @@ const CreateStoreForm = ({ nextStep }) => {
     const { value } = e.target;
     setFieldValue('nickname', value);
     setIsValidatingNickname(true);
+    setNicknameChanges((prev) => prev + 1);
     debounceNickname(value);
+  };
+
+  const handleChangeName = (e) => {
+    const { value } = e.target;
+    setFieldValue('name', value);
+    if (!nicknameChanges) {
+      setFieldValue('nickname', paramCase(value));
+      setIsValidatingNickname(true);
+      debounceNickname(paramCase(value));
+    }
   };
 
   return (
@@ -174,6 +195,8 @@ const CreateStoreForm = ({ nextStep }) => {
                   fullWidth
                   label="Nombre Comercial *"
                   {...getFieldProps('name')}
+                  value={values.name}
+                  onChange={handleChangeName}
                   disabled={isSubmitting}
                   error={Boolean(errors.name && touched.name)}
                   helperText={touched.name && errors.name}
@@ -192,7 +215,7 @@ const CreateStoreForm = ({ nextStep }) => {
               <Grid item xs={12}>
                 <LinkTextField
                   fullWidth
-                  label="Link"
+                  label="Link *"
                   InputLabelProps={{ shrink: true }}
                   {...getFieldProps('nickname')}
                   value={values.nickname}

@@ -67,7 +67,7 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 const RegisterStore = ({ setHasPartnership }) => {
   const isOffset = useOffSetTop(100);
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -159,7 +159,7 @@ const RegisterStore = ({ setHasPartnership }) => {
                     <Typography variant="body1" align="center">
                       Gracias por completar tus datos
                     </Typography>
-                    <Button variant="contained" sx={{ mt: 2 }} onClick={() => setHasPartnership(false)}>
+                    <Button variant="contained" sx={{ mt: 2 }} onClick={() => setHasPartnership(true)}>
                       Empezar a vender
                     </Button>
                   </Box>
