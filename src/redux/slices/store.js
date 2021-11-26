@@ -60,16 +60,41 @@ export const getStore = () => async (dispatch) => {
   }
 };
 
-export const createStore = (data) => async (dispatch) => {
-  dispatch(slice.actions.startLoading());
-  try {
-    const response = await axios.post('/api/v1/partnerships/create', data);
-    dispatch(slice.actions.getStoreSuccess(response.data.partnership));
-  } catch (error) {
-    dispatch(slice.actions.hasError(error));
-    throw error;
-  }
-};
+export const createStore =
+  (body, photo = null) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      delete body.photo;
+      const data = new FormData();
+      Object.keys(body).forEach((item) => {
+        if (typeof body[item] === 'object') {
+          const file = body[item];
+          data.append(item, file);
+        } else {
+          const value = body[item] || '';
+          if (value) {
+            data.append(item, value);
+          }
+        }
+      });
+      if (photo) {
+        data.append('photo', photo);
+      }
+
+      const response = await axios({
+        method: 'post',
+        url: '/api/v1/partnerships/create',
+        data,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      dispatch(slice.actions.getStoreSuccess(response.data.partnership));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+      throw error;
+    }
+  };
 
 export const updateStore = (data) => async (dispatch, getState) => {
   const state = getState();

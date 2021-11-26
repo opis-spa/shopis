@@ -47,6 +47,7 @@ const LinkTextField = styled(TextField)(({ theme }) => ({
 const CreateStoreForm = ({ nextStep }) => {
   const [isValidatingNickname, setIsValidatingNickname] = useState(false);
   const [nicknameChanges, setNicknameChanges] = useState(0);
+  const [photo, setPhoto] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
@@ -62,7 +63,6 @@ const CreateStoreForm = ({ nextStep }) => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      photo: null,
       nickname: '',
       name: '',
       identityCode: ''
@@ -78,7 +78,7 @@ const CreateStoreForm = ({ nextStep }) => {
             return;
           }
         }
-        await dispatch(createStore(values));
+        await dispatch(createStore(values, photo));
         setSubmitting(false);
         enqueueSnackbar('Tienda creada satisfactoriamente', { variant: 'success' });
         nextStep();
@@ -108,6 +108,7 @@ const CreateStoreForm = ({ nextStep }) => {
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
+      setPhoto(acceptedFiles[0]);
       const file = acceptedFiles[0];
       if (file) {
         setFieldValue('photo', {
