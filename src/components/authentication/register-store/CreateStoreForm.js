@@ -17,6 +17,8 @@ import axios from '../../../utils/axios';
 // redux
 import { useDispatch } from '../../../redux/store';
 import { createStore } from '../../../redux/slices/store';
+// config
+import { urlShop } from '../../../config';
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +38,7 @@ const LinkTextField = styled(TextField)(({ theme }) => ({
     position: 'relative'
   },
   '& .MuiInputBase-root::before': {
-    content: '"https://menu.opis.cl/"',
+    content: `"${urlShop}"`,
     display: 'block',
     position: 'absolute',
     left: theme.spacing(2),
@@ -194,7 +196,8 @@ const CreateStoreForm = ({ nextStep }) => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Nombre Comercial *"
+                  required
+                  label="Nombre de tu tienda"
                   {...getFieldProps('name')}
                   value={values.name}
                   onChange={handleChangeName}
@@ -216,7 +219,8 @@ const CreateStoreForm = ({ nextStep }) => {
               <Grid item xs={12}>
                 <LinkTextField
                   fullWidth
-                  label="Link *"
+                  required
+                  label="Shopis Link a tu tienda"
                   InputLabelProps={{ shrink: true }}
                   {...getFieldProps('nickname')}
                   value={values.nickname}
