@@ -47,7 +47,6 @@ const Payment = () => {
   const dispatch = useDispatch();
   const { sale } = useSelector((state) => state.sale);
   const order = query.get('order');
-  const status = query.get('status');
 
   useMemo(() => {
     dispatch(getSale(order));

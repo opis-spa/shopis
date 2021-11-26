@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector } from '@mui/material';
+import { Box, Grid, Step, Stepper, Container, StepLabel } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getCart, onGotoStep, getProductStore, createInformation, createDelivery } from '../../redux/slices/product';
@@ -25,21 +25,6 @@ import {
 } from '../../components/shop/checkout';
 
 // ----------------------------------------------------------------------
-
-const QontoConnector = styled(StepConnector)(({ theme }) => ({
-  top: 10,
-  left: 'calc(-50% + 20px)',
-  right: 'calc(50% + 20px)',
-  '& .MuiStepConnector-line': {
-    borderTopWidth: 2,
-    borderColor: theme.palette.divider
-  },
-  '&.Mui-active, &.Mui-completed': {
-    '& .MuiStepConnector-line': {
-      borderColor: theme.palette.primary.main
-    }
-  }
-}));
 
 QontoStepIcon.propTypes = {
   active: PropTypes.bool,
