@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from '../../redux/store';
 import { getSale } from '../../redux/slices/sales';
 // components
 import Page from '../../components/Page';
-import ProductItemSummary from '../../components/rifopis/product/ProductItemSummary';
+import ProductItemSummary from '../../components/shop/product/ProductItemSummary';
 import LinkPartnership from '../../components/LinkPartnership';
 
 const RootStyle = styled(Page)(({ theme }) => ({
@@ -62,16 +62,15 @@ const Payment = () => {
   }, [sale, isMountedRef]);
 
   return (
-    <RootStyle title="Orden procesada" sx={{ backgroundColor: '#1A0033' }}>
+    <RootStyle title="Orden procesada">
       <Container maxWidth="sm">
         <CardStyle>
           <Stack direction="column" spacing={3}>
-            <Stack direction="column" spacing={2}>
+            <Stack direction="column" spacing={2} sx={{ alignItems: 'center', pt: 5 }}>
               <Box
                 component="img"
-                alt={status}
-                src="/static/icons/ic_check.svg"
-                sx={{ width: 114, height: 114, margin: 'auto', mt: 2 }}
+                sx={{ width: '90%', maxWidth: 150 }}
+                src="/static/illustrations/illustration-success.svg"
               />
 
               <Typography variant="h4" sx={{ color: 'primary.light', mt: 4, fontWeight: 900 }}>
@@ -93,8 +92,8 @@ const Payment = () => {
 
               <StackStyle spacing={3} direction="column">
                 {products.map((item) => {
-                  const { _id, product, quantity } = item;
-                  return <ProductItemSummary key={_id} product={{ ...product, quantity }} />;
+                  const { _id, product, quantity, subtotal } = item;
+                  return <ProductItemSummary key={_id} product={{ ...product, quantity, subtotal }} filter={false} />;
                 })}
               </StackStyle>
             </ContentStyle>

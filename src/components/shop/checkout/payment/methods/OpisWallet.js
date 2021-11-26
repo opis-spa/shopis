@@ -12,6 +12,7 @@ import { fNumber, fCurrency } from '../../../../../utils/formatNumber';
 
 const RootStyle = styled(Box)(({ theme }) => ({
   display: 'flex',
+  flex: 1,
   position: 'inherit',
   paddingBottom: theme.spacing(2)
 }));
@@ -122,7 +123,7 @@ function OpisWallet({ amount, onSelectToken }) {
 
   return (
     <RootStyle>
-      <Stack direction={{ xs: 'column', md: 'row', flex: 1 }}>
+      <Stack direction={{ xs: 'column', md: 'row' }} sx={{ flex: 1 }}>
         <TextField
           select
           fullWidth

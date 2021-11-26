@@ -142,20 +142,10 @@ export default function EcommerceCheckout() {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <Grid container justifyContent="center">
           <Grid item xs={12} md={8} sx={{ mb: 5, justifyContent: 'center' }}>
-            <Stepper activeStep={activeStep} connector={<QontoConnector />}>
+            <Stepper activeStep={activeStep} alternativeLabel>
               {STEPS.map((label) => (
-                <Step key={label}>
-                  <StepLabel
-                    StepIconComponent={QontoStepIcon}
-                    sx={{
-                      '& .MuiStepLabel-label': {
-                        typography: 'subtitle2',
-                        color: 'text.disabled'
-                      }
-                    }}
-                  >
-                    {label}
-                  </StepLabel>
+                <Step key={label} sx={{ '& .MuiSvgIcon-root': { color: 'secondary.light' } }}>
+                  <StepLabel>{label}</StepLabel>
                 </Step>
               ))}
             </Stepper>

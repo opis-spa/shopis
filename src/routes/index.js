@@ -200,9 +200,13 @@ export default function Router() {
         ),
         children: [
           { path: ':id/checkout', element: <Checkout /> },
-          { path: ':id/checkout/payment', element: <Payment /> },
-          { path: ':id/checkout/payment/result', element: <PaymentResult /> }
+          { path: ':id/checkout/payment', element: <Payment /> }
         ]
+      },
+      {
+        path: '',
+        element: <LogoOnlyLayout />,
+        children: [{ path: 'payment/result', element: <PaymentResult /> }]
       }
     );
   }
