@@ -207,7 +207,11 @@ function AuthProvider({ children }) {
 
   const resetPassword = async (email) => {
     try {
-      const response = await axios.get(`/api/v1/auth/email/forgot-password/${email}/shopis`);
+      const DOMAIN_HOST = window.location.host;
+      const isRifopis = DOMAIN_HOST.indexOf('rifopis.cl') >= 0;
+      const response = await axios.get(
+        `/api/v1/auth/email/forgot-password/${email}/${isRifopis ? 'rifopis' : 'shopis'}`
+      );
       const { success, result, message } = response.data;
 
       if (success) {
