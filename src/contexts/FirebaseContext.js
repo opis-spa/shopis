@@ -4,7 +4,6 @@ import {
   FacebookAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
-  sendPasswordResetEmail,
   onAuthStateChanged,
   signOut,
   signInWithCustomToken
@@ -49,6 +48,7 @@ const AuthContext = createContext({
   user: {},
   login: () => Promise.resolve(),
   register: () => Promise.resolve(),
+  newPassword: () => Promise.resolve(),
   signup: () => Promise.resolve(),
   loginWithGoogle: () => Promise.resolve(),
   loginWithFaceBook: () => Promise.resolve(),
@@ -206,7 +206,46 @@ function AuthProvider({ children }) {
   };
 
   const resetPassword = async (email) => {
-    await sendPasswordResetEmail(auth, email);
+    try {
+      const response = await axios.get(`/api/v1/auth/email/forgot-password/${email}/shopis`);
+      const { success, result, message } = response.data;
+
+      if (success) {
+        return result;
+      }
+
+      throw new Error(message);
+    } catch (error) {
+      const { message } = error;
+      if (message === 'User not found') {
+        throw new Error('El correo electrónico no se encuentra registrado');
+      }
+      throw error;
+    }
+  };
+
+  const newPassword = async (token, password, newPassword) => {
+    try {
+      const body = {
+        newPassword: password,
+        newPasswordConfirmation: newPassword,
+        newPasswordToken: token
+      };
+      const response = await axios.post(`/api/v1/auth/email/reset-password`, body);
+      const { success, result, message } = response.data;
+
+      if (success) {
+        return result;
+      }
+
+      throw new Error(message);
+    } catch (error) {
+      const { message } = error;
+      if (message === 'User not found') {
+        throw new Error('El correo electrónico no se encuentra registrado');
+      }
+      throw error;
+    }
   };
 
   const setHasPartnership = (value) => {
@@ -245,6 +284,7 @@ function AuthProvider({ children }) {
         loginWithFaceBook,
         logout,
         resetPassword,
+        newPassword,
         setHasPartnership
       }}
     >

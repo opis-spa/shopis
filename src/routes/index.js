@@ -138,7 +138,7 @@ export default function Router() {
             )
           },
           { path: 'reset-password', element: <ResetPassword /> },
-          { path: 'verify', element: <VerifyCode /> }
+          { path: 'verify/:token', element: <VerifyCode /> }
         ]
       },
       // Dashboard Routes
