@@ -97,18 +97,13 @@ export default function AccountSocialLinks() {
 
   const socialLinksSchema = Yup.object().shape({
     facebookLink: Yup.string()
-      .matches(websiteRegex, '*URL inválida.')
-      .matches(facebookRegex, '*La URL debe ser un perfil de Facebook.')
-      .required('*Campo requerido.'),
+      .matches(websiteRegex, 'URL inválida.')
+      .matches(facebookRegex, 'La URL debe ser un perfil de Facebook.'),
     instagramLink: Yup.string()
-      .matches(websiteRegex, '*URL inválida.')
-      .matches(instagramRegex, '*La URL debe ser un perfil de Instagram.')
-      .required('*Campo requerido.'),
-    webpageLink: Yup.string().matches(websiteRegex, '*URL inválida.').required('*Campo requerido.'),
-    whatsappLink: Yup.string()
-      .matches(isNumberRegex, '*Número inválido.')
-      .length(9, '*El número debe tener 8 dígitos.')
-      .required('*Campo requerido.')
+      .matches(websiteRegex, 'URL inválida.')
+      .matches(instagramRegex, 'La URL debe ser un perfil de Instagram.'),
+    webpageLink: Yup.string().matches(websiteRegex, 'URL inválida.'),
+    whatsappLink: Yup.string().matches(isNumberRegex, 'Número inválido.').length(9, '*El número debe tener 8 dígitos.')
   });
 
   const formik = useFormik({
@@ -124,9 +119,11 @@ export default function AccountSocialLinks() {
       try {
         await dispatch(setSocialNetwork(values));
         setSubmitting(false);
-        enqueueSnackbar('Save success', { variant: 'success' });
+        enqueueSnackbar('Redes de contacto guardadas satisfactoriamente', { variant: 'success' });
       } catch (error) {
         console.log(error);
+        setSubmitting(false);
+        enqueueSnackbar('Error al guardar redes de contacto', { variant: 'error' });
       }
     }
   });

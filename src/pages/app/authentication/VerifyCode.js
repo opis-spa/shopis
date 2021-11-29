@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
 import { styled } from '@mui/material/styles';
@@ -12,6 +12,7 @@ import { PATH_AUTH } from '../../../routes/paths';
 // components
 import Page from '../../../components/Page';
 import { VerifyCodeForm } from '../../../components/authentication/verify-code';
+import { NewPasswordForm } from '../../../components/authentication/new-password';
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +26,14 @@ const RootStyle = styled(Page)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function VerifyCode() {
+  const { token } = useParams();
+  const [validate, setValidate] = useState(false);
+
+  const handleValidate = (result) => {
+    if (result) {
+      setValidate(true);
+    }
+  };
   return (
     <RootStyle title="Verificar | shopis">
       <LogoOnlyLayout />
@@ -41,24 +50,42 @@ export default function VerifyCode() {
             Volver
           </Button>
 
-          <Typography variant="h3" paragraph>
-            Por favor revisa tu correo electrónico!
-          </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
-            Te enviamos un correo electrónico con una código de 6 digitos, por favor intresa ese código para verificar
-            tu correo electrónico.
-          </Typography>
+          {validate ? (
+            <>
+              <Typography variant="h3" paragraph>
+                Ingresa una nueva contraseña
+              </Typography>
+              <Typography sx={{ color: 'text.secondary' }}>
+                Te enviamos un correo electrónico con una código de 6 digitos, por favor intresa ese código para
+                verificar tu correo electrónico.
+              </Typography>
 
-          <Box sx={{ mt: 5, mb: 3 }}>
-            <VerifyCodeForm />
-          </Box>
+              <Box sx={{ mt: 5, mb: 3 }}>
+                <NewPasswordForm token={token} />
+              </Box>
+            </>
+          ) : (
+            <>
+              <Typography variant="h3" paragraph>
+                Por favor revisa tu correo electrónico!
+              </Typography>
+              <Typography sx={{ color: 'text.secondary' }}>
+                Te enviamos un correo electrónico con una código de 6 digitos, por favor intresa ese código para
+                verificar tu correo electrónico.
+              </Typography>
 
-          <Typography variant="body2" align="center">
-            No tiene un código? &nbsp;
-            <Link variant="subtitle2" underline="none" onClick={() => {}}>
-              Volver a enviar
-            </Link>
-          </Typography>
+              <Box sx={{ mt: 5, mb: 3 }}>
+                <VerifyCodeForm token={token} onValidate={handleValidate} />
+              </Box>
+
+              <Typography variant="body2" align="center">
+                No tiene un código? &nbsp;
+                <Link variant="subtitle2" underline="none" onClick={() => {}}>
+                  Volver a enviar
+                </Link>
+              </Typography>
+            </>
+          )}
         </Box>
       </Container>
     </RootStyle>

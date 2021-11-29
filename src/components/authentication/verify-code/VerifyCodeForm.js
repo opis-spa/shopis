@@ -1,12 +1,10 @@
 import * as Yup from 'yup';
+import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
-import { useNavigate } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
 import { OutlinedInput, FormHelperText, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-// routes
-import { PATH_APP } from '../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -17,8 +15,17 @@ function maxLength(object) {
   }
 }
 
-export default function VerifyCodeForm() {
-  const navigate = useNavigate();
+const propTypes = {
+  token: PropTypes.string,
+  onValidate: PropTypes.func
+};
+
+const defaultProps = {
+  token: '',
+  onValidate: () => {}
+};
+
+function VerifyCodeForm({ token, onValidate }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const VerifyCodeSchema = Yup.object().shape({
@@ -30,19 +37,20 @@ export default function VerifyCodeForm() {
     code6: Yup.number().required('Code is required')
   });
 
+  const code = token ? token.split('') : [...Array(6)];
   const formik = useFormik({
     initialValues: {
-      code1: '',
-      code2: '',
-      code3: '',
-      code4: '',
-      code5: '',
-      code6: ''
+      code1: code[0],
+      code2: code[1],
+      code3: code[2],
+      code4: code[3],
+      code5: code[4],
+      code6: code[5]
     },
     validationSchema: VerifyCodeSchema,
     onSubmit: async () => {
-      enqueueSnackbar('Verify success', { variant: 'success' });
-      navigate(PATH_APP.root);
+      enqueueSnackbar('Código verificado', { variant: 'success' });
+      onValidate(true);
     }
   });
 
@@ -84,3 +92,8 @@ export default function VerifyCodeForm() {
     </FormikProvider>
   );
 }
+
+VerifyCodeForm.propTypes = propTypes;
+VerifyCodeForm.defaultProps = defaultProps;
+
+export default VerifyCodeForm;

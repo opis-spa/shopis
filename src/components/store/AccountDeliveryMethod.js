@@ -68,9 +68,11 @@ const AccountDeliveryMethod = () => {
       try {
         await dispatch(setDeliveryMethods(values));
         setSubmitting(false);
-        enqueueSnackbar('Save success', { variant: 'success' });
+        enqueueSnackbar('Formas de entrega guardadas satisfactoriamente', { variant: 'success' });
       } catch (error) {
         console.log(error);
+        setSubmitting(false);
+        enqueueSnackbar('Error al guardar formas de entrega', { variant: 'error' });
       }
     }
   });

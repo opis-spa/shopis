@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import { capitalCase } from 'change-case';
 import shareFill from '@iconify/icons-eva/share-fill';
 import roundBanks from '@iconify/icons-ant-design/bank-outlined';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
@@ -46,26 +45,31 @@ export default function Store() {
   const ACCOUNT_TABS = [
     {
       value: 'general',
+      label: 'General',
       icon: <Icon icon={roundAccountBox} width={20} height={20} />,
       component: <AccountGeneral />
     },
     {
       value: 'cuenta_bancaria',
+      label: 'Cuentas bancarias',
       icon: <Icon icon={roundBanks} width={20} height={20} />,
       component: <AccountBilling />
     },
     {
       value: 'formas_de_entrega',
+      label: 'Formas de entrega',
       icon: <Icon icon={deliveryParcel} width={20} height={20} />,
       component: <AccountDeliveryMethod />
     },
     {
       value: 'metodos_de_pago',
+      label: 'Métodos de pago',
       icon: <Icon icon={outlinePayment} width={20} height={20} />,
       component: <AccountPaymentMethod />
     },
     {
       value: 'redes_de_contacto',
+      label: 'Redes de contacto',
       icon: <Icon icon={shareFill} width={20} height={20} />,
       component: <AccountSocialLinks />
     }
@@ -89,7 +93,7 @@ export default function Store() {
             onChange={handleChangeTab}
           >
             {ACCOUNT_TABS.map((tab) => (
-              <Tab disableRipple key={tab.value} label={capitalCase(tab.value)} icon={tab.icon} value={tab.value} />
+              <Tab disableRipple key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
             ))}
           </Tabs>
 

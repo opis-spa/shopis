@@ -31,9 +31,11 @@ const AccountPaymentMethod = () => {
           values.paymentMethods?.indexOf(opisID) === -1 ? [...values.paymentMethods, opisID] : values.paymentMethods;
         await dispatch(setPaymentMethods(valuesToSend));
         setSubmitting(false);
-        enqueueSnackbar('Save success', { variant: 'success' });
+        enqueueSnackbar('Métodos de pago guardados satisfactoriamente', { variant: 'success' });
       } catch (error) {
         console.log(error);
+        setSubmitting(false);
+        enqueueSnackbar('Error al guardar métodos de pago', { variant: 'error' });
       }
     }
   });

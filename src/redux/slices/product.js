@@ -9,6 +9,7 @@ import axios from '../../utils/axios';
 const initialState = {
   isLoading: false,
   error: false,
+  partnership: '',
   products: [],
   product: null,
   sortBy: null,
@@ -151,6 +152,10 @@ const slice = createSlice({
       state.product = state.products.find((product) => paramCase(product.name) === name);
     },
 
+    getStoreProduct(state, action) {
+      state.product = action.payload;
+    },
+
     clearFilterProducts(state) {
       state.filters = initialState.filters;
     },
@@ -266,12 +271,26 @@ const slice = createSlice({
       state.checkout.shipping = shipping;
       state.checkout.total = state.checkout.subtotal - state.checkout.discount + shipping;
     },
+    addStoreProduct(state, action) {
+      state.products = [...state.products, action.payload];
+    },
+    editStoreProduct(state, action) {
+      state.products = state.products.map((prod) => (prod.id === action.payload.id ? action.payload : prod));
+    },
     getCheckoutSuccess(state, action) {
       // state.checkout = initialState.checkout; // this is commment for not cart reload
       state.checkoutResult = {
         success: true,
         ...action.payload
       };
+    },
+    // GET PRODUCTS
+    setParnership(state, action) {
+      state.isLoading = false;
+      if (state.partnership !== action.payload) {
+        state.checkout = initialState.checkout;
+        state.partnership = action.payload;
+      }
     }
   }
 });
@@ -301,7 +320,8 @@ export const {
   createBilling,
   createDelivery,
   createInformation,
-  applyShipping
+  applyShipping,
+  setParnership
 } = slice.actions;
 
 // ----------------------------------------------------------------------
@@ -329,6 +349,18 @@ export function getProductStore(nickname) {
     }
   };
 }
+
+export const getProductByID = (id) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.get(`/api/v1/products/${id}`);
+    dispatch(slice.actions.getStoreProduct(response.data.product));
+  } catch (error) {
+    console.error(error);
+    dispatch(slice.actions.hasError(error));
+    throw error;
+  }
+};
 
 // ----------------------------------------------------------------------
 
@@ -373,7 +405,55 @@ export const createProduct = (body, photos) => async (dispatch) => {
       data,
       headers: { 'Content-Type': 'multipart/form-data' }
     });
-    dispatch(slice.actions.addProduct(response.data.product));
+    dispatch(slice.actions.addStoreProduct(response.data.product));
+  } catch (error) {
+    console.error(error);
+    dispatch(slice.actions.hasError(error));
+    throw error;
+  }
+};
+
+export const editProduct = (body, photos, id) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    delete body.photos;
+    const data = new FormData();
+    Object.keys(body).forEach((item) => {
+      if (typeof body[item] === 'object') {
+        const file = body[item];
+        data.append(item, file);
+      } else {
+        const value = body[item] || '';
+        if (value) {
+          data.append(item, value);
+        }
+      }
+    });
+    if (photos) {
+      photos.forEach((image) => {
+        data.append('photos[]', image);
+      });
+    }
+
+    const response = await axios({
+      method: 'put',
+      url: `/api/v1/products/${id}`,
+      data,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    dispatch(slice.actions.editStoreProduct(response.data.product));
+  } catch (error) {
+    console.error(error);
+    dispatch(slice.actions.hasError(error));
+    throw error;
+  }
+};
+
+export const deleteStoreProduct = (id) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    await axios.delete(`/api/v1/products/${id}`);
+    dispatch(slice.actions.deleteProduct(id));
   } catch (error) {
     console.error(error);
     dispatch(slice.actions.hasError(error));

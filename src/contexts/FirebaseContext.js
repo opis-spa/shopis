@@ -4,7 +4,6 @@ import {
   FacebookAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
-  sendPasswordResetEmail,
   onAuthStateChanged,
   signOut,
   signInWithCustomToken
@@ -17,17 +16,26 @@ import { auth } from '../utils/firebase';
 const initialState = {
   isAuthenticated: false,
   isInitialized: false,
+  hasPartnership: false,
   user: null
 };
 
 const reducer = (state, action) => {
   if (action.type === 'INITIALISE') {
-    const { isAuthenticated, user } = action.payload;
+    const { isAuthenticated, user, hasPartnership } = action.payload;
     return {
       ...state,
       isAuthenticated,
+      hasPartnership,
       isInitialized: true,
       user
+    };
+  }
+
+  if (action.type === 'SET_PARTNERSHIP') {
+    return {
+      ...state,
+      hasPartnership: action.payload
     };
   }
 
@@ -40,6 +48,7 @@ const AuthContext = createContext({
   user: {},
   login: () => Promise.resolve(),
   register: () => Promise.resolve(),
+  newPassword: () => Promise.resolve(),
   signup: () => Promise.resolve(),
   loginWithGoogle: () => Promise.resolve(),
   loginWithFaceBook: () => Promise.resolve(),
@@ -58,12 +67,14 @@ function AuthProvider({ children }) {
   const init = async () => {
     try {
       const response = await axios.get('/api/v1/user/profile');
+      const resPartnership = await axios.get('/api/v1/partnerships');
       const { success, user: userData } = response.data;
+      const { partnership } = resPartnership.data;
       if (success) {
         setProfile(userData);
         dispatch({
           type: 'INITIALISE',
-          payload: { isAuthenticated: true, user: userData }
+          payload: { isAuthenticated: true, user: userData, hasPartnership: Boolean(partnership?._id) }
         });
 
         return true;
@@ -195,7 +206,57 @@ function AuthProvider({ children }) {
   };
 
   const resetPassword = async (email) => {
-    await sendPasswordResetEmail(auth, email);
+    try {
+      const DOMAIN_HOST = window.location.host;
+      const isRifopis = DOMAIN_HOST.indexOf('rifopis.cl') >= 0;
+      const response = await axios.get(
+        `/api/v1/auth/email/forgot-password/${email}/${isRifopis ? 'rifopis' : 'shopis'}`
+      );
+      const { success, result, message } = response.data;
+
+      if (success) {
+        return result;
+      }
+
+      throw new Error(message);
+    } catch (error) {
+      const { message } = error;
+      if (message === 'User not found') {
+        throw new Error('El correo electrónico no se encuentra registrado');
+      }
+      throw error;
+    }
+  };
+
+  const newPassword = async (token, password, newPassword) => {
+    try {
+      const body = {
+        newPassword: password,
+        newPasswordConfirmation: newPassword,
+        newPasswordToken: token
+      };
+      const response = await axios.post(`/api/v1/auth/email/reset-password`, body);
+      const { success, result, message } = response.data;
+
+      if (success) {
+        return result;
+      }
+
+      throw new Error(message);
+    } catch (error) {
+      const { message } = error;
+      if (message === 'User not found') {
+        throw new Error('El correo electrónico no se encuentra registrado');
+      }
+      throw error;
+    }
+  };
+
+  const setHasPartnership = (value) => {
+    dispatch({
+      type: 'SET_PARTNERSHIP',
+      payload: value
+    });
   };
 
   const user = { ...state.user };
@@ -226,7 +287,9 @@ function AuthProvider({ children }) {
         loginWithGoogle,
         loginWithFaceBook,
         logout,
-        resetPassword
+        resetPassword,
+        newPassword,
+        setHasPartnership
       }}
     >
       {children}

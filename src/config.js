@@ -10,6 +10,7 @@ export const firebaseConfig = {
 };
 
 export const isProduction = process.env.REACT_APP_PROD === 'true' || false;
+export const urlShop = process.env.REACT_APP_URL_SHOP;
 export const googleAnalyticsConfig = process.env.REACT_APP_GA_MEASUREMENT_ID;
 export const facebookPixelConfig = process.env.REACT_APP_FACEBOOK_PIXEL;
 export const hotjarConfig = process.env.REACT_APP_HOTJAR;

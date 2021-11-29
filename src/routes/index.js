@@ -69,7 +69,7 @@ export default function Router() {
             )
           },
           { path: 'reset-password', element: <ResetPassword /> },
-          { path: 'verify', element: <VerifyCode /> }
+          { path: 'verify/:token', element: <VerifyCode /> }
         ]
       },
       {
@@ -138,7 +138,7 @@ export default function Router() {
             )
           },
           { path: 'reset-password', element: <ResetPassword /> },
-          { path: 'verify', element: <VerifyCode /> }
+          { path: 'verify/:token', element: <VerifyCode /> }
         ]
       },
       // Dashboard Routes
@@ -155,10 +155,10 @@ export default function Router() {
           { path: 'store', element: <Store /> },
           { path: 'products', element: <Products /> },
           { path: 'product/new', element: <ProductCreate /> },
-          { path: 'product/:name/edit', element: <ProductCreate /> },
+          { path: 'product/:id', element: <ProductCreate /> },
           { path: 'products', element: <Products /> },
           { path: 'orders', element: <Orders /> },
-          { path: 'order/:id', element: <Order /> },
+          { path: 'orders/:id', element: <Order /> },
           { path: 'coupons', element: <Coupons /> }
         ]
       },
@@ -200,9 +200,13 @@ export default function Router() {
         ),
         children: [
           { path: ':id/checkout', element: <Checkout /> },
-          { path: ':id/checkout/payment', element: <Payment /> },
-          { path: ':id/checkout/payment/result', element: <PaymentResult /> }
+          { path: ':id/checkout/payment', element: <Payment /> }
         ]
+      },
+      {
+        path: '',
+        element: <LogoOnlyLayout />,
+        children: [{ path: 'payment/result', element: <PaymentResult /> }]
       }
     );
   }
@@ -237,8 +241,8 @@ const DashboardBusiness = Loadable(lazy(() => import('../pages/app/dashboard/Bus
 const Store = Loadable(lazy(() => import('../pages/app/store/Store')));
 const Products = Loadable(lazy(() => import('../pages/app/store/product/ProductList')));
 const ProductCreate = Loadable(lazy(() => import('../pages/app/store/product/ProductCreate')));
-const Orders = Loadable(lazy(() => import('../pages/app/store/Orders')));
-const Order = Loadable(lazy(() => import('../pages/app/store/Order')));
+const Orders = Loadable(lazy(() => import('../pages/app/store/orders/OrderList')));
+const Order = Loadable(lazy(() => import('../pages/app/store/orders/OrderDetail')));
 const Coupons = Loadable(lazy(() => import('../pages/app/store/Coupons')));
 // Shop
 const ShopHome = Loadable(lazy(() => import('../pages/shop/Home')));

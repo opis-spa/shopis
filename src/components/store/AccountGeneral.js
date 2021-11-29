@@ -22,18 +22,19 @@ import { styled } from '@mui/styles';
 import QRCode from 'qrcode.react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 // hooks
-import useAuth from '../../hooks/useAuth';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import { UploadAvatar } from '../upload';
 // redux
 import { useSelector, useDispatch } from '../../redux/store';
-import { setNickname } from '../../redux/slices/store';
+import { setNickname, updateStore } from '../../redux/slices/store';
 // utils
 import { fData } from '../../utils/formatNumber';
 import axios from '../../utils/axios';
 //
 import countries from '../../assets/data/countries';
 import { regiones } from '../../assets/data/regiones';
+// config
+import { urlShop } from '../../config';
 
 // ----------------------------------------------------------------------
 
@@ -45,7 +46,7 @@ const LinkTextField = styled(TextField)(({ theme }) => ({
     position: 'relative'
   },
   '& .MuiInputBase-root::before': {
-    content: '"https://menu.opis.cl/"',
+    content: `"${urlShop}"`,
     display: 'block',
     position: 'absolute',
     left: theme.spacing(2),
@@ -57,46 +58,45 @@ export default function AccountGeneral() {
   const isMountedRef = useIsMountedRef();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const { updateProfile } = useAuth();
-  const { data: parnership } = useSelector((state) => state.store);
+  const { data: partnership } = useSelector((state) => state.store);
   const [cities, setCities] = useState([]);
   const [link, setLink] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [isLoadingNickname, setIsLoadingNickname] = useState(false);
-  const BASE_CATALOGUE_URL = 'https://menu.opis.cl/';
-
-  useEffect(() => {
-    setLink(() => parnership?.nickname || '');
-  }, [parnership]);
+  const BASE_CATALOGUE_URL = urlShop;
 
   const UpdateUserSchema = Yup.object().shape({
-    displayName: Yup.string().required('Name is required.'),
-    nickname: Yup.string().required('*Campo requerido.')
+    nickname: Yup.string()
+      .trim()
+      .matches(/^[a-z0-9_-]+$/, 'Solo se permiten letras en minúsculas y números, sin espacios o caracteres especiales')
+      .required('*Campo requerido.')
   });
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: parnership?.name || '',
-      legalName: parnership?.legalName || '',
-      identity: parnership?.identity || '',
-      identityCode: parnership?.identityCode || '',
-      nickname: parnership?.nickname || '',
+      photoURL: partnership?.photo || '',
+      name: partnership?.name || '',
+      legalName: partnership?.legalName || '',
+      identity: partnership?.identity || '',
+      identityCode: partnership?.identityCode || '',
+      nickname: partnership?.nickname || '',
       location: {
         address: '',
         addressMore: '',
         state: '',
         city: '',
-        country: 'CL'
+        country: 'CL',
+        ...(partnership?.location ? partnership?.location : {})
       },
-      about: parnership?.about || '',
-      isOnline: parnership?.isOnline || true
+      about: partnership?.about || '',
+      status: partnership?.status || false
     },
 
     validationSchema: UpdateUserSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
-        await updateProfile({ ...values });
+        await dispatch(updateStore({ ...values }));
         enqueueSnackbar('Datos guardados satisfactoriamente', { variant: 'success' });
         if (isMountedRef.current) {
           setSubmitting(false);
@@ -122,6 +122,18 @@ export default function AccountGeneral() {
     setFieldError,
     setFieldTouched
   } = formik;
+
+  useEffect(() => {
+    if (partnership) {
+      setLink(() => partnership.nickname || '');
+      if (partnership.location?.state) {
+        const { comunas: citiesMap } = regiones.find((item) => item.region === partnership.location.state);
+        setCities(citiesMap);
+      } else {
+        setCities([]);
+      }
+    }
+  }, [partnership]);
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -233,7 +245,7 @@ export default function AccountGeneral() {
                   </FormHelperText>
 
                   <FormControlLabel
-                    control={<Switch {...getFieldProps('isPublic')} color="primary" />}
+                    control={<Switch {...getFieldProps('status')} checked={values.status} color="primary" />}
                     labelPlacement="start"
                     label="Tienda Activa"
                     sx={{ mt: 2 }}
@@ -314,7 +326,7 @@ export default function AccountGeneral() {
             <Card sx={{ p: 3 }}>
               <Stack spacing={{ xs: 2, md: 3 }}>
                 <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                  <TextField fullWidth label="Nombre Comercial" {...getFieldProps('name')} />
+                  <TextField fullWidth label="Nombre de tu tienda" {...getFieldProps('name')} />
                 </Stack>
 
                 <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
@@ -379,8 +391,8 @@ export default function AccountGeneral() {
                     value={values.location?.state || ''}
                     onChange={handleChangeState}
                     SelectProps={{ native: true }}
-                    error={Boolean(touched.country && errors.country)}
-                    helperText={touched.country && errors.country}
+                    error={Boolean(touched.location?.state && errors.location?.state)}
+                    helperText={touched.location?.state && errors.location?.state}
                   >
                     <option value="" />
                     {regiones.map((option) => (
@@ -398,8 +410,8 @@ export default function AccountGeneral() {
                     value={values.location?.city || ''}
                     onChange={handleChangeCity}
                     SelectProps={{ native: true }}
-                    error={Boolean(touched.country && errors.country)}
-                    helperText={touched.country && errors.country}
+                    error={Boolean(touched.location?.city && errors.location?.city)}
+                    helperText={touched.location?.city && errors.location?.city}
                   >
                     <option value="" />
                     {cities.map((item) => (

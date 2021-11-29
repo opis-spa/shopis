@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-
-//
+// redux
+import { useDispatch } from '../../redux/store';
+import { setParnership } from '../../redux/slices/product';
+// hooks
+import usePartnership from '../../hooks/usePartnership';
+// components
 import MainNavbar from './MainNavbar';
 import MainFooter from './MainFooter';
 
@@ -23,6 +27,14 @@ const MainStyle = styled('div')(({ theme }) => ({
 }));
 
 export default function MainLayout() {
+  const dispatch = useDispatch();
+  const { partnership } = usePartnership();
+  const { nickname } = partnership;
+
+  useEffect(() => {
+    dispatch(setParnership(nickname));
+  }, [dispatch, nickname]);
+
   return (
     <>
       <MainNavbar />
