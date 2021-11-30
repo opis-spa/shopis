@@ -158,15 +158,8 @@ export default function OrderList() {
                 />
                 <TableBody>
                   {filteredSales.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const {
-                      id,
-                      orderCode,
-                      amountTotal,
-                      createdAt,
-                      stock,
-                      status,
-                      customer: { name }
-                    } = row;
+                    const { id, orderCode, amountTotal, createdAt, stock, status, customer, user } = row;
+                    const name = customer?.name || user?.name;
 
                     const isItemSelected = selected.indexOf(id) !== -1;
 
