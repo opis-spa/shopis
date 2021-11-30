@@ -67,14 +67,22 @@ function AuthProvider({ children }) {
   const init = async () => {
     try {
       const response = await axios.get('/api/v1/user/profile');
-      const resPartnership = await axios.get('/api/v1/partnerships');
       const { success, user: userData } = response.data;
-      const { partnership } = resPartnership.data;
+
+      let hasPartnership = false;
+      const DOMAIN_HOST = window.location.host;
+      const isRifopis = DOMAIN_HOST.indexOf('rifopis.cl') >= 0;
+      if (isRifopis) {
+        const resPartnership = await axios.get('/api/v1/partnerships');
+        const { partnership } = resPartnership.data;
+        hasPartnership = Boolean(partnership?._id);
+      }
+
       if (success) {
         setProfile(userData);
         dispatch({
           type: 'INITIALISE',
-          payload: { isAuthenticated: true, user: userData, hasPartnership: Boolean(partnership?._id) }
+          payload: { isAuthenticated: true, user: userData, hasPartnership }
         });
 
         return true;
