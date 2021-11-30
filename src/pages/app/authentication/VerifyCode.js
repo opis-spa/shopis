@@ -50,10 +50,6 @@ export default function VerifyCode() {
               <Typography variant="h3" paragraph>
                 Ingresa una nueva contraseña
               </Typography>
-              <Typography sx={{ color: 'text.secondary' }}>
-                Te enviamos un correo electrónico con una código de 6 digitos, por favor intresa ese código para
-                verificar tu correo electrónico.
-              </Typography>
 
               <Box sx={{ mt: 5, mb: 3 }}>
                 <NewPasswordForm token={token} />
