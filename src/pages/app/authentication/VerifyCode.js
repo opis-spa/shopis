@@ -52,7 +52,7 @@ export default function VerifyCode() {
               </Typography>
 
               <Box sx={{ mt: 5, mb: 3 }}>
-                <NewPasswordForm token={token} />
+                <NewPasswordForm token={validate} />
               </Box>
             </>
           ) : (
