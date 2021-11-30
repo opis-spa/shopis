@@ -31,8 +31,12 @@ function NewPassword({ token }) {
 
   const VerifyCodeSchema = Yup.object().shape({
     token: Yup.string().required('El código es requerido'),
-    newPassword: Yup.string().required('La contraseña es requerida'),
-    newPasswordConfirmation: Yup.string().required('La confirmación de la contraseña es requerida')
+    newPassword: Yup.string()
+      .min(8, 'La contraseña debe tene más de 8 caracteres')
+      .required('La contraseña es requerida'),
+    newPasswordConfirmation: Yup.string()
+      .oneOf([Yup.ref('newPassword'), null], 'La confirmación de la contraseña no coincide')
+      .required('La confirmación de la contraseña es requerida')
   });
 
   const formik = useFormik({

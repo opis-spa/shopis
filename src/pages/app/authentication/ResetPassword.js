@@ -3,8 +3,6 @@ import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Button, Container, Typography } from '@mui/material';
-// layouts
-import LogoOnlyLayout from '../../../layouts/LogoOnlyLayout';
 // routes
 import { PATH_AUTH } from '../../../routes/paths';
 // components
@@ -30,9 +28,7 @@ export default function ResetPassword() {
   const [sent, setSent] = useState(false);
 
   return (
-    <RootStyle title="Reiniciar contraseña | shopis">
-      <LogoOnlyLayout />
-
+    <RootStyle title="Reiniciar contraseña">
       <Container>
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
           {!sent ? (

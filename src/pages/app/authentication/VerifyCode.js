@@ -5,8 +5,6 @@ import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Button, Link, Container, Typography } from '@mui/material';
-// layouts
-import LogoOnlyLayout from '../../../layouts/LogoOnlyLayout';
 // routes
 import { PATH_AUTH } from '../../../routes/paths';
 // components
@@ -27,17 +25,14 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function VerifyCode() {
   const { token } = useParams();
-  const [validate, setValidate] = useState(false);
+  const [validate, setValidate] = useState(token);
 
   const handleValidate = (result) => {
-    if (result) {
-      setValidate(true);
-    }
+    setValidate(result || '');
   };
-  return (
-    <RootStyle title="Verificar | shopis">
-      <LogoOnlyLayout />
 
+  return (
+    <RootStyle title="Verificar">
       <Container>
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
           <Button
@@ -50,7 +45,7 @@ export default function VerifyCode() {
             Volver
           </Button>
 
-          {validate ? (
+          {(validate || '') !== '' ? (
             <>
               <Typography variant="h3" paragraph>
                 Ingresa una nueva contraseña
@@ -80,7 +75,7 @@ export default function VerifyCode() {
 
               <Typography variant="body2" align="center">
                 No tiene un código? &nbsp;
-                <Link variant="subtitle2" underline="none" onClick={() => {}}>
+                <Link underline="none" variant="subtitle2" component={RouterLink} to={PATH_AUTH.resetPassword}>
                   Volver a enviar
                 </Link>
               </Typography>

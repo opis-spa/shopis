@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
@@ -29,16 +30,17 @@ function VerifyCodeForm({ token, onValidate }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const VerifyCodeSchema = Yup.object().shape({
-    code1: Yup.number().required('Code is required'),
-    code2: Yup.number().required('Code is required'),
-    code3: Yup.number().required('Code is required'),
-    code4: Yup.number().required('Code is required'),
-    code5: Yup.number().required('Code is required'),
-    code6: Yup.number().required('Code is required')
+    code1: Yup.number().required('Código es requerido'),
+    code2: Yup.number().required('Código es requerido'),
+    code3: Yup.number().required('Código es requerido'),
+    code4: Yup.number().required('Código es requerido'),
+    code5: Yup.number().required('Código es requerido'),
+    code6: Yup.number().required('Código es requerido')
   });
 
-  const code = token ? token.split('') : [...Array(6)];
+  const code = token ? token.split('') : [...Array(6)].map(() => '');
   const formik = useFormik({
+    enableReinitialize: false,
     initialValues: {
       code1: code[0],
       code2: code[1],
@@ -48,41 +50,134 @@ function VerifyCodeForm({ token, onValidate }) {
       code6: code[5]
     },
     validationSchema: VerifyCodeSchema,
-    onSubmit: async () => {
+    onSubmit: async (values) => {
       enqueueSnackbar('Código verificado', { variant: 'success' });
-      onValidate(true);
+      const tokenCode = Object.keys(values)
+        .filter((item) => values[item])
+        .join('');
+      onValidate(tokenCode);
     }
   });
 
-  const { values, errors, isValid, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, isValid, touched, isSubmitting, handleSubmit, submitForm, getFieldProps } = formik;
+
+  useEffect(() => {
+    const isComplete = token.length === 6;
+    if (isComplete) {
+      formik.submitCount();
+    }
+  }, [formik, submitForm, token]);
 
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack direction="row" spacing={2} justifyContent="center">
-          {Object.keys(values).map((item) => (
-            <OutlinedInput
-              key={item}
-              {...getFieldProps(item)}
-              type="number"
-              placeholder="-"
-              onInput={maxLength}
-              error={Boolean(touched[item] && errors[item])}
-              inputProps={{
-                maxLength: 1,
-                sx: {
-                  p: 0,
-                  textAlign: 'center',
-                  width: { xs: 36, sm: 56 },
-                  height: { xs: 36, sm: 56 }
-                }
-              }}
-            />
-          ))}
+          <OutlinedInput
+            {...getFieldProps('code1')}
+            type="number"
+            disabled={isSubmitting}
+            placeholder="-"
+            onInput={maxLength}
+            error={Boolean(touched.code1 && errors.code1)}
+            inputProps={{
+              maxLength: 1,
+              sx: {
+                p: 0,
+                textAlign: 'center',
+                width: { xs: 36, sm: 56 },
+                height: { xs: 36, sm: 56 }
+              }
+            }}
+          />
+          <OutlinedInput
+            {...getFieldProps('code2')}
+            type="number"
+            disabled={isSubmitting}
+            placeholder="-"
+            onInput={maxLength}
+            error={Boolean(touched.code2 && errors.code2)}
+            inputProps={{
+              maxLength: 1,
+              sx: {
+                p: 0,
+                textAlign: 'center',
+                width: { xs: 36, sm: 56 },
+                height: { xs: 36, sm: 56 }
+              }
+            }}
+          />
+          <OutlinedInput
+            {...getFieldProps('code3')}
+            type="number"
+            disabled={isSubmitting}
+            placeholder="-"
+            onInput={maxLength}
+            error={Boolean(touched.code3 && errors.code3)}
+            inputProps={{
+              maxLength: 1,
+              sx: {
+                p: 0,
+                textAlign: 'center',
+                width: { xs: 36, sm: 56 },
+                height: { xs: 36, sm: 56 }
+              }
+            }}
+          />
+          <OutlinedInput
+            {...getFieldProps('code4')}
+            type="number"
+            disabled={isSubmitting}
+            placeholder="-"
+            onInput={maxLength}
+            error={Boolean(touched.code4 && errors.code4)}
+            inputProps={{
+              maxLength: 1,
+              sx: {
+                p: 0,
+                textAlign: 'center',
+                width: { xs: 36, sm: 56 },
+                height: { xs: 36, sm: 56 }
+              }
+            }}
+          />
+          <OutlinedInput
+            {...getFieldProps('code5')}
+            type="number"
+            disabled={isSubmitting}
+            placeholder="-"
+            onInput={maxLength}
+            error={Boolean(touched.code5 && errors.code5)}
+            inputProps={{
+              maxLength: 1,
+              sx: {
+                p: 0,
+                textAlign: 'center',
+                width: { xs: 36, sm: 56 },
+                height: { xs: 36, sm: 56 }
+              }
+            }}
+          />
+          <OutlinedInput
+            {...getFieldProps('code6')}
+            type="number"
+            disabled={isSubmitting}
+            placeholder="-"
+            onInput={maxLength}
+            error={Boolean(touched.code6 && errors.code6)}
+            inputProps={{
+              maxLength: 1,
+              sx: {
+                p: 0,
+                textAlign: 'center',
+                width: { xs: 36, sm: 56 },
+                height: { xs: 36, sm: 56 }
+              }
+            }}
+          />
         </Stack>
 
         <FormHelperText error={!isValid} style={{ textAlign: 'right' }}>
-          {!isValid && 'Code is required'}
+          {!isValid && 'El código es requerido'}
         </FormHelperText>
 
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting} sx={{ mt: 3 }}>
