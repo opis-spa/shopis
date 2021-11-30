@@ -53,7 +53,7 @@ function VerifyCodeForm({ token, onValidate }) {
     onSubmit: async (values) => {
       enqueueSnackbar('Código verificado', { variant: 'success' });
       const tokenCode = Object.keys(values)
-        .filter((item) => values[item])
+        .map((item) => values[item])
         .join('');
       onValidate(tokenCode);
     }
