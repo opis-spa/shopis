@@ -72,10 +72,12 @@ function AuthProvider({ children }) {
       let hasPartnership = false;
       const DOMAIN_HOST = window.location.host;
       const isRifopis = DOMAIN_HOST.indexOf('rifopis.cl') >= 0;
-      if (isRifopis) {
+      if (!isRifopis) {
         const resPartnership = await axios.get('/api/v1/partnerships');
         const { partnership } = resPartnership.data;
         hasPartnership = Boolean(partnership?._id);
+      } else {
+        hasPartnership = true;
       }
 
       if (success) {
