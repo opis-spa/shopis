@@ -45,16 +45,19 @@ export default function EcommerceBestSalesman() {
             </TableHead>
             <TableBody>
               {sales.map((row) => {
-                const { orderCode, customer, paymentMethod, status, amountTotal } = row;
+                const { orderCode, customer, user, paymentMethod, status, amountTotal } = row;
+                const name = customer?.name || user?.name;
+                const photo = customer?.photo || user?.photo;
+                const email = customer?.email || user?.email;
                 return (
                   <TableRow key={orderCode}>
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Avatar alt={customer.name} src={customer.photo} />
+                        <Avatar alt={name} src={photo} />
                         <Box sx={{ ml: 2 }}>
-                          <Typography variant="subtitle2"> {customer.name}</Typography>
+                          <Typography variant="subtitle2"> {name}</Typography>
                           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                            {customer.email}
+                            {email}
                           </Typography>
                         </Box>
                       </Box>
