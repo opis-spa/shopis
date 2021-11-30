@@ -76,6 +76,8 @@ function AuthProvider({ children }) {
         const resPartnership = await axios.get('/api/v1/partnerships');
         const { partnership } = resPartnership.data;
         hasPartnership = Boolean(partnership?._id);
+      } else {
+        hasPartnership = true;
       }
 
       if (success) {
