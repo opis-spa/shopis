@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // materials
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Button, Card, Stack, Divider, Typography } from '@mui/material';
+import { Box, Card, Stack, Divider, Typography } from '@mui/material';
 // components
 import RaffleProgress from './RaffleProgress';
 import RafflePrizes from './RafflePrizes';
 import ButtonTicket from '../ButtonTicket';
 import Scrollbar from '../../Scrollbar';
 import RifopisPolaroid from '../RifopisPolaroid';
-import { MHidden } from '../../@material-extend';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   boxShadow: '-2px -2px 14px rgba(255, 194, 36, 0.2)',
@@ -76,12 +75,6 @@ function Raffles(props) {
               />
             </Stack>
           </Box>
-
-          <MHidden width="mdDown">
-            <Button color="inherit" variant="outlined">
-              Detalle
-            </Button>
-          </MHidden>
 
           <StyledBox>
             <Typography
