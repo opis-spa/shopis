@@ -25,25 +25,8 @@ import { urlShop } from '../../../config';
 const PhotoBoxStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(5, 3),
   borderRadius: 16,
-  // border: `1px solid ${theme.palette.primary.main}`,
   boxShadow: 'inset 2px 2px 10px .5px rgba(0,0,0,.1)',
   textAlign: 'center'
-}));
-
-const LinkTextField = styled(TextField)(({ theme }) => ({
-  '& .MuiInputBase-input': {
-    paddingLeft: 142.75 + 16
-  },
-  '& .MuiInputBase-root': {
-    position: 'relative'
-  },
-  '& .MuiInputBase-root::before': {
-    content: `"${urlShop}"`,
-    display: 'block',
-    position: 'absolute',
-    left: theme.spacing(2),
-    top: 16.5
-  }
 }));
 
 const CreateStoreForm = ({ nextStep }) => {
@@ -57,30 +40,46 @@ const CreateStoreForm = ({ nextStep }) => {
     name: Yup.string().required('Campo requerido.'),
     identityCode: Yup.string(),
     nickname: Yup.string()
-      .trim()
-      .matches(/^[a-z0-9_-]+$/, 'Solo se permiten letras en minúsculas y números, sin espacios o caracteres especiales')
-      .required('El link es requerido')
   });
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      nickname: '',
+      nickname: urlShop,
       name: '',
       identityCode: ''
     },
     validationSchema: CreateStoreSchema,
     onSubmit: async (values, { setFieldError, setSubmitting }) => {
       try {
-        if (values.nickname !== '') {
-          const response = await axios.get(`/api/v1/partnerships/validate-nickname/${values.nickname}`);
-          if (!response.data.success) {
-            setFieldError('nickname', 'El link ya está registrado');
-            setSubmitting(false);
-            return;
-          }
+        const trimValue = values.nickname.trim();
+        const containDomain = Boolean(trimValue.indexOf(urlShop) === 0);
+        if (!containDomain) {
+          setFieldError('nickname', 'Link inválido');
+          setSubmitting(false);
+          return;
         }
-        await dispatch(createStore(values, photo));
+        const nicknameValue = trimValue.replace(urlShop, '');
+        const isValid = /^[a-z0-9_-]+$/;
+        if (!isValid.test(nicknameValue)) {
+          if (nicknameValue === '') {
+            setFieldError('nickname', 'El link es requerido');
+          } else {
+            setFieldError(
+              'nickname',
+              'Solo se permiten letras en minúsculas y números, sin espacios o caracteres especiales'
+            );
+          }
+          setSubmitting(false);
+          return;
+        }
+        const response = await axios.get(`/api/v1/partnerships/validate-nickname/${nicknameValue}`);
+        if (!response.data.success) {
+          setFieldError('nickname', 'El link ya está registrado');
+          setSubmitting(false);
+          return;
+        }
+        await dispatch(createStore({ ...values, nickname: nicknameValue }, photo));
         setSubmitting(false);
         enqueueSnackbar('Tienda creada satisfactoriamente', { variant: 'success' });
         nextStep();
@@ -127,7 +126,18 @@ const CreateStoreForm = ({ nextStep }) => {
     debounce(async (value) => {
       setIsValidatingNickname(true);
       try {
-        if (value !== '') {
+        const isValid = /^[a-z0-9_-]+$/;
+        if (!isValid.test(value)) {
+          await setFieldTouched('nickname', true, false);
+          if (value !== '') {
+            setFieldError(
+              'nickname',
+              'Solo se permiten letras en minúsculas y números, sin espacios o caracteres especiales'
+            );
+          } else {
+            setFieldError('nickname', 'El link es requerido');
+          }
+        } else {
           await axios.get(`/api/v1/partnerships/validate-nickname/${value}`);
         }
         setIsValidatingNickname(false);
@@ -143,19 +153,24 @@ const CreateStoreForm = ({ nextStep }) => {
     []
   );
 
-  const handleChangeNickname = (e) => {
+  const handleChangeNickname = async (e) => {
     const { value } = e.target;
-    setFieldValue('nickname', value);
-    setIsValidatingNickname(true);
-    setNicknameChanges((prev) => prev + 1);
-    debounceNickname(value);
+    const trimValue = value.trim();
+    const containDomain = Boolean(trimValue.indexOf(urlShop) === 0);
+    if (containDomain) {
+      setFieldValue('nickname', trimValue);
+      setNicknameChanges((prev) => prev + 1);
+      const nicknameValue = trimValue.replace(urlShop, '');
+      setIsValidatingNickname(true);
+      debounceNickname(nicknameValue);
+    }
   };
 
   const handleChangeName = (e) => {
     const { value } = e.target;
     setFieldValue('name', value);
     if (!nicknameChanges) {
-      setFieldValue('nickname', paramCase(value));
+      setFieldValue('nickname', `${urlShop}${paramCase(value)}`);
       setIsValidatingNickname(true);
       debounceNickname(paramCase(value));
     }
@@ -217,7 +232,7 @@ const CreateStoreForm = ({ nextStep }) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <LinkTextField
+                <TextField
                   fullWidth
                   required
                   label="Shopis Link a tu tienda"

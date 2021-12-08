@@ -17,7 +17,6 @@ import {
   Button
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { styled } from '@mui/styles';
 // QR Code
 import QRCode from 'qrcode.react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -36,24 +35,6 @@ import { regiones } from '../../assets/data/regiones';
 // config
 import { urlShop } from '../../config';
 
-// ----------------------------------------------------------------------
-
-const LinkTextField = styled(TextField)(({ theme }) => ({
-  '& .MuiInputBase-input': {
-    paddingLeft: 142.75 + 16
-  },
-  '& .MuiInputBase-root': {
-    position: 'relative'
-  },
-  '& .MuiInputBase-root::before': {
-    content: `"${urlShop}"`,
-    display: 'block',
-    position: 'absolute',
-    left: theme.spacing(2),
-    top: 16.5
-  }
-}));
-
 export default function AccountGeneral() {
   const isMountedRef = useIsMountedRef();
   const dispatch = useDispatch();
@@ -67,9 +48,6 @@ export default function AccountGeneral() {
 
   const UpdateUserSchema = Yup.object().shape({
     nickname: Yup.string()
-      .trim()
-      .matches(/^[a-z0-9_-]+$/, 'Solo se permiten letras en minúsculas y números, sin espacios o caracteres especiales')
-      .required('*Campo requerido.')
   });
 
   const formik = useFormik({
@@ -80,7 +58,7 @@ export default function AccountGeneral() {
       legalName: partnership?.legalName || '',
       identity: partnership?.identity || '',
       identityCode: partnership?.identityCode || '',
-      nickname: partnership?.nickname || '',
+      nickname: partnership?.nickname ? `${BASE_CATALOGUE_URL}${partnership?.nickname}` : '',
       location: {
         address: '',
         addressMore: '',
@@ -118,14 +96,13 @@ export default function AccountGeneral() {
     handleSubmit,
     getFieldProps,
     setFieldValue,
-    validateField,
     setFieldError,
     setFieldTouched
   } = formik;
 
   useEffect(() => {
     if (partnership) {
-      setLink(() => partnership.nickname || '');
+      setLink(() => (partnership?.nickname ? `${BASE_CATALOGUE_URL}${partnership?.nickname}` : ''));
       if (partnership.location?.state) {
         const { comunas: citiesMap } = regiones.find((item) => item.region === partnership.location.state);
         setCities(citiesMap);
@@ -133,7 +110,7 @@ export default function AccountGeneral() {
         setCities([]);
       }
     }
-  }, [partnership]);
+  }, [partnership, BASE_CATALOGUE_URL]);
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -180,15 +157,41 @@ export default function AccountGeneral() {
     document.body.removeChild(downloadLink);
   };
 
+  const handleChangeNickname = async (e) => {
+    const { value } = e.target;
+    const trimValue = value.trim();
+    const containDomain = Boolean(trimValue.indexOf(BASE_CATALOGUE_URL) === 0);
+    if (containDomain) {
+      await setFieldValue('nickname', trimValue);
+      const nicknameValue = trimValue.replace(BASE_CATALOGUE_URL, '');
+      const isValid = /^[a-z0-9_-]+$/;
+      if (!isValid.test(nicknameValue)) {
+        await setFieldTouched('nickname', true, false);
+        if (nicknameValue === '') {
+          setFieldError('nickname', 'Campo requerido');
+        } else {
+          setFieldError(
+            'nickname',
+            'Solo se permiten letras en minúsculas y números, sin espacios o caracteres especiales'
+          );
+        }
+      }
+    }
+  };
+
   const handleSaveNickname = async () => {
     setIsLoadingNickname(() => true);
     try {
-      await validateField('nickname');
-      if (errors.nickname) return;
-      const response = await axios.get(`/api/v1/partnerships/validate-nickname/${values.nickname}`);
+      await handleChangeNickname({ target: { value: values.nickname } });
+      if (errors.nickname) {
+        setIsLoadingNickname(() => false);
+        return;
+      }
+      const nicknameValue = values.nickname.replace(BASE_CATALOGUE_URL, '');
+      const response = await axios.get(`/api/v1/partnerships/validate-nickname/${nicknameValue}`);
       const { success } = response.data;
       if (success) {
-        await dispatch(setNickname(values.nickname));
+        await dispatch(setNickname(nicknameValue));
         setIsLoadingNickname(() => false);
         setIsEditing(() => false);
         enqueueSnackbar('Link actualizado satisfactoriamente', { variant: 'success' });
@@ -258,10 +261,11 @@ export default function AccountGeneral() {
                   <Typography variant="subtitle1" sx={{ mb: 2 }}>
                     Catálogo Digital
                   </Typography>
-                  <LinkTextField
+                  <TextField
                     label="Link"
                     fullWidth
                     {...getFieldProps('nickname')}
+                    onChange={handleChangeNickname}
                     InputLabelProps={{ shrink: true }}
                     disabled={Boolean(!isEditing || isLoadingNickname)}
                     error={Boolean(touched.nickname && errors.nickname)}
@@ -287,7 +291,7 @@ export default function AccountGeneral() {
                       </>
                     ) : (
                       <>
-                        <CopyToClipboard text={`${BASE_CATALOGUE_URL}${values.nickname}`}>
+                        <CopyToClipboard text={link}>
                           <Button
                             variant="outlined"
                             sx={{ mr: 1 }}
@@ -310,7 +314,7 @@ export default function AccountGeneral() {
                     )}
                   </Box>
                   <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
-                    <QRCode id="qr-catalogo-digital" level="H" size={200} value={`${BASE_CATALOGUE_URL}${link}`} />
+                    <QRCode id="qr-catalogo-digital" level="H" size={200} value={link} />
                   </Box>
                   <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
                     <Button onClick={handleDownloadQR} disabled={Boolean(!values.nickname)}>
