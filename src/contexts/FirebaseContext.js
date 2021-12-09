@@ -73,9 +73,15 @@ function AuthProvider({ children }) {
       const DOMAIN_HOST = window.location.host;
       const isRifopis = DOMAIN_HOST.indexOf('rifopis.cl') >= 0;
       if (!isRifopis) {
-        const resPartnership = await axios.get('/api/v1/partnerships');
-        const { partnership } = resPartnership.data;
-        hasPartnership = Boolean(partnership?._id);
+        try {
+          const resPartnership = await axios.get('/api/v1/partnerships');
+          console.log(' aqui ');
+          console.log(resPartnership.data);
+          const { partnership } = resPartnership.data;
+          hasPartnership = Boolean(partnership?._id);
+        } catch (error) {
+          hasPartnership = false;
+        }
       } else {
         hasPartnership = true;
       }
