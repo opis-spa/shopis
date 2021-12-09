@@ -247,7 +247,7 @@ const Orders = Loadable(lazy(() => import('../pages/app/store/orders/OrderList')
 const Order = Loadable(lazy(() => import('../pages/app/store/orders/OrderDetail')));
 const Coupons = Loadable(lazy(() => import('../pages/app/store/Coupons')));
 // Shop
-const ShopHome = Loadable(lazy(() => import('../pages/shop/Home')));
+const ShopHome = Loadable(lazy(() => import('../pages/shop/Store')));
 const ShopCart = Loadable(lazy(() => import('../pages/shop/Cart')));
 const ShopProduct = Loadable(lazy(() => import('../pages/shop/Product')));
 const ShopStore = Loadable(lazy(() => import('../pages/shop/Store')));
