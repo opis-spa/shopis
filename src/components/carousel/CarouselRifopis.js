@@ -31,6 +31,52 @@ const defaultProps = {
   onSelectProduct: () => {}
 };
 
+function ChristmasCarouselItem({ isActive }) {
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        background: `url(https://firebasestorage.googleapis.com/v0/b/dreampay-73a3a.appspot.com/o/rifopis%2Fbackground-christmas.png?alt=media&token=f0875bdd-9754-450b-868e-c5739efb12b1)`,
+        backgroundPosition: 'center'
+      }}
+    >
+      <Container
+        maxWidth="lg"
+        sx={{
+          width: '100%',
+          color: 'common.white',
+          py: (theme) => theme.spacing(20)
+        }}
+      >
+        <Grid
+          container
+          sx={{
+            height: '100%',
+            display: 'flex',
+            flex: 1,
+            justifyContent: { xs: 'center', md: 'flex-start' },
+            alignItems: 'center'
+          }}
+        >
+          <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
+            <MotionContainer open={isActive}>
+              <motion.div variants={varZoomIn}>
+                <Box
+                  component="img"
+                  src="https://firebasestorage.googleapis.com/v0/b/dreampay-73a3a.appspot.com/o/rifopis%2Frifopis-christmas.png?alt=media&token=52e6571d-7799-468b-875c-39c7aac90846"
+                  sx={{ height: 460, objectFit: 'contain' }}
+                />
+              </motion.div>
+            </MotionContainer>
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
+  );
+}
+
+ChristmasCarouselItem.propTypes = { isActive: PropTypes.bool.isRequired };
+
 function CarouselItem({ item, isActive, index, onSelectProduct }) {
   const { photo, photos, name } = item;
 
@@ -177,13 +223,14 @@ function CarouselRifopis({ onSelectProduct }) {
   return (
     <CardStyle>
       <Slider adaptiveHeight ref={carouselRef} {...settings}>
+        <ChristmasCarouselItem onSelectProduct={onSelectProduct} item={{}} index={0} isActive={currentIndex === 0} />
         {productsList.map((item, index) => (
           <CarouselItem
             onSelectProduct={onSelectProduct}
             key={item.name}
             item={item}
-            index={index}
-            isActive={index === currentIndex}
+            index={index + 1}
+            isActive={index + 1 === currentIndex}
           />
         ))}
       </Slider>
